@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<launch>
+  <!-- Arguments -->
+  <arg name="output"                default="screen"/>
+  <arg name="enable_controllers"         default="false" />
+  <!-- <arg name="publish_measurements"  default="true"/> -->
+  <arg name="launch_prefix"         default="nice -n -20" />
+  <arg name="controller_namespace"      default="lowlevel_controller"/>
+  <arg name="description_name"      default="robot_description"/>
+  <arg name="port"                       default="/dev/ttyUSB0"/>
+  <arg name="command_smb"                 default="false"/>
+  <!-- <arg name="launch_prefix"         default="gdb -ex run -args" /> -->
+
+  <rosparam command="load" ns="$(arg controller_namespace)" file="$(find smb_lowlevel_controller)/config/hardware.yaml"/>
+  <rosparam command="load" ns="$(arg controller_namespace)" file="$(find smb_lowlevel_controller)/config/joint_limits.yaml"/>
+
+  <!-- Launch the lowlevel controller -->
+  <node pkg="smb_lowlevel_controller" type="smb_lowlevel_controller_node" name="smb_lowlevel_controller" output="$(arg output)" launch-prefix="$(arg launch_prefix)">
+    <param name="port"                       value="$(arg port)"/>
+    <param name="controller_namespace"       value="$(arg controller_namespace)"/>
+    <param name="command_smb"                value="$(arg command_smb)"/>
+    <remap from="robot_description"          to="$(arg description_name)"/>
+  </node>
+
+
+    <rosparam command="load" ns="$(arg controller_namespace)" file="$(find smb_lowlevel_controller)/config/controllers.yaml"/>
+  <group if="$(arg enable_controllers)">
+    <node name="lowlevel_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="$(arg controller_namespace)/LF_WHEEL_velocity_controller $(arg controller_namespace)/RF_WHEEL_velocity_controller " />
+  </group>
+
+</launch>

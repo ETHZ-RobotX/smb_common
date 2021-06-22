@@ -1,0 +1,21 @@
+LF_WHEEL_JOINT:
+        has_position_limits: false
+        has_velocity_limits: true
+        max_velocity: 2.0
+        has_acceleration_limits: true
+        max_acceleration: 5.0
+        has_jerk_limits: true
+        max_jerk: 100.0
+        has_effort_limits: true
+        max_effort: 1.0
+
+RF_WHEEL_JOINT:
+        has_position_limits: false
+        has_velocity_limits: true
+        max_velocity: 2.0
+        has_acceleration_limits: true
+        max_acceleration: 5.0
+        has_jerk_limits: true
+        max_jerk: 100.0
+        has_effort_limits: true
+        max_effort: 1.0

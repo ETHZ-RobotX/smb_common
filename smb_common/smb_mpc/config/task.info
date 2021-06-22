@@ -1,0 +1,118 @@
+
+model_settings
+{
+  recompileLibraries             1         ; put this flag to 1 if dynamic libraries are already generated
+  systemName smb
+}
+
+; DDP settings
+ddp
+{
+  algorithm                     SLQ
+
+  nThreads                      1
+
+  maxNumIterations              10
+  minRelCost                    0.1
+  constraintTolerance           1e-3
+
+  displayInfo                   false
+  displayShortSummary           false
+  checkNumericalStability       false
+
+  AbsTolODE                     1e-5
+  RelTolODE                     1e-3
+  minTimeStep                   1e-3
+  maxNumStepsPerSecond          100000
+  backwardPassIntegratorType    ODE45
+
+  inequalityConstraintMu        100.0
+  inequalityConstraintDelta     1.1
+
+  preComputeRiccatiTerms        true
+  useNominalTimeForBackwardPass false
+
+  useFeedbackPolicy             false
+
+  strategy                      LINE_SEARCH
+  lineSearch
+  {
+    minStepLength                 1e-2
+    maxStepLength                 1.0
+    hessianCorrectionStrategy     DIAGONAL_SHIFT
+    hessianCorrectionMultiple     1e-3
+  }
+}
+
+; Rollout settings
+rollout
+{
+  AbsTolODE                     1e-5
+  RelTolODE                     1e-3
+  minTimeStep                   1e-3
+  maxNumStepsPerSecond          100000
+  checkNumericalStability       false
+}
+
+; MPC settings
+mpc
+{
+  timeHorizon                    5.0
+  numPartitions                  1
+
+  runtimeMaxNumIterations        4
+  initMaxNumIterations           10
+
+  runtimeMaxStepLength           1.0
+  runtimeMinStepLength           1e-2
+  initMaxStepLength              1.0
+  initMinStepLength              1e-2
+
+  debugPrint                     false
+  coldStart                      false
+
+  useParallelRiccatiSolver       true  ; use disjoint riccati solver in MP case and recedingHorizon fashion
+
+  solutionTimeWindow             -1.0   ; [s]
+
+  mpcDesiredFrequency            10   ; [Hz]
+  mrtDesiredFrequency            50   ; [Hz]
+}
+
+
+; initial configuration
+initialState
+{
+  (0,0)  0.0     ; x
+  (1,0)  0.0     ; y
+  (2,0)  0.0     ; theta
+}
+
+; position weight matrix
+QPosition
+{
+  scaling 1e+0
+
+  (0,0) 1.0  ; x
+  (1,1) 1.0  ; y
+  (2,2) 0.0  ; z
+}
+
+; orientation weight matrix
+QOrientation
+{
+  scaling 1e+0
+
+  (0,0) 0.0  ; x
+  (1,1) 0.0  ; y
+  (2,2) 5.0  ; z
+}
+
+; control weight matrix
+R
+{
+  scaling 1e+0
+
+  (0,0) 1.0  ; linear velocity cost
+  (1,1) 1.0  ; angular velocity cost
+}

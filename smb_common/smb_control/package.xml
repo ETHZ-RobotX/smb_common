@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>smb_control</name>
+  <version>0.0.1</version>
+  <description>Smb controller configurations</description>
+
+  <author email="ej@ethz.ch">Edo Jelavic</author>
+  <maintainer email="ej@ethz.ch">Edo Jelavic</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>controller_manager</build_depend>
+  <build_depend>joint_state_controller</build_depend>
+  <build_depend>robot_state_publisher</build_depend>
+  <build_depend>roslaunch</build_depend>
+
+  <build_export_depend>controller_manager</build_export_depend>
+  <build_export_depend>joint_state_controller</build_export_depend>
+  <build_export_depend>robot_state_publisher</build_export_depend>
+
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+
+  <exec_depend>smb_description</exec_depend>
+  <exec_depend>smb_mpc</exec_depend>
+
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>diff_drive_controller</exec_depend>
+
+  <exec_depend>robot_localization</exec_depend>
+  <exec_depend>interactive_marker_twist_server</exec_depend>
+  <exec_depend>joy</exec_depend>
+  <exec_depend>rostopic</exec_depend>
+  <exec_depend>teleop_twist_joy</exec_depend>
+  <exec_depend>twist_mux</exec_depend>
+
+
+  <export>
+  </export>
+</package>

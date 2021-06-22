@@ -1,0 +1,6 @@
+smb:
+  hardware_interface:
+    loop_hz: 400 #hz
+    joints:
+      - LF_WHEEL_JOINT
+      - RF_WHEEL_JOINT

@@ -1,0 +1,4 @@
+control_frame: tracking_camera_odom
+base_frame: base_link
+max_linear_velocity: 0.2
+max_angular_velocity: 0.5

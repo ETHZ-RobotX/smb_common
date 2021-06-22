@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<robot  name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
+  <xacro:property name="realsense_t265_length" value="0.108"/>
+  <xacro:property name="realsense_t265_height" value="0.025"/>
+  <xacro:property name="realsense_t265_width"  value="0.013"/>
+  <xacro:property name="realsense_t265_housing_center_x_offset"  value="0.00910"/>
+  <!-- t265_origin_xyz is the offset to the parent link -->
+  <!-- t265_origin_rpy is the fixed axis roll, pitch and yaw angle such that the resulting frame has
+       the x axis pointing forward ("out of camera"),
+       the y axis pointing left and the z axis pointing upward -->
+  <!-- another frame "realsense_t265_odom_frame is created that is in line with the one documented here:
+       https://www.intel.com/content/dam/support/us/en/documents/emerging-technologies/intel-realsense-technology/IntelRealSenseTrackingT265Datasheet.pdf -->
+
+  <xacro:macro name="REALSENSE_T265" params="base_link t265_origin_xyz t265_origin_rpy simulation">
+
+    <link name="realsense_t265">
+      <inertial>
+          <mass value="0.001"/>
+          <origin rpy="0 0 0" xyz="0 0 0"/>
+          <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+      </inertial>
+      <collision>
+          <origin xyz="0 0 0" rpy="0 0 0"/> 
+          <geometry> 
+              <box size="${realsense_t265_width} ${realsense_t265_length} ${realsense_t265_height}"/> 
+          </geometry> 
+      </collision> 
+      <visual> 
+          <origin xyz="0 0 0" rpy="0 0 0"/> 
+          <geometry> 
+              <box size="${realsense_t265_width} ${realsense_t265_length} ${realsense_t265_height}"/> 
+          </geometry> 
+          <material name="black"/>
+      </visual>
+    </link>
+
+    <gazebo reference="realsense_t265">
+        <material>Gazebo/Black</material>
+    </gazebo>
+
+    <joint name="realsense_t265_joint" type="fixed">
+      <parent link="${base_link}"/>
+      <child link="realsense_t265"/>
+      <!-- <origin xyz="-${chassisLength/2.0+realsense_t265_width} 0.0 ${chassisHeight*0.5+realsense_t265_height*0.5}" rpy="0 0 ${PI}" /> -->
+      <!-- Manually calibrated sensor orientation  -->
+      <origin xyz="${t265_origin_xyz}" rpy="${t265_origin_rpy}" />
+    </joint>
+
+    <joint name="camera_pose_frame_joint" type="fixed">
+      <parent link="realsense_t265"/>
+      <child link="camera_pose_frame"/>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    <link name="camera_pose_frame" />
+
+
+    <link name="realsense_t265_odom_frame" />
+    <joint name="realsense_t265_odom_joint" type="fixed">
+      <parent link="realsense_t265"/>
+      <child link="realsense_t265_odom_frame"/>
+      <origin xyz="0 ${realsense_t265_housing_center_x_offset} 0 " rpy="${0.5*PI} 0 ${-0.5*PI}" />
+    </joint>
+
+    <link name="realsense_t265_imu_optical_frame" />
+    <joint name="realsense_t265_imu_joint" type="fixed">
+      <parent link="realsense_t265_odom_frame"/>
+      <child link="realsense_t265_imu_optical_frame"/>
+      <origin xyz="0 0 0 " rpy="0 ${PI} 0" />
+    </joint>
+
+      <xacro:if value="${simulation}">
+            <xacro:odometry_plugin sensor_link="realsense_t265" topic_name="/camera/odom/sample" rate="200" max_linear_speed_before_settle="0.01" max_angular_speed_before_settle="0.05" publish_tf="false"/>
+      </xacro:if>
+
+      <gazebo reference="realsense_t265_joint">
+          <disableFixedJointLumping>true</disableFixedJointLumping>
+      </gazebo>
+
+
+  </xacro:macro>
+</robot>

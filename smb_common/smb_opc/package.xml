@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>smb_opc</name>
+  <version>0.1.4</version>
+  <description>smb_opc</description>
+  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <license>Proprietary</license>
+  <author email="pankertj@ethz.ch">Johannes Pankert</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>smb_description</exec_depend>
+</package>

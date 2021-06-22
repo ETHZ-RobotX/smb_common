@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>smb</name>
+  <version>0.1.4</version>
+  <description>smb_highlevel_controller</description>
+  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <license>Proprietary</license>
+  <author email="pankertj@ethz.ch">Johannes Pankert</author>
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>odometry_conversion</exec_depend>
+  <exec_depend>rslidar_sdk</exec_depend>
+  <exec_depend>versavis</exec_depend>
+  <exec_depend>smb_control</exec_depend>
+  <exec_depend>smb_lowlevel_controller</exec_depend>
+  <exec_depend>smb_opc</exec_depend>
+  <!--exec_depend>spinnaker_camera_driver</exec_depend-->
+</package>

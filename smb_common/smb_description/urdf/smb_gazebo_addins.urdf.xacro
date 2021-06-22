@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smb">
+
+  <xacro:arg name="use_ros_skid_steer" default="false"/>
+  <xacro:arg name="use_ros_control" default="false"/>
+
+  <xacro:if value="$(arg use_ros_skid_steer)">
+    <xacro:include filename="$(find smb_description)/urdf/smb_ros_skid_steer.gazebo.xacro"/>
+    <xacro:smb_ros_skid_steer_plugin description_name="$(arg description_name_xacro)"
+      broadcast_tf="true" robot_namespace="$(arg robot_namespace)"/>
+  </xacro:if>
+  <xacro:if value="$(arg use_ros_control)">
+    <xacro:include filename="$(find smb_description)/urdf/smb_ros_control.gazebo.xacro"/>
+    <xacro:smb_ros_control_plugin description_name="$(arg description_name_xacro)"
+      broadcast_tf="true" robot_namespace="$(arg robot_namespace)"/>
+  </xacro:if>
+
+</robot>

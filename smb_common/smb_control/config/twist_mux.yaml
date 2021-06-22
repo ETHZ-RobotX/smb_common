@@ -1,0 +1,18 @@
+topics:
+- name    : joy
+  topic   : joy_teleop/cmd_vel
+  timeout : 0.5
+  priority: 10
+- name    : mpc_command_twist
+  topic   : /smb_mpc/command_twist
+  timeout : 0.2
+  priority: 5
+- name    : teb_planner_twist
+  topic   : /teb_planner_twist
+  timeout : 1.0
+  priority: 3
+locks:
+- name    : e_stop
+  topic   : e_stop
+  timeout : 0.0
+  priority: 255

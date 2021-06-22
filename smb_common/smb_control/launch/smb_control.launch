@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="robot_namespace"            default=""/>
+  <arg name="description_name"           default="smb_description"/>
+  <arg name="control_namespace"          default="control"/>
+  <arg name="enable_ekf"                 default="false"/>
+  <arg name="laser_enabled"              default="true"/>
+  <arg name="joint_states_topic"         default="joint_states"/>
+  <arg name="description_file"           default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
+  <arg name="simulation"                 default="false"/>
+  <arg name="joystick"                   default="true"/>
+  <arg name="mpc"                        default="false"/>
+  <arg name="mpc_track_local_plan"       default="false" />
+
+  <!-- Load robot description for controller -->
+  <include file="$(find smb_description)/launch/load.launch">
+    <arg name="lidar"            value="$(arg laser_enabled)"/>
+    <arg name="simulation"       value="$(arg simulation)"/>
+    <arg name="use_ros_control"  value="true"/>
+    <arg name="description_name" value="$(arg description_name)"/>
+    <arg name="description_file" value="$(arg description_file)"/>
+    <arg name="wheel_joint_type" value="continuous"/>
+    <arg name="robot_namespace"  value="$(arg robot_namespace)"/>
+    <arg name="publish_tf"       value="true"/>
+  </include>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam command="load" file="$(find smb_control)/config/smb_control.yaml" ns="$(arg control_namespace)"/>
+
+  <group if="$(arg simulation)">
+    <rosparam command="load" file="$(find smb_control)/config/gazebo_control.yaml" ns="$(arg control_namespace)"/>
+  </group>
+
+  <!-- Spawn controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="$(arg control_namespace)"
+    args="smb_diff_drive joint_state_controller"/>
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="smb_robot_state_publisher" pkg="robot_state_publisher" ns="$(arg control_namespace)" type="robot_state_publisher" output="screen">
+    <param name="publish_frequency" value="50"/>
+    <!-- <param name="tf_prefix"         value="$(arg tf_prefix)"/> -->
+    <param name="use_tf_static"     value="true"/>
+    <remap from="robot_description" to="$(arg description_name)" />
+    <remap from="joint_states"      to="$(arg joint_states_topic)" />
+  </node>
+
+
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux" >
+    <rosparam command="load" file="$(find smb_control)/config/twist_mux.yaml" />
+    <remap from="cmd_vel_out" to="/control/smb_diff_drive/cmd_vel"/>
+  </node>
+
+
+  <!-- Start EKF for localization -->
+  <group if="$(arg enable_ekf)" >
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" ns="$(arg control_namespace)">
+      <rosparam command="load" file="$(find smb_control)/config/localization.yaml" />
+    </node>
+  </group>
+
+  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)"/>
+
+  <include file="$(find smb_mpc)/launch/mpc.launch" if="$(arg mpc)">
+    <arg name="track_local_plan" value="$(arg mpc_track_local_plan)"/>
+  </include>
+
+</launch>

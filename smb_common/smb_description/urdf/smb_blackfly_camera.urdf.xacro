@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!-- This file contains plugins to simulate an Imu sensor attached to the robot. -->
+<!-- Documentation can be found at http://wiki.ros.org/hector_gazebo_plugins -->
+
+<robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- INCLUDE PLUGIN -->
+  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_blackfly.gazebo.xacro"/>
+
+
+  <xacro:macro name="blackfly_cam" params="*origin id base_link simulation">
+    <!--                              Camera  Properties 				          	-->
+    <xacro:property name="blackfly_base_link"		value="${base_link}"/>
+    <xacro:property name="blackfly_origin_rpy"		value="0 0 0"/>
+    <xacro:property name="blackfly_origin_xyz"		value="0.29082 -0.04458 ${0.0955 + chassisHeight/2.0}"/>
+
+    <xacro:property name="blackfly_update_rate"		value="30"/>
+    <xacro:property name="blackfly_link"  			value="blackfly${id}_link"/>
+    <xacro:property name="blackfly_topic" 			value="/blackfly${id}/cam0/image_raw"/>
+
+
+    <link name="${blackfly_link}">
+      <inertial>
+        <mass value="0.01" /> <!-- [kg] -->
+        <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+      </inertial>
+      <visual>
+        <geometry>
+          <mesh filename="package://smb_description/urdf/new_payload/meshes/SMB_blackfly_camera.dae"/> 
+        </geometry>
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://smb_description/urdf/new_payload/meshes/SMB_blackfly_camera.dae"/> 
+        </geometry>
+      </collision>
+      <material name="red">
+          <color rgba="255 0 10 255"/>
+        </material>
+    </link>
+
+      <gazebo reference="${blackfly_link}">
+        <material>Gazebo/Red</material>
+      </gazebo>
+
+    <joint name="blackfly${id}_camera_joint" type="fixed">
+      <!-- <origin xyz="${blackfly_origin_xyz}" rpy="${blackfly_origin_rpy}"/> -->
+      <xacro:insert_block name="origin"/>
+      <parent link="${blackfly_base_link}"/>
+      <child link="${blackfly_link}"/>
+    </joint>
+
+      <gazebo reference="blackfly${id}_camera_joint">
+        <disableFixedJointLumping>true</disableFixedJointLumping>
+      </gazebo>
+
+    <link name="blackfly${id}_optical_link"/>
+
+    <joint name="blackfly${id}_camera_optical_joint" type="fixed">
+      <origin xyz="0.0066 0 0" rpy="-1.57 0 -1.57"/>
+      <parent link="${blackfly_link}"/>
+      <child link="blackfly${id}_optical_link"/>
+    </joint>
+
+    <xacro:if value="${simulation}">
+        <xacro:blackfly_camera_plugin name="blackfly${id}" rate="${blackfly_update_rate}"/>
+    </xacro:if>
+
+
+  </xacro:macro>
+</robot>

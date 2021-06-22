@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>odometry_conversion</name>
+  <version>0.1.0</version>
+  <description>Odometry Conversions</description>
+  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <license>BSD</license>
+  <url type="website">https://bitbucket.org/leggedrobotics/smb_common</url>
+  <author email="pankertj@ethz.ch">Johannes Pankert</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2_ros</depend>
+  <depend>eigen_conversions</depend>
+</package>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>smb_mpc</name>
+  <version>0.0.0</version>
+  <description>The smb_mpc package</description>
+  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <license>TODO</license>
+  <author email="pankertj@ethz.ch">Johannes Pankert</author>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roslib</depend>
+  <depend>ocs2_comm_interfaces</depend>
+  <depend>ocs2_core</depend>
+  <depend>ocs2_robotic_tools</depend>
+  <depend>ocs2_ddp</depend>
+  <depend>tf2_ros</depend>
+  <depend>eigen_conversions</depend>
+  <export>
+  </export>
+</package>

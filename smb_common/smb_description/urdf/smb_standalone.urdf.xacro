@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smb">
+
+  <!-- Arguments -->
+  <xacro:arg name="wheel_joint_type"          default="fixed"/> <!-- continuous for gazebo -->
+  <xacro:arg name="simulation"                default="false"/>
+  <xacro:arg name="use_ros_skid_steer"        default="false"/> <!-- Specify one! -->
+  <xacro:arg name="use_ros_control"           default="false"/>
+  <xacro:arg name="lidar"                     default="true"/>
+  <xacro:arg name="robot_namespace"           default=""/>
+  <xacro:arg name="description_name_xacro"    default="robot_description"/>
+  <xacro:arg name="publish_tf"                default="false"/>
+  <xacro:arg name="tracking_camera"           default="true"/>
+
+  <xacro:property name="lidar" value="$(arg lidar)"/>
+
+  <!-- Includes -->
+  <xacro:include filename="$(find smb_description)/urdf/smb_big_properties.urdf.xacro" />
+
+  <xacro:if value="$(arg simulation)">
+    <xacro:include filename="$(find smb_description)/urdf/smb_gazebo_addins.urdf.xacro"/>
+  </xacro:if>
+
+  <xacro:include filename="$(find smb_description)/urdf/smb.urdf.xacro">
+    <xacro:arg name="lidar" default="$(arg lidar)"/>
+  </xacro:include>
+
+
+  <xacro:smb wheel_joint_type="$(arg wheel_joint_type)" simulation="$(arg simulation)" tracking_camera="$(arg tracking_camera)"/>
+
+</robot>

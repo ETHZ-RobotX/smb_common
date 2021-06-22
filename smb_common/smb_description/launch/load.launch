@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <!-- Configurations (can also be set as argument) -->
+  <arg name="description_file"   default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
+  <arg name="description_name"   default="smb_description"/>
+  <arg name="wheel_joint_type"   default="fixed"/>
+  <arg name="simulation"         default="true"/>
+  <arg name="use_ros_skid_steer" default="false"/>
+  <arg name="use_ros_control"    default="false"/>
+  <arg name="robot_namespace"    default="/"/>
+  <arg name="lidar"              default="true"/>
+  <arg name="publish_tf"         default="false"/>
+  <arg name="control_namespace"  default="control"/>
+  <arg name="tracking_camera"    default="true"/>
+
+  <!-- Run xacro script to generate Super mega bot description -->
+  <param name="$(arg description_name)" command="$(find xacro)/xacro
+    $(arg description_file)
+    wheel_joint_type:=$(arg wheel_joint_type)
+    simulation:=$(arg simulation)
+    robot_namespace:=$(arg robot_namespace)
+    lidar:=$(arg lidar)
+    use_ros_control:=$(arg use_ros_control)
+    use_ros_skid_steer:=$(arg use_ros_skid_steer)
+    description_name_xacro:=$(arg description_name)
+    publish_tf:=$(arg publish_tf)
+    tracking_camera:=$(arg tracking_camera)"/>
+</launch>

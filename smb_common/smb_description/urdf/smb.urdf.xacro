@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smb">
+
+    <xacro:arg name="lidar" default="true"/>
+
+    <xacro:include filename="$(find smb_description)/urdf/smb_utils.urdf.xacro" />
+    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_imu.gazebo.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_gps.gazebo.xacro"/>
+    <xacro:if value="$(arg lidar)">
+        <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_robosense.gazebo.xacro"/>
+    </xacro:if>
+    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_mono.gazebo.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera.urdf.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera_stereo.urdf.xacro"/>
+    <xacro:include filename="$(find smb_description)/urdf/smb_lidar_mount.urdf.xacro"/>
+
+    <xacro:property name="PI" value="3.1415926535897931"/>
+
+    <!-- Model macros -->
+    <xacro:macro name="wheel" params="prefix X Y wheel_joint_type friction_coeff:=0.2 transmission_reduction:=${wheelTransmission}" >
+        <joint name="${prefix}_WHEEL_JOINT" type="${wheel_joint_type}">
+            <parent link="${base_link_name}"/>
+            <child link="${prefix}_WHEEL"/>
+            <origin xyz="${X} ${Y} ${wheelHeight - chassisHeight/2.0}" rpy="-${0.5*PI} 0 0" />
+            <axis xyz="0 0 1" rpy="0 0 0" />
+            <dynamics damping="1.0" friction="0.0"/>
+            <limit effort="100" velocity="10"/>
+            <joint_properties damping="0.2" friction="0.2"/>
+        </joint>
+
+        <link name="${prefix}_WHEEL">
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <cylinder length="${wheelWidth/10}" radius="${wheelRadius}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 0" rpy="1.570796 0  0" />
+                <geometry>
+                    <mesh filename="package://smb_description/urdf/meshes/wheel.dae" />
+                </geometry>
+            </visual>
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <mass value="${wheelMass}"/>
+                <xacro:cylinder_inertia m="${wheelMass}" r="${wheelRadius}" h="${wheelWidth}"/>
+            </inertial>
+        </link>
+
+        <gazebo reference="${prefix}_WHEEL">
+            <mu1 value="${friction_coeff}"/>
+            <mu2 value="${friction_coeff}"/>
+            <fdir1 value="1 0 0"/>
+            <kp>10000000.0</kp>
+            <kd>1.0</kd>
+            <minDepth>0.005</minDepth>
+            <maxVel>100.0</maxVel>
+            <material>Gazebo/DarkGrey</material>
+        </gazebo>
+
+        <transmission name="${prefix}_WHEEL_TRANS">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${prefix}_WHEEL_JOINT">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${prefix}_WHEEL_ACTUATOR">
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+                <mechanicalReduction>${transmission_reduction}</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+
+    </xacro:macro>
+
+    <xacro:macro name="chassis">
+
+        <link name="${base_link_name}">
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/>
+                </geometry>
+                <material name="base_material">
+                    <color rgba="0.8 0.0 0.1 1.0"/>
+                </material>
+            </visual>
+        </link>
+
+        <link name="top">
+            <collision>
+                <origin xyz="${topXOffset} 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <!-- <box size="${topLength} ${topWidth} ${topHeight}"/> -->
+                     <mesh filename="package://smb_description/urdf/new_payload/meshes/SMB_step.dae"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <!-- <box size="${topLength} ${topWidth} ${topHeight}"/> -->
+                     <mesh filename="package://smb_description/urdf/new_payload/meshes/SMB_step.dae"/>
+                </geometry>
+            </visual>
+        </link>
+
+        <gazebo reference="top">
+            <material>Gazebo/Grey</material>
+        </gazebo>
+
+        <gazebo reference="${base_link_name}">
+            <material>Gazebo/Red</material>
+        </gazebo>
+
+    <joint name="top_to_base_link" type="fixed">
+        <parent link="${base_link_name}"/>
+        <child link="top"/>
+        <!-- <origin xyz="${topXOffset/2.0} 0.0 ${chassisHeight/2.0 + topHeight/2.0}" rpy="0 0 0"/> -->
+        <origin xyz="0.0 0.0 ${chassisHeight/2.0}" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Fixed joint to add dummy inertia link -->
+    <joint name="base_to_base_inertia" type="fixed">
+      <parent link="${base_link_name}"/>
+      <child link="base_inertia"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Dummy inertia link, because KDL cannot have inertia on the base link -->
+    <link name="base_inertia">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${chassisMass}"/>
+        <xacro:box_inertia m="${chassisMass}"
+                     x="${chassisLength}"
+                     y="${chassisWidth}"
+                     z="${chassisHeight}"/>
+      </inertial>
+    </link>
+
+    </xacro:macro>
+
+    <xacro:macro name="smb" params="wheel_joint_type:=continuous lidar:=${lidar} tracking_camera:=true tracking_camera_rear_facing:=false simulation:=true">
+        <xacro:chassis/>
+
+        <xacro:wheel prefix="LF" X="${frontWheelX}"
+            Y="${chassisWidth/2+wheelClearance+wheelWidth/2}"
+            wheel_joint_type="${wheel_joint_type}"
+            friction_coeff="0.5" />
+
+        <xacro:wheel prefix="RF" X="${frontWheelX}"
+            Y="${-chassisWidth/2-wheelClearance-wheelWidth/2}"
+            wheel_joint_type="${wheel_joint_type}"
+            friction_coeff="0.5"/>
+
+        <xacro:wheel prefix="LH" X="${backWheelX}"
+            Y="${chassisWidth/2+wheelClearance+wheelWidth/2}"
+	    wheel_joint_type="${wheel_joint_type}"
+        friction_coeff="0.0" />
+
+        <xacro:wheel prefix="RH" X="${backWheelX}"
+            Y="${-chassisWidth/2-wheelClearance-wheelWidth/2}"
+            wheel_joint_type="${wheel_joint_type}" />
+
+        <xacro:IMU base_link="${base_link_name}" simulation="${simulation}"/>
+
+        <!-- <xacro:GPS base_link="${base_link_name}" simulation="${simulation}"/> -->
+
+        <xacro:mono_cam base_link="${base_link_name}" simulation="${simulation}"/>
+        <xacro:blackfly_cam id="0" base_link="${base_link_name}" simulation="${simulation}">
+            <origin xyz="0.29082 0.04458 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
+        </xacro:blackfly_cam>
+
+        <xacro:blackfly_cam id="1" base_link="${base_link_name}" simulation="${simulation}">
+            <origin xyz="0.29082 -0.04542 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
+        </xacro:blackfly_cam>
+
+        <xacro:blackfly_cam_stereo base_link="${base_link_name}" simulation="${simulation}"/>
+
+        <xacro:if value="${lidar}">
+            <xacro:LIDAR base_link="${base_link_name}" simulation="${simulation}"/>
+            <xacro:lidar_mount base_link="${base_link_name}"/>
+        </xacro:if>
+
+        <xacro:if value="${tracking_camera}">
+            <xacro:unless value="${tracking_camera_rear_facing}">
+                <xacro:REALSENSE_T265 base_link="imu_link"
+                    t265_origin_xyz="0.0537 0.0321 0.172"
+                    t265_origin_rpy="0 0 0"
+                    simulation="${simulation}"/>
+            </xacro:unless>
+            <xacro:if value="${tracking_camera_rear_facing}">
+                <xacro:REALSENSE_T265 base_link="imu_link"
+                    t265_origin_xyz="${0.0537-0.6} 0.0321 0.172"
+                    t265_origin_rpy="0 0 ${PI}"    
+                    simulation="${simulation}"/>
+            </xacro:if>
+        </xacro:if>
+
+
+    </xacro:macro>
+</robot>

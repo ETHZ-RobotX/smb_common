@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="joy_dev" default="$(optenv SMB_JOY_DEVICE /dev/input/js0)" />
+  <arg name="joystick" default="true" />
+
+  <group ns="joy_teleop">
+    <!--rosparam command="load" file="$(find smb_control)/config/teleop_ps4.yaml" /-->
+    <rosparam command="load" file="$(find smb_control)/config/teleop_logitech.yaml" />
+    <param name="joy_node/dev" value="$(arg joy_dev)" />
+    <node pkg="joy" type="joy_node" name="joy_node" />
+    <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_twist_joy"/>
+  </group>
+
+</launch>

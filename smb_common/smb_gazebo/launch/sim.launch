@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <!-- ROBOT ARGUMENTS -->
+  <!-- Name of the robot description parameter -->
+  <arg name="description_name"            default="smb_description"/>
+  <arg name="description_file"            default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
+  <arg name="enable_ekf"                  default="true"/>
+  <arg name="robot_namespace"             default=""/>
+  <arg name="control_namespace"           default="control"/>
+  <arg name="launch_rviz"                 default="true"/>
+  <arg name="launch_gazebo_gui"           default="false"/>
+  <arg name="mpc"                         default="false"/>
+
+
+  <include file="$(find smb_control)/launch/smb_control.launch">
+    <arg name="control_namespace"       value="$(arg control_namespace)"/>
+    <arg name="robot_namespace"         value="$(arg robot_namespace)"/>
+    <arg name="description_name"        value="$(arg description_name)"/>
+    <arg name="enable_ekf"              value="$(arg enable_ekf)" />
+    <arg name="simulation"              value="true"/>
+    <arg name="mpc"                     value="$(arg mpc)"/>
+  </include>
+
+  <include file="$(find smb_gazebo)/launch/smb_gazebo.launch">
+    <arg name="description_name"   value="$(arg description_name)"/>
+    <arg name="control_namespace"   value="$(arg control_namespace)"/>
+    <arg name="run_gui"           value="$(arg launch_gazebo_gui)"/>
+  </include>
+
+  <include file="$(find smb_opc)/launch/opc.launch" if="$(arg launch_rviz)"/>
+
+</launch>

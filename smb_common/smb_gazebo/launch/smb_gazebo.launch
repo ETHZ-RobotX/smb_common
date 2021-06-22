@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <!-- Model path -->
+  <arg name="model_path"                            default="$(find smb_gazebo)/"/>
+  <arg name="robot_model_name"                      default="smb"/>
+
+  <!-- Name of the world -->
+  <!-- <arg name="world"                                 default="big_map_summer_school"/> -->
+  <arg name="world"                                 default="planner_tutorial"/>
+  <!-- Path to the world file -->
+  <arg name="world_file"                            default="$(find smb_gazebo)/worlds/$(arg world).world"/>
+
+  <!-- Set the initial pose of the robot's main body -->
+  <arg name="x"                                     default="0.0"/>
+  <arg name="y"                                     default="0.0"/>
+  <arg name="z"                                     default="0.4"/>
+  <arg name="roll"                                  default="0.0"/>
+  <arg name="pitch"                                 default="0.0"/>
+  <arg name="yaw"                                   default="0.0"/>
+  <!-- Start paused -->
+  <arg name="paused"                                default="false"/>
+  <!-- Use simulation clock -->
+  <arg name="use_sim_time"                          default="true"/>
+  <!-- Debug mode -->
+  <arg name="debug"                                 default="false"/>
+  <!-- Verbose mode -->
+  <arg name="verbose"                               default="true"/>
+
+  <arg name="publishing_time_step"                  default="0.025"/>
+
+  <!-- GUI ARGUMENTS -->
+  <!-- Enable/disable Gazebo GUI -->
+  <arg name="run_gui"                               default="true"/>
+
+  <!-- ROBOT ARGUMENTS -->
+  <!-- Name of the robot description parameter -->
+  <arg name="description_name"                     default="robot_description"/>
+  <arg name="control_namespace"                    default="control"/>
+  <remap from="/$(arg control_namespace)/robot_description" to="$(arg description_name)"/>
+
+  <!-- Load parameters -->
+  <param name="gazebo/publishing_time_step"     value="$(arg publishing_time_step)"/>
+
+
+  <!-- Load Gazebo world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <env name="GAZEBO_MODEL_PATH" value="$(arg model_path)"/>
+    <arg name="world_name"        value="$(arg world_file)"/>
+    <arg name="paused"            value="$(arg paused)"/>
+    <arg name="use_sim_time"      value="$(arg use_sim_time)"/>
+    <arg name="gui"               value="$(arg run_gui)"/>
+    <arg name="debug"             value="$(arg debug)"/>
+    <arg name="verbose"           value="$(arg verbose)"/>
+  </include>
+
+  <!-- Spawn robot in Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+    args="-param $(arg description_name) -urdf -model $(arg robot_model_name) -x $(arg x)
+      -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"
+    output="screen"/>
+
+  <!-- Publish camera odometry tf-->
+  <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion"/>
+
+</launch>
