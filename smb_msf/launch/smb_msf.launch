@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="launch_state_to_base_link_publisher"  default="true"/>
+    <node name="msf_smb" pkg="msf_updates" type="pose_sensor" clear_params="true" output="screen"> #launch-prefix="gdb -ex run --args" 
+        <!-- IMU -->
+        <remap from="msf_core/imu_state_input" to="/versavis/imu" />
+        <!-- 6DOF Pose -->
+        <remap from="msf_updates/transform_input" to="/transform_aft_mapped_to_init_CORRECTED" />
+        <!-- Params -->
+        <rosparam file="$(find smb_msf)/param/smb_msf_params.yaml" command="load"/>
+    </node>
+    <!-- Initialize service -->
+    <node pkg="rosservice" type="rosservice" name="initializer" args="call --wait /msf_smb/pose_sensor/initialize_msf_scale 1.0"/>
+
+      <node pkg="tf" type="static_transform_publisher" name="imu_to_base" respawn="true" args="-0.255 0.024 -0.179 0 0 0 state base_link 100" if="$(arg launch_state_to_base_link_publisher)"/>
+
+</launch>

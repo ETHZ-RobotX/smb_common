@@ -15,14 +15,14 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   sensorTransformHom_.block<3, 3>(0, 0) = sensorTransformHom_.block<3, 3>(0, 0).transpose();
   sensorTransformHom_.block<3, 1>(0, 3) = -sensorTransformHom_.block<3, 3>(0, 0) * sensorTransformHom_.block<3, 1>(0, 3);
 
+  auto odomTransform = buffer_.lookupTransform(outSensorFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
+  odomTransformHom_ = toHomTransform(odomTransform.transform);
+
   // the odom frame of the tracking camera is gravity aligned. In case the camera is mounted with an angle, remove pitch and roll of this
   // transformation
-  sensorTransform.header.frame_id = outOdomFrame_;
-  sensorTransform.child_frame_id = inOdomFrame_;
-  odomCameraOdomTransformPublisher_.sendTransform(sensorTransform);
-
-  auto odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
-  odomTransformHom_ = toHomTransform(odomTransform.transform);
+  odomTransform.header.frame_id = outOdomFrame_;
+  odomTransform.child_frame_id = inOdomFrame_ + "_odom";
+  odomCameraOdomTransformPublisher_.sendTransform(odomTransform);
 
   odometryPublisher_ = nh.advertise<nav_msgs::Odometry>("/base_odom", 1, false);
   odometryInSubscriber_ = nh.subscribe("/camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
@@ -104,4 +104,13 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   tf::quaternionEigenToMsg(Eigen::Quaterniond(odomTransformRot), odomTransform.transform.rotation);
   tf::vectorEigenToMsg(Eigen::Vector3d(-odomTransformRot * outHom.block<3, 1>(0, 3)), odomTransform.transform.translation);
   odomPublisher_.sendTransform(odomTransform);
+
+  Eigen::Affine3d odomTransformEigen;
+  tf::transformMsgToEigen(odomTransform.transform, odomTransformEigen);
+
+  // ROS_WARN_STREAM_THROTTLE(5.0, std::endl << "inHom:" << std::endl << inHom << std::endl << std::endl
+  // << "odomTransformHom_:" << std::endl << odomTransformHom_ << std::endl << std::endl
+  // << "sensorTransformHom_:" << std::endl << sensorTransformHom_ << std::endl << std::endl
+  // << "outHom:" << std::endl << outHom << std::endl << std::endl
+  // << "odomTransformEigen:" << std::endl << odomTransformEigen.matrix() << std::endl << std::endl);
 }

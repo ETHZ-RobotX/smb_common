@@ -3,6 +3,10 @@ topics:
   topic   : joy_teleop/cmd_vel
   timeout : 0.5
   priority: 10
+- name    : joy_opc
+  topic   : opc/cmd_vel
+  timeout : 0.5
+  priority: 8
 - name    : mpc_command_twist
   topic   : /smb_mpc/command_twist
   timeout : 0.2
@@ -13,6 +17,10 @@ topics:
   priority: 3
 locks:
 - name    : e_stop
-  topic   : e_stop
+  topic   : joy_teleop/e_stop
   timeout : 0.0
   priority: 255
+- name    : e_stop_opc
+  topic   : opc/e_stop
+  timeout : 0.0
+  priority: 200

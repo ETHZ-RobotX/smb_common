@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+<arg name="laser_enabled" default="true"/>
+<arg name="laser_scan_min_height" default="-0.0"/>
+<arg name="laser_scan_max_height" default="1.0"/>
+<arg name="angle_min" default="-3.14"/>
+<arg name="angle_max" default="3.14"/>
+<arg name="range_min" default="0.7"/>
+<arg name="range_max" default="50.0"/>
+<arg name="scan_time" default="0.1"/> <!-- 10Hz -->
+<arg name="use_inf" default="true"/>
+<arg name="inf_epsilon" default="1.0"/>
+<arg name="angle_increment" default="0.00174"/> <!-- M_PI/180.0/10 -->
+
+ <!-- Convert 3D velodyne scan to laser scan -->
+  <node name= "pointcloud_to_laserscan" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" if="$(arg laser_enabled)">
+        <remap from="cloud_in" to="/rslidar_points"/>
+        <remap from="scan" to="/scan"/>
+        <param name="target_frame"          value="rslidar"/>
+        <param name="scan_time"          value="$(arg scan_time)"/>
+            <param name="transform_tolerance"   value="0.01"/>
+            <param name="min_height"            value="$(arg laser_scan_min_height)"/>
+            <param name="max_height"            value="$(arg laser_scan_max_height)"/>
+            <param name="angle_min"             value="$(arg angle_min)"/>
+            <param name="angle_max"             value="$(arg angle_max)"/>
+            <param name="angle_increment"       value="$(arg angle_increment)"/>
+            <param name="range_min"             value="$(arg range_min)"/>
+            <param name="range_max"             value="$(arg range_max)"/>
+            <param name="use_inf"               value="$(arg use_inf)"/>
+            <param name="inf_epsilon"           value="$(arg inf_epsilon)"/>
+            <param name="concurrency_level"     value="1"/>
+
+            # Concurrency level, affects number of pointclouds queued for processing and number of threads used
+            # 0 : Detect number of cores
+            # 1 : Single threaded
+            # 2->inf : Parallelism level
+  </node>
+
+
+
+</launch>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+  <arg name="joystick" default="false"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find smb_opc)/rviz/smb_vis.rviz"
     output="screen"/>
+
+  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)">
+    <arg name="joystick_name_space" value="opc"/>
+  </include>
+
 </launch>

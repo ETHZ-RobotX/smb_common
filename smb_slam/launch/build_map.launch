@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <arg name="launch_rviz" default="false"/>
+  <arg name="launch_sensors" default="false"/>
+
+  <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)">
+   </include> 
+
+  <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
+    <arg name="launch_rviz" default="$(arg launch_rviz)"/>
+  </include>
+
+</launch>

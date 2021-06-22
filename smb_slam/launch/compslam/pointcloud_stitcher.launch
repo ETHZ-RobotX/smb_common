@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="launch_prefix" default="" />
+        
+
+    <!-- Launch pole_detection node -->
+    <node name="pointcloud_stitcher_node" pkg="smb_slam" type="pointcloud_stitcher_node"
+        output="screen" launch-prefix="$(arg launch_prefix)">
+        <param name="input_cloud_topic" value="/velodyne_cloud_registered"/>
+        <param name="accumulate_on_startup" value="true"/>
+    </node>
+    
+
+</launch>

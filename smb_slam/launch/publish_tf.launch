@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+	<arg name="odometry_frame" 	 			 default="odom"/>
+	<arg name="map_frame"        			 default="map"/>
+	<arg name="description_name" 			 default="smb_description"/>
+	<arg name="launch_odometry_tf_publisher" default="true"/>
+
+	<node pkg="smb_slam" type="smb_tf_publisher.py"
+		name="smb_tf_publisher" output="screen" if="$(arg launch_odometry_tf_publisher)">
+		<param name="odometry_frame" value="$(arg odometry_frame)"/>
+	</node>
+
+	<!-- Publish robot state (joints) as TF -->
+	<node name="smb_robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" if="true">
+		<param name="publish_frequency" value="100"/>
+		<param name="use_tf_static"     value="true"/>
+		<param name="tf_prefix"         value=""/>
+		<remap from="robot_description" to="$(arg description_name)"/>
+	</node>
+
+</launch>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+
+  <arg name="description_name"  default="smb_description"/>
+  <arg name="use_sim_time"      default="false"/>
+  <arg name="launch_rviz"       default="false"/>
+  <arg name="rviz_config"       default="slam_vis.rviz"/>
+  <arg name="run_slam"          default="true"/>
+  <arg name="run_tf_publisher"  default="true"/>
+  <arg name="load_description"  default="true"/>
+
+  <arg name = "launch_prefix"    default="gdb -ex run --args" />
+  <arg name = "config_file_name" default="mapper_params_offline.yaml"/>
+  <arg name = "config_file_path" default="$(find smb_slam)/config/slam_toolbox/$(arg config_file_name)"/>
+
+  <param name="/use_sim_time" value="$(arg use_sim_time)"/>
+
+  <!-- Load robot description -->
+  <include file="$(find smb_description)/launch/load.launch" if="$(arg load_description)">
+  	<arg name="description_name" value="$(arg description_name)"/>
+  	<arg name="tracking_camera" value="true"/>
+  </include>
+
+  <include file="$(find smb_slam)/launch/pointcloud_to_laserscan.launch">
+  </include>
+
+  <include file="$(find smb_slam)/launch/publish_tf.launch" if="$(arg run_tf_publisher)">
+    <arg name="description_name" value="$(arg description_name)"/>
+  </include>
+
+
+  <node name="rviz_slam_smb" pkg="rviz" type="rviz" args="-d $(find smb_slam)/rviz/$(arg rviz_config)" if="$(arg launch_rviz)">
+  </node>
+
+  <node pkg="slam_toolbox" type="sync_slam_toolbox_node" name="slam_toolbox" output="screen" launch-prefix="" if="$(arg run_slam)">
+    <rosparam command="load" file="$(arg config_file_path)" />
+  </node>
+
+
+
+</launch>

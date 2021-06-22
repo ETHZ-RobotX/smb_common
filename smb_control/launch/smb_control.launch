@@ -64,5 +64,5 @@
   <include file="$(find smb_mpc)/launch/mpc.launch" if="$(arg mpc)">
     <arg name="track_local_plan" value="$(arg mpc_track_local_plan)"/>
   </include>
-
+  
 </launch>

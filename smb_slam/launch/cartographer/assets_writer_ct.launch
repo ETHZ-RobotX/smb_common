@@ -1,0 +1,18 @@
+<launch>
+
+<arg name="bag_filenames"         default="/home/jelavice/git/smb_common/smb_slam/data/garage_easy.bag"/>
+<arg name="pose_graph_filename"   default="/home/jelavice/git/smb_common/smb_slam/data/garage_easy.bag.pbstream"/>
+
+
+
+
+  <node name="cartographer_assets_writer" pkg="cartographer_ros" required="true"
+      type="cartographer_assets_writer" args="
+          -configuration_directory $(find smb_slam)/config/smb_cartographer
+          -configuration_basename assets_writer_smb.lua
+          -urdf_filename $(find smb_slam)/config/smb_cartographer/smb.urdf
+          -bag_filenames $(arg bag_filenames)
+          -pose_graph_filename $(arg pose_graph_filename)"
+      output="screen">
+  </node>
+</launch>

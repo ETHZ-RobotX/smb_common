@@ -3,9 +3,9 @@
   <arg name="launch_versavis"                       default="true" />
   <arg name="launch_depth_cam"                     default="false" />
   <arg name="launch_tracking_cam"                  default="true" />
-  <arg name="launch_odometry_conversion_node"      default="true" />
+  <arg name="use_lidar_odometry"                   default="false" />
   <arg name="launch_sensors"                       default="true" />
-  <arg name="enable_ekf"                           default="true" />
+  <arg name="enable_ekf"                           default="false" />
   <arg name="launch_gui"                           default="false" />
   <arg name="mpc"                                  default="false" />
   <arg name="mpc_track_local_plan"                 default="false" />
@@ -22,8 +22,29 @@
       <arg name="launch_tracking_cam"      value="$(arg launch_tracking_cam)"/>
     </include>
   </group>
-  <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion" if="$(arg launch_odometry_conversion_node)"/>
 
+  <group name="odometry" if="$(arg use_lidar_odometry)">
+    <node pkg="odometry_conversion" type="odometry_conversion_node" name="lidar_odometry_conversion">
+      <param name="in_odom_frame" value="rslidar"/>
+      <param name="in_sensor_frame" value="imu"/>
+      <param name="out_odom_frame" value="lidar_odom_base"/>
+      <param name="out_sensor_frame" value="base_link"/>
+      <remap from="/camera/odom/sample" to="/msf_core/odometry"/>
+    </node>
+    <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
+      <arg name="launch_rviz" value="false"/>
+      <arg name="stitch_pointclouds"  value="false"/>
+    </include>
+  </group>
+
+  <group name="odometry" unless="$(arg use_lidar_odometry)">
+    <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
+      <param name="in_odom_frame" value="camera_pose_frame"/>
+      <param name="in_sensor_frame" value="camera_pose_frame"/>
+      <param name="out_odom_frame" value="tracking_camera_odom"/>
+      <param name="out_sensor_frame" value="base_link"/>
+    </node>
+  </group>
 
   <include file="$(find smb_lowlevel_controller)/launch/smb_lowlevel_controller.launch" ns="$(arg control_namespace)">
 	  <arg name="description_name"            value="/$(arg description_name)"/>

@@ -21,8 +21,8 @@ class OdometryConversion {
   geometry_msgs::Transform fromHomTransform(const Eigen::Matrix4d& homTransform) const;
   geometry_msgs::Pose fromHomTransformToPose(const Eigen::Matrix4d& homTransform) const;
 
-  std::string inOdomFrame_ = "camera_odom_frame";
-  std::string inSensorFrame_ = "realsense_t265";
+  std::string inOdomFrame_ = "camera_pose_frame";
+  std::string inSensorFrame_ = "camera_pose_frame";
   std::string outOdomFrame_ = "tracking_camera_odom";
   std::string outSensorFrame_ = "base_link";
 

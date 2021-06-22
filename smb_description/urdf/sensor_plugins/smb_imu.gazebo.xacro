@@ -85,6 +85,20 @@
       </material>
     </link>
 
+    <link name="imu">
+      <inertial>
+        <mass value="0.001"/>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001"/>
+      </inertial>
+    </link>
+
+    <joint name="imu_imu_link_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${imu_link}"/>
+      <child link="imu"/>
+    </joint>
+
     <gazebo reference="${imu_link}">
       <material>Gazebo/Orange</material>
     </gazebo>
