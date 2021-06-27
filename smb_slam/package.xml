@@ -16,5 +16,7 @@
 	<depend>pointmatcher_ros</depend>
 	<depend>libpointmatcher</depend>
 	<depend>roslib</depend>
+	<depend>cartographer_ros</depend>
+	<depend>cartographer_rviz</depend>
 
 </package>
