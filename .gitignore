@@ -1,4 +1,5 @@
 smb_slam/data/*
+maps/
 !smb_slam/data/.gitkeep
 *.pcd
 .vscode
