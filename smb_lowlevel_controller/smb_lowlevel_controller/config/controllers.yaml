@@ -15,16 +15,16 @@ RF_WHEEL_velocity_controller:
 # The current PID loop
 RF_WHEEL_JOINT_dc_controller:
   p: 50.0
-  i: 0.1
+  i: 0.0
   d: 0.0
-  i_clamp: 500
+  i_clamp: 0.0
   antiwindup: True
   publish_state: True
 
 LF_WHEEL_JOINT_dc_controller:
   p: 50.0
-  i: 0.1
+  i: 0.0
   d: 0.0
-  i_clamp: 500
+  i_clamp: 0.0
   antiwindup: True
   publish_state: True
