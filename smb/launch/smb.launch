@@ -11,6 +11,7 @@
   <arg name="mpc_track_local_plan"                 default="false" />
   <arg name="control_namespace"                    default="control"/>
   <arg name="description_name"                     default="smb_description"/>
+  <arg name="command_smb"                          default="true"/>
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
 
