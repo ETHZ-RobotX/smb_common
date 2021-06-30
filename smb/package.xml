@@ -9,10 +9,8 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>odometry_conversion</exec_depend>
-  <exec_depend>rslidar_sdk</exec_depend>
-  <exec_depend>versavis</exec_depend>
+  <exec_depend>smb_sensors</exec_depend>
   <exec_depend>smb_control</exec_depend>
   <exec_depend>smb_lowlevel_controller</exec_depend>
   <exec_depend>smb_opc</exec_depend>
-  <!--exec_depend>spinnaker_camera_driver</exec_depend-->
 </package>
