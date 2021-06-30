@@ -156,7 +156,7 @@
 
   <!-- Launch powerstatus -->
   <group if="$(arg launch_versavis)" >
-    <include file="$(find smb_powerstatus)/launch/smb_powerstatus.launch">
+    <include file="$(find smb_powerstatus)/launch/smb_powerstatus.launch"/>
   </group>
 
 
