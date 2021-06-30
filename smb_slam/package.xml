@@ -16,5 +16,6 @@
 	<depend>pointmatcher_ros</depend>
 	<depend>libpointmatcher</depend>
 	<depend>roslib</depend>
+	<depend>icp_localization</depend>
 
 </package>

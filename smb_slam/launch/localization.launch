@@ -4,8 +4,7 @@
   <arg name="launch_rviz" 		    default="false"/>
   <arg name="launch_sensors"      default="false"/>
   <arg name="use_lidar_odometry"  default="false"/>
-  <arg name="pcd_filepath" 
-    default="$(find smb_slam)/compslam_map.pcd" /> 
+  <arg name="map_name"            default="Wangen_mapdecimated.pcd" /> 
   <arg name="launch_lidar_odometry"   default="false"/>
 
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)">
@@ -15,7 +14,7 @@
   <group if="$(arg use_lidar_odometry)">
     <include file="$(find icp_localization)/launch/icp_node.launch">
       <arg name="launch_rviz" value="$(arg launch_rviz)"/>
-      <arg name="pcd_filepath"  value="$(arg pcd_filepath)"/>
+      <arg name="pcd_filepath"  value="$(find smb_slam)/maps/$(arg map_name)"/>
       <arg name="parameter_filepath"   value="$(find smb_slam)/config/localization/param_with_lidar_odometry.yaml"/>
     </include>
 
@@ -35,7 +34,7 @@
 
     <include file="$(find icp_localization)/launch/icp_node.launch">
       <arg name="launch_rviz" value="$(arg launch_rviz)"/>
-      <arg name="pcd_filepath"  value="$(arg pcd_filepath)"/>
+      <arg name="pcd_filepath"  value="$(find smb_slam)/maps/$(arg map_name)"/>
       <arg name="parameter_filepath"   value="$(find smb_slam)/config/localization/param_with_camera_odometry.yaml"/>
     </include>
 
