@@ -18,6 +18,9 @@
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
 
+  <!-- launch powerstatus -->
+  <param name="launch_powerstatus" value="true"/>
+
   <!-- Robosense LiDAR -->
   <group if="$(arg launch_lidar)" >
     <node  name="rslidar_sdk_node" pkg="rslidar_sdk" type="rslidar_sdk_node" output="screen"/>
@@ -148,6 +151,12 @@
       <param name="imu_sub_topic"  type="string"          value="/versavis/imu_micro"/>
     </node>
 
+  </group>
+
+
+  <!-- Launch powerstatus -->
+  <group if="$(arg launch_versavis)" >
+    <include file="$(find smb_powerstatus)/launch/smb_powerstatus.launch"/>
   </group>
 
 

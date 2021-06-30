@@ -11,6 +11,7 @@
   <arg name="mpc_track_local_plan"                 default="false" />
   <arg name="control_namespace"                    default="control"/>
   <arg name="description_name"                     default="smb_description"/>
+  <arg name="command_smb"                          default="true"/>
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
 
@@ -23,7 +24,7 @@
     </include>
   </group>
 
-  <group name="odometry" if="$(arg use_lidar_odometry)">
+  <group ns="odometry" if="$(arg use_lidar_odometry)">
     <node pkg="odometry_conversion" type="odometry_conversion_node" name="lidar_odometry_conversion">
       <param name="in_odom_frame" value="rslidar"/>
       <param name="in_sensor_frame" value="imu"/>
@@ -37,7 +38,7 @@
     </include>
   </group>
 
-  <group name="odometry" unless="$(arg use_lidar_odometry)">
+  <group ns="odometry" unless="$(arg use_lidar_odometry)">
     <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
       <param name="in_odom_frame" value="camera_pose_frame"/>
       <param name="in_sensor_frame" value="camera_pose_frame"/>
@@ -48,7 +49,7 @@
 
   <include file="$(find smb_lowlevel_controller)/launch/smb_lowlevel_controller.launch" ns="$(arg control_namespace)">
 	  <arg name="description_name"            value="/$(arg description_name)"/>
-	  <arg name="command_smb"                 value="true"/>
+	  <arg name="command_smb"                 value="$(arg command_smb)"/>
   </include>
 
   
