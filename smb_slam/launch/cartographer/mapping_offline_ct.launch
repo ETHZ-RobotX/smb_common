@@ -3,7 +3,7 @@
 
   <param name="/use_sim_time" value="true" />
 
-  <arg name="bag_filename" default="$(find smb_slam)/data/First_mission_wangen.bag" /> 
+  <arg name="bag_filename" default="$(find smb_slam)/data/first_mission_wangen.bag" /> 
 
   <node name="cartographer_offline_node" pkg="cartographer_ros"
     type="cartographer_offline_node" args="
