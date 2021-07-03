@@ -7,9 +7,7 @@
 	<license>BSD-3</license>
 	<author email="jelavice@ethz.ch">EJ</author>
 
-
-   <buildtool_depend>catkin</buildtool_depend>
-
+	<buildtool_depend>catkin</buildtool_depend>
 
 	<depend>roscpp</depend>
 	<depend>nav_msgs</depend>
@@ -17,5 +15,7 @@
 	<depend>libpointmatcher</depend>
 	<depend>roslib</depend>
 	<depend>icp_localization</depend>
+	
+	<build_depend>libgoogle-glog-dev</build_depend>
 
 </package>
