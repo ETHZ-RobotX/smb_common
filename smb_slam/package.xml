@@ -2,7 +2,7 @@
 <package format="2">
 	<name>smb_slam</name>
 	<version>0.1.0</version>
-	<description>collection of hacks for the smb</description>
+	<description>SMB mapping and localization</description>
 	<maintainer email="jelavice@ethz.ch">EJ</maintainer>
 	<license>BSD-3</license>
 	<author email="jelavice@ethz.ch">EJ</author>
