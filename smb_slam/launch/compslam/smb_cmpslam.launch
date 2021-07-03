@@ -8,6 +8,7 @@
   <arg name="rviz_config"       default="compslam.rviz"/>
   <arg name="run_tf_publisher"  default="true"/>
   <arg name="stitch_pointclouds"  default="true"/>
+  <arg name="map_name"          default="compslam"/>
 
 
   <param name="/use_sim_time" value="$(arg use_sim_time)"/>
@@ -35,6 +36,7 @@
   </node>
 
   <include file="$(find smb_slam)/launch/compslam/pointcloud_stitcher.launch" if="$(arg stitch_pointclouds)">
+    <arg name="map_name" value="$(arg map_name)"/>
   </include>
 
 </launch>

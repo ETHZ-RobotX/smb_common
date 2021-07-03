@@ -82,6 +82,8 @@ void PointCloudStitcher::initRos()
 {
   nh_.param<std::string>("stitching_frame", concatenatingFrame_, "BASE");
 
+  nh_.param<std::string>("output_path", output_path_, ros::package::getPath("smb_slam") + "/maps/compslam_map.pcd");
+
   //subscriber
   std::string inputPointCloudTopic = "/velodyne_points_self_filtered";
   nh_.param<std::string>("input_cloud_topic", inputPointCloudTopic,
@@ -164,7 +166,7 @@ void PointCloudStitcher::save() const{
 
   std::cout << "SAving cloud with: " << concatenatedCloud_.dataPoints_.getNbPoints() << " points" << std::endl;
   //concatenatedCloud_.clear();
-  const std::string path = ros::package::getPath("smb_slam") + "/compslam_map.pcd";
+  const std::string path = output_path_;
   cloudOut.save(path);
   std::cout << "Saved to: " << path << std::endl;
   // sensor_msgs::PointCloud2 cloudOutRos = pointmatcher_ros::pointMatcherCloudToRosMsg<float>(
