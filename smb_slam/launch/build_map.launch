@@ -3,12 +3,14 @@
 
   <arg name="launch_rviz" default="false"/>
   <arg name="launch_sensors" default="false"/>
+  <arg name="map_name"    default="compslam"/>
 
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)">
    </include> 
 
   <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
     <arg name="launch_rviz" default="$(arg launch_rviz)"/>
+    <arg name="map_name"    value="$(arg map_name)"/>
   </include>
 
 </launch>

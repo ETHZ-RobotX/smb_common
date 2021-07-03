@@ -65,6 +65,7 @@ class PointCloudStitcher {
   ros::NodeHandle &nh_;
   std::string concatenatingFrame_ = "odom";
   std::string filteringFrame_ = "base_link";
+  std::string output_path_ = "";
   ros::Time lastSaveTime_;
   double saveEveryNSec_= 5.0;
 
