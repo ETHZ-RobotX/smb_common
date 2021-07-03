@@ -477,6 +477,10 @@ Visualization Manager:
         Show Battery 1: true
         Show Battery 2: true
         Show Plug: true
+    - Class: smb_rviz_plugins/SMBPowerMotor
+      Enabled: true
+      Name: SMBPowerMotor
+      Topic Power Motor: /control/base_battery_state
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
