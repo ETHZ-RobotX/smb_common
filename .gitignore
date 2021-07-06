@@ -1,6 +1,9 @@
 smb_slam/data/*
 smb_slam/maps/*
+*.pcd
+!smb_slam/maps/*.png
+!smb_slam/maps/rescue_mapdecimated.pcd
+!smb_slam/maps/rescue_map_cleaned_v2.pcd
 !smb_slam/data/.gitkeep
 !smb_slam/maps/.gitkeep
-*.pcd
 .vscode
