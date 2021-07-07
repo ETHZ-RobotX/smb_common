@@ -114,3 +114,4 @@ rostopic echo /W_artefact
 
 - remark
   - you need to set "darknet_classes" params in artefact_mapping.launch to detect different objects
+  - https://github.com/ethz-asl/darknet_catkin/blob/master/data/coco.names
