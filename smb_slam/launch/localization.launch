@@ -4,7 +4,7 @@
   <arg name="launch_rviz" 		    default="false"/>
   <arg name="launch_sensors"      default="false"/>
   <arg name="use_lidar_odometry"  default="false"/>
-  <arg name="map_name"            default="Wangen_mapdecimated.pcd" /> 
+  <arg name="map_name"            default="rescue_mapdecimated.pcd" /> 
   <arg name="launch_lidar_odometry"   default="false"/>
 
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)">
