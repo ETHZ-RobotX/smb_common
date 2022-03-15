@@ -7,7 +7,7 @@
 
   <!-- Name of the world -->
   <!-- <arg name="world"                                 default="big_map_summer_school"/> -->
-  <arg name="world"                                 default="planner_tutorial"/>
+  <arg name="world"                                 default="WaA"/>
   <!-- Path to the world file -->
   <arg name="world_file"                            default="$(find smb_gazebo)/worlds/$(arg world).world"/>
 
