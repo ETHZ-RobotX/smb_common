@@ -5,6 +5,7 @@ set(CATKIN_DEPENDENCIES
   roslib
   ocs2_core
   ocs2_robotic_tools
+  ocs2_ros_interfaces
   ocs2_ddp
   tf2_ros
   eigen_conversions
@@ -43,13 +44,13 @@ include_directories(
 
 add_library(${PROJECT_NAME}
   src/SmbSystemDynamics.cpp
-  src/SmbCost.cpp
-  src/SmbCostWrapper.cpp
-  src/SmbOperatingPoint.cpp
+  #src/SmbCost.cpp
+  #src/SmbCostWrapper.cpp
+  #src/SmbOperatingPoint.cpp
   src/SmbInterface.cpp
-  src/SmbConversions.cpp
+  #src/SmbConversions.cpp
   src/SmbDefinitions.cpp
-  src/SmbController.cpp
+  #src/SmbController.cpp
 )
 add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}

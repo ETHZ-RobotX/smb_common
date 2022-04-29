@@ -14,6 +14,7 @@
   <depend>ocs2_ddp</depend>
   <depend>tf2_ros</depend>
   <depend>eigen_conversions</depend>
+  <depend>ocs2_ros_interfaces</depend>
   <export>
   </export>
 </package>

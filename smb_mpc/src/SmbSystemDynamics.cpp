@@ -8,7 +8,7 @@ using namespace ocs2;
 namespace smb_mpc
 {
   SmbSystemDynamics::SmbSystemDynamics(const std::string &modelName,
-                                       const std::string &modelFolder = "/tmp/ocs2", bool recompileLibraries = true, bool verbose = true)
+                                       const std::string &modelFolder, bool recompileLibraries, bool verbose)
   {
     this->initialize(SmbDefinitions::STATE_DIM, SmbDefinitions::INPUT_DIM, modelName, modelFolder, recompileLibraries, verbose);
   }

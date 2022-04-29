@@ -53,8 +53,8 @@ namespace smb_mpc
     initialState_.setZero(SmbDefinitions::STATE_DIM);
 
     // DDP-MPC settings
-    ddpSettings_ = ddp::loadSettings(taskFile, "ddp");
-    mpcSettings_ = mpc::loadSettings(taskFile, "mpc");
+    ddpSettings_ = ddp::loadSettings(taskFile, "ddp", false);
+    mpcSettings_ = mpc::loadSettings(taskFile, "mpc", false);
 
     // Reference Manager
     referenceManagerPtr_.reset(new ReferenceManager);

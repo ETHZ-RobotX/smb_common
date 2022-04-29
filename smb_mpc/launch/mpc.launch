@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-  <arg name="track_local_plan" default="false"/>
-  <node name="smb_mpc" type="smb_mpc_node" pkg="smb_mpc">
+  <!-- The task file for the mpc. -->
+  <arg name="taskFile" default="$(find smb_mpc)/config/task.info" doc="The task file for the mpc." />
+  <!-- The library folder to generate CppAD codegen into -->
+  <arg name="libFolder" default="$(find smb_mpc)/auto_generated" doc="The library folder to generate CppAD codegen into." />
+
+  <!-- make the files into global parameters -->
+  <param name="taskFile" value="$(arg taskFile)" />
+  <param name="libFolder" value="$(arg libFolder)" />
+
+  <!-- Track local plan -->
+  <arg name="track_local_plan" default="false" doc="Track local plan" />
+
+  <!-- <node name="smb_mpc" type="smb_controller_node" pkg="smb_mpc">
     <rosparam command="load" file="$(find smb_mpc)/config/parameters.yaml" />
-    <param name="~adjust_time_stamps" value="$(eval not arg('track_local_plan'))"/>
-    <remap from="~reference_trajectory" to="/move_base/TebLocalPlannerROS/local_plan" if="$(arg track_local_plan)"/>
-    <remap from="~reference_trajectory" to="/mpc_trajectory_standalone" unless="$(arg track_local_plan)"/>
-    <remap from="~joy_twist" to="/joy_teleop/cmd_vel"/>
-  </node>
-  <node name="mpc_standalone_path_publisher" type="mpc_path_publisher.py" pkg="smb_mpc" ns="smb_mpc" unless="$(arg track_local_plan)" output="screen"/>
+    <param name="~adjust_time_stamps" value="$(eval not arg('track_local_plan'))" />
+    <remap from="~reference_trajectory" to="/move_base/TebLocalPlannerROS/local_plan" if="$(arg track_local_plan)" />
+    <remap from="~reference_trajectory" to="/mpc_trajectory_standalone" unless="$(arg track_local_plan)" />
+    <remap from="~joy_twist" to="/joy_teleop/cmd_vel" />
+  </node> -->
+
+  <node name="smb_mpc" type="smb_mpc_node" pkg="smb_mpc" />
+
+  <!-- Track local plan -->
+  <node name="mpc_standalone_path_publisher" type="mpc_path_publisher.py" pkg="smb_mpc" ns="smb_mpc" unless="$(arg track_local_plan)" output="screen" />
 </launch>
