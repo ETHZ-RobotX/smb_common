@@ -3,7 +3,7 @@
 //
 
 #include <smb_mpc/SmbDefinitions.h>
-namespace smb_path_following {
+namespace smb_mpc {
 const size_t SmbDefinitions::STATE_DIM;
 const size_t SmbDefinitions::INPUT_DIM;
 const size_t SmbDefinitions::REFERENCE_STATE_DIM_;
