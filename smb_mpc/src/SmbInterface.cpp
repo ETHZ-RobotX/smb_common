@@ -21,8 +21,7 @@ using namespace ocs2;
 namespace smb_mpc
 {
 
-  SmbInterface::SmbInterface(const std::string &taskFile, const std::string &libraryFolder,
-                             const std::string &urdfFile)
+  SmbInterface::SmbInterface(const std::string &taskFile, const std::string &libraryFolder)
   {
     // check that task file exists
     boost::filesystem::path taskFilePath(taskFile);

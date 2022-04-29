@@ -17,7 +17,7 @@ namespace smb_mpc
   class SmbInterface final : public RobotInterface
   {
   public:
-    SmbInterface(const std::string &taskFile, const std::string &libraryFolder, const std::string &urdfFile);
+    SmbInterface(const std::string &taskFile, const std::string &libraryFolder);
 
     const vector_t &getInitialState() { return initialState_; }
 
