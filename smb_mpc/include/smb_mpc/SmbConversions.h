@@ -11,7 +11,7 @@
 #include <ocs2_core/Types.h>
 #include <ocs2_mpc/SystemObservation.h>
 
-namespace smb_path_following {
+namespace smb_mpc {
 
 class SmbConversions {
 public:

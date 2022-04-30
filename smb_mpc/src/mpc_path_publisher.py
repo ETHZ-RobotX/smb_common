@@ -15,8 +15,8 @@ class MpcPathPublisher:
         self.path_publisher_ = rospy.Publisher("/mpc_trajectory_standalone", Path, queue_size=1, latch=False)
         self.pose_subscriber_ = rospy.Subscriber("/move_base_simple/goal", PoseStamped, self.receiveGoalPose)
 
-        self.control_frame_ = rospy.get_param("control_frame", "world")
-        self.robot_base_link_ = rospy.get_param("base_frame", "base")
+        self.control_frame_ = rospy.get_param("control_frame", "tracking_camera_odom")
+        self.robot_base_link_ = rospy.get_param("base_frame", "base_link")
 
         self.tf_buffer_ = tf2_ros.Buffer(rospy.Duration(1200))
         self.tf_listener_ = tf2_ros.TransformListener(self.tf_buffer_)

@@ -12,13 +12,14 @@
   <!-- Track local plan -->
   <arg name="track_local_plan" default="false" doc="Track local plan" />
 
-  <!-- <node name="smb_mpc" type="smb_controller_node" pkg="smb_mpc">
-    <rosparam command="load" file="$(find smb_mpc)/config/parameters.yaml" />
-    <param name="~adjust_time_stamps" value="$(eval not arg('track_local_plan'))" />
-    <remap from="~reference_trajectory" to="/move_base/TebLocalPlannerROS/local_plan" if="$(arg track_local_plan)" />
-    <remap from="~reference_trajectory" to="/mpc_trajectory_standalone" unless="$(arg track_local_plan)" />
-    <remap from="~joy_twist" to="/joy_teleop/cmd_vel" />
-  </node> -->
+  <rosparam command="load" file="$(find smb_mpc)/config/parameters.yaml" />
+
+  <node name="smb_controller" type="smb_controller_node" pkg="smb_mpc">
+    <param name="adjust_time_stamps" value="$(eval not arg('track_local_plan'))" />
+    <remap from="reference_trajectory" to="/move_base/TebLocalPlannerROS/local_plan" if="$(arg track_local_plan)" />
+    <remap from="reference_trajectory" to="/mpc_trajectory_standalone" unless="$(arg track_local_plan)" />
+    <remap from="joy_twist" to="/joy_teleop/cmd_vel" />
+  </node>
 
   <node name="smb_mpc" type="smb_mpc_node" pkg="smb_mpc" />
 
