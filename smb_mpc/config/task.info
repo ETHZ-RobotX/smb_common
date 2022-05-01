@@ -94,8 +94,8 @@ QPosition
 {
   scaling 1e+0
 
-  (0,0) 1.0  ; x
-  (1,1) 1.0  ; y
+  (0,0) 10.0  ; x
+  (1,1) 10.0  ; y
   (2,2) 0.0  ; z
 }
 
@@ -119,4 +119,12 @@ inputCost
     (0,0) 1.0  ; linear velocity cost
     (1,1) 1.0  ; angular velocity cost
   }
+}
+
+R
+{
+  scaling 1e+1
+
+  (0,0) 1.0  ; linear velocity cost
+  (1,1) 1.0  ; angular velocity cost
 }

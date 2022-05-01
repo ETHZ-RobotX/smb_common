@@ -44,7 +44,7 @@ include_directories(
 
 add_library(${PROJECT_NAME}
   src/SmbSystemDynamics.cpp
-  #src/SmbCost.cpp
+  src/SmbCost.cpp
   #src/SmbCostWrapper.cpp
   #src/SmbOperatingPoint.cpp
   src/SmbInterface.cpp

@@ -3,6 +3,7 @@
 #include "smb_mpc/SmbInterface.h"
 #include "smb_mpc/SmbSystemDynamics.h"
 #include "smb_mpc/cost/QuadraticInputCost.h"
+#include "smb_mpc/SmbCost.h"
 
 #include <ocs2_core/initialization/DefaultInitializer.h>
 #include <ocs2_core/misc/LoadData.h>
@@ -64,9 +65,9 @@ namespace smb_mpc
      */
     // Cost
     problem_.costPtr->add("inputCost", getQuadraticInputCost(taskFile));
+    problem_.costPtr->add("pos_cost", getPositionCost(taskFile, libraryFolder, recompileLibraries));
 
     problem_.dynamicsPtr.reset(new SmbSystemDynamics("dynamics", libraryFolder, recompileLibraries, true));
-
 
     // Rollout
     const auto rolloutSettings = rollout::loadSettings(taskFile, "rollout");
@@ -86,6 +87,19 @@ namespace smb_mpc
     loadData::loadEigenMatrix(taskFile, "inputCost.R", R);
 
     return std::unique_ptr<StateInputCost>(new QuadraticInputCost(std::move(R), SmbDefinitions::STATE_DIM));
+  }
+
+  std::unique_ptr<StateInputCost> SmbInterface::getPositionCost(const std::string &taskFile, const std::string &libraryFolder, bool recompileLibraries)
+  {
+    matrix_t QPosition(3, 3);
+    matrix_t QOrientation(3, 3);
+    matrix_t R(SmbDefinitions::INPUT_DIM, SmbDefinitions::INPUT_DIM);
+
+    loadData::loadEigenMatrix(taskFile, "QPosition", QPosition);
+    loadData::loadEigenMatrix(taskFile, "QOrientation", QOrientation);
+    loadData::loadEigenMatrix(taskFile, "R", R);
+
+    return std::unique_ptr<StateInputCost>(new SmbCost(QPosition, QOrientation, R, libraryFolder, recompileLibraries));
   }
 
 }

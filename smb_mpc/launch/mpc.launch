@@ -19,6 +19,7 @@
     <remap from="reference_trajectory" to="/move_base/TebLocalPlannerROS/local_plan" if="$(arg track_local_plan)" />
     <remap from="reference_trajectory" to="/mpc_trajectory_standalone" unless="$(arg track_local_plan)" />
     <remap from="joy_twist" to="/joy_teleop/cmd_vel" />
+    <remap from="command_twist" to="/control/smb_diff_drive/cmd_vel"/>
   </node>
 
   <node name="smb_mpc" type="smb_mpc_node" pkg="smb_mpc" />

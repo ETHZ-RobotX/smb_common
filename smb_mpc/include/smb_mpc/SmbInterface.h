@@ -35,6 +35,7 @@ namespace smb_mpc
 
   private:
     std::unique_ptr<StateInputCost> getQuadraticInputCost(const std::string &taskFile);
+    std::unique_ptr<StateInputCost> getPositionCost(const std::string &taskFile, const std::string &libraryFolder, bool recompileLibraries);
 
     ddp::Settings ddpSettings_;
     mpc::Settings mpcSettings_;

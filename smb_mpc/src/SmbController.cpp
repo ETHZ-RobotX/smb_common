@@ -59,10 +59,10 @@ namespace smb_mpc
     controlFrame_ = nh_.param<std::string>("control_frame", controlFrame_);
     adjustTimeStamps_ = nh_.param<bool>("adjust_time_stamps", adjustTimeStamps_);
 
-    // rosPublishingWorker_ = nh_.createTimer(
-    //     ros::Duration(1 / nh_.param<double>("ros_publishing_rate", 10.0)),
-    //     [this](const auto &)
-    //     { this->publishRos(); });
+    rosPublishingWorker_ = nh_.createTimer(
+        ros::Duration(1 / nh_.param<double>("ros_publishing_rate", 10.0)),
+        [this](const auto &)
+        { this->publishRos(); });
 
     // Start mpc update worker.
     mpcUpdateWorker_ = nh_.createTimer(
