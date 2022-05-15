@@ -28,8 +28,9 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
 
   wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("/wheelSpeeds", 1);
 
+  //interchange wheel labels
   wheelSpeedMsg_.layout.dim.resize(1);
-  wheelSpeedMsg_.layout.dim[0].label = "t leftSpeed rightSpeed";
+  wheelSpeedMsg_.layout.dim[0].label = "t rightSpeed leftSpeed";
   wheelSpeedMsg_.layout.dim[0].size = 1;
   wheelSpeedMsg_.layout.dim[0].stride = 3;
   wheelSpeedMsg_.data.resize(3);
