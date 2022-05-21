@@ -1,22 +1,30 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smb">
 
+    <!-- TODO: replace this arg by other ones like sensors, legacy, etc -->
     <xacro:arg name="lidar" default="true"/>
 
+    <!-- Defines colors and calculates typical inertias -->
     <xacro:include filename="$(find smb_description)/urdf/smb_utils.urdf.xacro" />
+    <!-- Defines IMU macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_imu.gazebo.xacro"/>
+    <!-- Defines GPS macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_gps.gazebo.xacro"/>
     <xacro:if value="$(arg lidar)">
         <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_robosense.gazebo.xacro"/>
     </xacro:if>
+    <!-- Defines odometry macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
+    <!-- Defines lidar macro -->
     <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
+    <!-- Defines camera macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_mono.gazebo.xacro"/>
+    <!-- Defines blackfly camera macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera.urdf.xacro"/>
+    <!-- Defines blackfly stereo macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera_stereo.urdf.xacro"/>
+    <!-- Defines lidar macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_lidar_mount.urdf.xacro"/>
-
-    <xacro:property name="PI" value="3.1415926535897931"/>
 
     <!-- Model macros -->
     <xacro:macro name="wheel" params="prefix X Y wheel_joint_type friction_coeff:=0.2 transmission_reduction:=${wheelTransmission}" >
@@ -167,8 +175,7 @@
 
         <xacro:wheel prefix="LH" X="${backWheelX}"
             Y="${chassisWidth/2+wheelClearance+wheelWidth/2}"
-	    wheel_joint_type="${wheel_joint_type}"
-        friction_coeff="0.0" />
+	    wheel_joint_type="${wheel_joint_type}" />
 
         <xacro:wheel prefix="RH" X="${backWheelX}"
             Y="${-chassisWidth/2-wheelClearance-wheelWidth/2}"
@@ -178,7 +185,7 @@
 
         <!-- <xacro:GPS base_link="${base_link_name}" simulation="${simulation}"/> -->
 
-        <xacro:mono_cam base_link="${base_link_name}" simulation="${simulation}"/>
+        <!-- <xacro:mono_cam base_link="${base_link_name}" simulation="${simulation}"/>
         <xacro:blackfly_cam id="0" base_link="${base_link_name}" simulation="${simulation}">
             <origin xyz="0.29082 0.04458 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
         </xacro:blackfly_cam>
@@ -187,7 +194,7 @@
             <origin xyz="0.29082 -0.04542 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
         </xacro:blackfly_cam>
 
-        <xacro:blackfly_cam_stereo base_link="${base_link_name}" simulation="${simulation}"/>
+        <xacro:blackfly_cam_stereo base_link="${base_link_name}" simulation="${simulation}"/> -->
 
         <xacro:if value="${lidar}">
             <xacro:LIDAR base_link="${base_link_name}" simulation="${simulation}"/>
