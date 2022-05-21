@@ -4,7 +4,6 @@
   <!-- ROBOT ARGUMENTS -->
   <!-- Name of the robot description parameter -->
   <arg name="description_name"            default="smb_description"/>
-  <arg name="description_file"            default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
   <arg name="enable_ekf"                  default="false"/>
   <arg name="robot_namespace"             default=""/>
   <arg name="control_namespace"           default="control"/>

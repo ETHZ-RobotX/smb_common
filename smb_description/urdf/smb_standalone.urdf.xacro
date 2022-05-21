@@ -15,11 +15,12 @@
   <xacro:property name="lidar" value="$(arg lidar)"/>
 
   <!-- Includes -->
+  <!-- This loads a bunch of xacro properties -->
   <xacro:include filename="$(find smb_description)/urdf/smb_big_properties.urdf.xacro" />
 
-  <xacro:if value="$(arg simulation)">
+  <!-- <xacro:if value="$(arg simulation)">
     <xacro:include filename="$(find smb_description)/urdf/smb_gazebo_addins.urdf.xacro"/>
-  </xacro:if>
+  </xacro:if> -->
 
   <xacro:include filename="$(find smb_description)/urdf/smb.urdf.xacro">
     <xacro:arg name="lidar" default="$(arg lidar)"/>
