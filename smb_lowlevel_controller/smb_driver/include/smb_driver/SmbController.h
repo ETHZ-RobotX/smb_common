@@ -91,6 +91,7 @@ private:
 
     bool readWheelSpeeds();
     bool readBatteryVoltage();
+    bool readRCInputs();
 
     const bool sendCommands_;
 

@@ -128,6 +128,19 @@ bool SmbController::readBatteryVoltage() {
     return res;
 }
 
+bool SmbController::readRCInputs() {
+    bool res = true;
+
+    int batteryVoltageResult, batteryVoltageResult2 = -1;
+    double batteryVoltage;
+    serialDevice->GetValue(_CIP, 1, batteryVoltageResult);
+    serialDevice->GetValue(_CIP, 2, batteryVoltageResult2);
+
+    std::cout << batteryVoltageResult << ", " << batteryVoltageResult2 << std::endl;
+
+    return res;
+}
+
 bool SmbController::setDesiredCommands()
 {
     bool res = true;
@@ -254,6 +267,8 @@ void SmbController::receiveData(void *context) {
     //Read the desired inputs (wheel speeds and battery voltage)
     if (!instance->readWheelSpeeds())
       res = false;
+
+    !instance->readRCInputs();
 
     if ((std::chrono::high_resolution_clock::now() - instance->t_lastVoltageUpdate_).count() > instance->batteryVoltageUpdateInterval_ns_) {
       if (!instance->readBatteryVoltage()){
