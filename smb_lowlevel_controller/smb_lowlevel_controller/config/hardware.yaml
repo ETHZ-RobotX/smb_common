@@ -4,3 +4,5 @@ smb:
     joints:
       - LF_WHEEL_JOINT
       - RF_WHEEL_JOINT
+  lin_vel_scale: 5
+  ang_vel_scale: 5

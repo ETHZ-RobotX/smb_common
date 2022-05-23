@@ -1,4 +1,8 @@
 topics:
+- name    : RC
+  topic   : /rc_twist
+  timeout : 0.5
+  priority: 15
 - name    : joy
   topic   : joy_teleop/cmd_vel
   timeout : 0.5

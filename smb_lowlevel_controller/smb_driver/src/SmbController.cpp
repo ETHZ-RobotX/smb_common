@@ -14,12 +14,14 @@
 
 namespace smb_driver {
 
-SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSize, bool sendCommands) :
+SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSize, bool sendCommands, double lin_vel_scale, double ang_vel_scale) :
         sendCommands_(sendCommands),
         vecSize_(vecSize),
         stopAcquisition_(false),
         port_(port),
-        nh_(nh)
+        nh_(nh),
+        lin_vel_scale_(lin_vel_scale),
+        ang_vel_scale_(ang_vel_scale)
 {
   rpmToRps_ = 2.0 * M_PI / 60.0;
 
@@ -27,6 +29,8 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
 //  this->startAcquisition();
 
   wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("/wheelSpeeds", 1);
+
+  rcTwistPub_ = nh_.advertise<geometry_msgs::Twist>("/rc_twist", 1);
 
   wheelSpeedMsg_.layout.dim.resize(1);
   wheelSpeedMsg_.layout.dim[0].label = "t leftSpeed rightSpeed";
@@ -130,13 +134,23 @@ bool SmbController::readBatteryVoltage() {
 
 bool SmbController::readRCInputs() {
     bool res = true;
-
-    int batteryVoltageResult, batteryVoltageResult2 = -1;
+    int channel_1, channel_2 = -1;
     double batteryVoltage;
-    serialDevice->GetValue(_CIP, 1, batteryVoltageResult);
-    serialDevice->GetValue(_CIP, 2, batteryVoltageResult2);
+    if(serialDevice->GetValue(_PIC, 1, channel_1) != RQ_SUCCESS){
+      res = false;
+    }
+    if(serialDevice->GetValue(_PIC, 2, channel_2) != RQ_SUCCESS){
+      res = false;
+    }
 
-    std::cout << batteryVoltageResult << ", " << batteryVoltageResult2 << std::endl;
+    x_rc_ = channel_1 / 1000.0 - channel_2 / 1000.0;
+    y_rc_ = -channel_1 / 1000.0 - channel_2 / 1000.0;
+
+    geometry_msgs::Twist twistMsg;
+    twistMsg.linear.x = x_rc_ * lin_vel_scale_;     
+    twistMsg.angular.z = -y_rc_ * ang_vel_scale_;
+
+    rcTwistPub_.publish(twistMsg);
 
     return res;
 }
@@ -268,7 +282,9 @@ void SmbController::receiveData(void *context) {
     if (!instance->readWheelSpeeds())
       res = false;
 
-    !instance->readRCInputs();
+    if(!instance->readRCInputs()){
+      std::cout << "readRCInputs failed" << std::endl;
+    };
 
     if ((std::chrono::high_resolution_clock::now() - instance->t_lastVoltageUpdate_).count() > instance->batteryVoltageUpdateInterval_ns_) {
       if (!instance->readBatteryVoltage()){
