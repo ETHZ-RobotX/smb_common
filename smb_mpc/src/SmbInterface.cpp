@@ -2,7 +2,6 @@
 
 #include "smb_mpc/SmbInterface.h"
 #include "smb_mpc/SmbSystemDynamics.h"
-#include "smb_mpc/cost/QuadraticInputCost.h"
 #include "smb_mpc/SmbCost.h"
 
 #include <ocs2_core/initialization/DefaultInitializer.h>
@@ -64,7 +63,6 @@ namespace smb_mpc
      * Optimal control problem
      */
     // Cost
-    problem_.costPtr->add("inputCost", getQuadraticInputCost(taskFile));
     problem_.costPtr->add("pos_cost", getPositionCost(taskFile, libraryFolder, recompileLibraries));
 
     problem_.dynamicsPtr.reset(new SmbSystemDynamics("dynamics", libraryFolder, recompileLibraries, true));
@@ -75,18 +73,6 @@ namespace smb_mpc
 
     // Initialization
     initializerPtr_.reset(new DefaultInitializer(SmbDefinitions::INPUT_DIM));
-  }
-
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-  /******************************************************************************************************/
-  std::unique_ptr<StateInputCost> SmbInterface::getQuadraticInputCost(const std::string &taskFile)
-  {
-    matrix_t R = matrix_t::Zero(SmbDefinitions::INPUT_DIM, SmbDefinitions::INPUT_DIM);
-
-    loadData::loadEigenMatrix(taskFile, "inputCost.R", R);
-
-    return std::unique_ptr<StateInputCost>(new QuadraticInputCost(std::move(R), SmbDefinitions::STATE_DIM));
   }
 
   std::unique_ptr<StateInputCost> SmbInterface::getPositionCost(const std::string &taskFile, const std::string &libraryFolder, bool recompileLibraries)

@@ -34,7 +34,6 @@ namespace smb_mpc
     const RolloutBase &getRollout() const { return *rolloutPtr_; }
 
   private:
-    std::unique_ptr<StateInputCost> getQuadraticInputCost(const std::string &taskFile);
     std::unique_ptr<StateInputCost> getPositionCost(const std::string &taskFile, const std::string &libraryFolder, bool recompileLibraries);
 
     ddp::Settings ddpSettings_;
