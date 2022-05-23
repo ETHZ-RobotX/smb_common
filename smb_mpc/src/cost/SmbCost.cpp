@@ -19,12 +19,13 @@ ad_vector_t SmbCost::costVectorFunction(ad_scalar_t time, const ad_vector_t &sta
 {
 
   using ad_quat_t = Eigen::Quaternion<ad_scalar_t>;
+  using ad_vector_4d = Eigen::Matrix<ad_scalar_t, 4, 1>;
 
-  const ad_vector_t &currentPosition = state.head(3);
-  const ad_quat_t currentOrientation(state.tail<4>());
+  const ad_vector_t &currentPosition = SmbConversions::readPosition<ad_vector_t>(state);
+  const ad_quat_t currentOrientation(ad_vector_4d(SmbConversions::readRotation<ad_vector_t>(state)));
 
-  const ad_vector_t &desiredPosition = parameters.head(3);
-  const ad_quat_t desiredOrientation(parameters.tail<4>());
+  const ad_vector_t &desiredPosition = SmbConversions::readPosition<ad_vector_t>(parameters);
+  const ad_quat_t desiredOrientation(ad_vector_4d(SmbConversions::readRotation<ad_vector_t>(parameters)));
 
   ad_vector_t positionError = desiredPosition - currentPosition;
   ad_vector_t orientationError =
@@ -54,16 +55,16 @@ vector_t SmbCost::getParameters(
 
     const auto &lhs = desiredTrajectory[index];
     const auto &rhs = desiredTrajectory[index + 1];
-    const Eigen::Quaterniond quaternionA(lhs.tail<4>());
-    const Eigen::Quaterniond quaternionB(rhs.tail<4>());
+    const Eigen::Quaterniond quaternionA(Eigen::Vector4d(SmbConversions::readRotation<vector_t>(lhs)));
+    const Eigen::Quaterniond quaternionB(Eigen::Vector4d(SmbConversions::readRotation<vector_t>(rhs)));
 
-    reference.head(3) = alpha * lhs.head<3>() + (1.0 - alpha) * rhs.head<3>();
+    reference.head(3) = alpha * SmbConversions::readPosition<vector_t>(lhs) + (1.0 - alpha) * SmbConversions::readPosition<vector_t>(rhs);
     reference.tail(4) = (quaternionA.slerp((1 - alpha), quaternionB)).coeffs();
   }
   else
   { // desiredTrajectory.size() == 1
-    reference.head(3) = desiredTrajectory[0].head<3>();
-    reference.tail(4) = desiredTrajectory[0].tail<4>();
+    reference.head(3) = SmbConversions::readPosition<vector_t>(desiredTrajectory[0]);
+    reference.tail(4) = SmbConversions::readRotation<vector_t>(desiredTrajectory[0]);
   }
 
   return reference;

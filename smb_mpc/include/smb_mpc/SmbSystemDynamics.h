@@ -8,6 +8,7 @@
 
 #include <cppad/cg.hpp>
 #include "smb_mpc/SmbDefinitions.h"
+#include "smb_mpc/SmbConversions.h"
 
 namespace smb_mpc
 {

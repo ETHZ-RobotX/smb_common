@@ -18,10 +18,12 @@ namespace smb_mpc
     ad_vector_t stateDerivative(SmbDefinitions::STATE_DIM);
 
     using ad_quat_t = Eigen::Quaternion<ad_scalar_t>;
+    using ad_vector_4d = Eigen::Matrix<ad_scalar_t, 4, 1>;
 
-    ad_scalar_t linearVelocity = input[0];
-    ad_scalar_t omega = input[1];
-    ad_quat_t currentRotation(state.tail<4>());
+    ad_scalar_t linearVelocity = SmbConversions::readLinVel<ocs2::ad_scalar_t, ocs2::ad_vector_t>(input);
+    ad_scalar_t omega = SmbConversions::readAngVel<ocs2::ad_scalar_t, ocs2::ad_vector_t>(input);
+
+    ad_quat_t currentRotation(ad_vector_4d(SmbConversions::readRotation<ad_vector_t>(state)));
 
     // derivative of orientation quaternion: https://fgiesen.wordpress.com/2012/08/24/quaternion-differentiation/
     ad_quat_t deltaRotation;

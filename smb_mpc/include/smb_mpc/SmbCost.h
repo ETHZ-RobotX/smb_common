@@ -10,6 +10,7 @@
 #pragma once
 
 #include "smb_mpc/SmbDefinitions.h"
+#include "smb_mpc/SmbConversions.h"
 #include <ocs2_core/cost/StateInputGaussNewtonCostAd.h>
 
 #include <cmath>
