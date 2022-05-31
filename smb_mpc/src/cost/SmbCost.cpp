@@ -19,13 +19,12 @@ ad_vector_t SmbCost::costVectorFunction(ad_scalar_t time, const ad_vector_t &sta
 {
 
   using ad_quat_t = Eigen::Quaternion<ad_scalar_t>;
-  using ad_vector_4d = Eigen::Matrix<ad_scalar_t, 4, 1>;
 
-  const ad_vector_t &currentPosition = SmbConversions::readPosition<ad_vector_t>(state);
-  const ad_quat_t currentOrientation(ad_vector_4d(SmbConversions::readRotation<ad_vector_t>(state)));
+  const ad_vector_t currentPosition = SmbConversions::readPosition(state);
+  const ad_quat_t currentOrientation = SmbConversions::readRotation(state);
 
-  const ad_vector_t &desiredPosition = SmbConversions::readPosition<ad_vector_t>(parameters);
-  const ad_quat_t desiredOrientation(ad_vector_4d(SmbConversions::readRotation<ad_vector_t>(parameters)));
+  const ad_vector_t desiredPosition = SmbConversions::readPosition(parameters);
+  const ad_quat_t desiredOrientation = SmbConversions::readRotation(parameters);
 
   ad_vector_t positionError = desiredPosition - currentPosition;
   ad_vector_t orientationError =
@@ -55,16 +54,16 @@ vector_t SmbCost::getParameters(
 
     const auto &lhs = desiredTrajectory[index];
     const auto &rhs = desiredTrajectory[index + 1];
-    const Eigen::Quaterniond quaternionA(Eigen::Vector4d(SmbConversions::readRotation<vector_t>(lhs)));
-    const Eigen::Quaterniond quaternionB(Eigen::Vector4d(SmbConversions::readRotation<vector_t>(rhs)));
+    const Eigen::Quaterniond quaternionA = SmbConversions::readRotation(lhs);
+    const Eigen::Quaterniond quaternionB = SmbConversions::readRotation(rhs);
 
-    reference.head(3) = alpha * SmbConversions::readPosition<vector_t>(lhs) + (1.0 - alpha) * SmbConversions::readPosition<vector_t>(rhs);
+    reference.head(3) = alpha * SmbConversions::readPosition(lhs) + (1.0 - alpha) * SmbConversions::readPosition(rhs);
     reference.tail(4) = (quaternionA.slerp((1 - alpha), quaternionB)).coeffs();
   }
   else
   { // desiredTrajectory.size() == 1
-    reference.head(3) = SmbConversions::readPosition<vector_t>(desiredTrajectory[0]);
-    reference.tail(4) = SmbConversions::readRotation<vector_t>(desiredTrajectory[0]);
+    reference.head(3) = SmbConversions::readPosition(desiredTrajectory[0]);
+    reference.tail(4) = SmbConversions::readRotation(desiredTrajectory[0]).coeffs();
   }
 
   return reference;

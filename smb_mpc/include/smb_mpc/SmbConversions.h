@@ -32,28 +32,28 @@ namespace smb_mpc
     static void readMpcInput(const ocs2::vector_t &inputVector,
                              geometry_msgs::Twist &twist);
 
-    template <typename T, typename U>
-    static T readLinVel(U input)
+    template <typename T>
+    static T readLinVel(const Eigen::Matrix<T, -1, 1> & input)
     {
       return input[0];
     }
 
-    template <typename T, typename U>
-    static T readAngVel(U input)
+    template <typename T>
+    static T readAngVel(const Eigen::Matrix<T, -1, 1> & input)
     {
       return input[1];
     }
 
     template <typename T>
-    static T readPosition(T state)
+    static Eigen::Matrix<T, -1, 1> readPosition(const Eigen::Matrix<T, -1, 1> & state)
     {
       return state.head(3);
     }
 
     template <typename T>
-    static T readRotation(T state)
+    static Eigen::Quaternion<T> readRotation(const Eigen::Matrix<T, -1, 1> & state)
     {
-      return state.tail(4);
+      return Eigen::Quaternion<T>(state.template tail<4>());
     }
   };
 
