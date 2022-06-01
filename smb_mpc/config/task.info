@@ -89,13 +89,16 @@ initialState
   (2,0)  0.0     ; theta
 }
 
+
+; TODO: Find suitable weights for position, orientation and control inputs
+
 ; position weight matrix
 QPosition
 {
   scaling 1e+0
 
-  (0,0) 10.0  ; x
-  (1,1) 10.0  ; y
+  (0,0) 0.0  ; x
+  (1,1) 0.0  ; y
   (2,2) 0.0  ; z
 }
 
@@ -106,13 +109,13 @@ QOrientation
 
   (0,0) 0.0  ; x
   (1,1) 0.0  ; y
-  (2,2) 5.0  ; z
+  (2,2) 0.0  ; z
 }
 
 R
 {
-  scaling 1e+1
+  scaling 1e+0
 
-  (0,0) 1.0  ; linear velocity cost
-  (1,1) 1.0  ; angular velocity cost
+  (0,0) 0.0  ; linear velocity cost
+  (1,1) 0.0  ; angular velocity cost
 }
