@@ -5,6 +5,7 @@ set(CATKIN_DEPENDENCIES
   roslib
   ocs2_core
   ocs2_robotic_tools
+  ocs2_ros_interfaces
   ocs2_ddp
   tf2_ros
   eigen_conversions
@@ -43,9 +44,8 @@ include_directories(
 
 add_library(${PROJECT_NAME}
   src/SmbSystemDynamics.cpp
-  src/SmbCost.cpp
-  src/SmbCostWrapper.cpp
-  src/SmbOperatingPoint.cpp
+  src/cost/SmbCost.cpp
+  #src/SmbOperatingPoint.cpp
   src/SmbInterface.cpp
   src/SmbConversions.cpp
   src/SmbDefinitions.cpp
@@ -66,7 +66,15 @@ add_executable(${PROJECT_NAME}_node
 target_link_libraries(${PROJECT_NAME}_node
   ${PROJECT_NAME}  
   ${catkin_LIBRARIES}
-  )
+)
+
+add_executable(smb_controller_node
+  src/smb_controller_node.cpp
+)
+target_link_libraries(smb_controller_node
+  ${PROJECT_NAME}  
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##

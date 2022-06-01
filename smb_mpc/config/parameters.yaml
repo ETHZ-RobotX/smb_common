@@ -2,3 +2,4 @@ control_frame: tracking_camera_odom
 base_frame: base_link
 max_linear_velocity: 0.2
 max_angular_velocity: 0.5
+mpc_path_publisher_type: 0  # 0 = straight line, 1 = zigzag line
