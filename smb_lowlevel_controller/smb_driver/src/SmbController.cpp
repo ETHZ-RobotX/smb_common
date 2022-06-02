@@ -64,7 +64,7 @@ bool SmbController::readWheelSpeeds() {
     double leftSpeed;
     leftSpeedStatus = serialDevice->GetValue(_S, 2, leftSpeedResult);
     if(leftSpeedStatus == RQ_SUCCESS) {
-        leftSpeed = leftSpeedResult;
+        leftSpeed = -leftSpeedResult;
         leftSpeed *= rpmToRps_;
     }
     else {
@@ -76,7 +76,7 @@ bool SmbController::readWheelSpeeds() {
     double rightSpeed;
     rightSpeedStatus = serialDevice->GetValue(_S, 1, rightSpeedResult);
     if(rightSpeedStatus == RQ_SUCCESS) {
-        rightSpeed = -rightSpeedResult; //Minus so that positive speed is in forward direction
+        rightSpeed = rightSpeedResult; //Minus so that positive speed is in forward direction
         rightSpeed *= rpmToRps_;
     }
     else {
