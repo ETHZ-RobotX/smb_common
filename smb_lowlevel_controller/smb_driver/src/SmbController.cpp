@@ -28,6 +28,7 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
 
   wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("/wheelSpeeds", 1);
 
+  //interchange wheel labels
   wheelSpeedMsg_.layout.dim.resize(1);
   wheelSpeedMsg_.layout.dim[0].label = "t leftSpeed rightSpeed";
   wheelSpeedMsg_.layout.dim[0].size = 1;
@@ -61,9 +62,9 @@ bool SmbController::readWheelSpeeds() {
     
     int leftSpeedResult, leftSpeedStatus = -1;
     double leftSpeed;
-    leftSpeedStatus = serialDevice->GetValue(_S, 1, leftSpeedResult);
+    leftSpeedStatus = serialDevice->GetValue(_S, 2, leftSpeedResult);
     if(leftSpeedStatus == RQ_SUCCESS) {
-        leftSpeed = leftSpeedResult;
+        leftSpeed = -leftSpeedResult;
         leftSpeed *= rpmToRps_;
     }
     else {
@@ -73,9 +74,9 @@ bool SmbController::readWheelSpeeds() {
 
     int rightSpeedResult, rightSpeedStatus = -1;
     double rightSpeed;
-    rightSpeedStatus = serialDevice->GetValue(_S, 2, rightSpeedResult);
+    rightSpeedStatus = serialDevice->GetValue(_S, 1, rightSpeedResult);
     if(rightSpeedStatus == RQ_SUCCESS) {
-        rightSpeed = -rightSpeedResult; //Minus so that positive speed is in forward direction
+        rightSpeed = rightSpeedResult; //Minus so that positive speed is in forward direction
         rightSpeed *= rpmToRps_;
     }
     else {
@@ -93,6 +94,7 @@ bool SmbController::readWheelSpeeds() {
 
     acquireMutex(dataMutex_, 0);
 
+    // not sure if to change?
     if (leftSpeedStatus == RQ_SUCCESS)
         leftMotorSpeed_ = leftSpeed;
     if(rightSpeedStatus == RQ_SUCCESS)
@@ -325,7 +327,7 @@ double SmbController::getVelocity(int motor)
 {
   double velocity;
   acquireMutex(dataMutex_, 0);
-  if(motor == 1)
+  if(motor == 2)
     velocity = leftMotorSpeed_;
   else
     velocity = rightMotorSpeed_;
