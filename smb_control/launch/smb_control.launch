@@ -10,7 +10,8 @@
   <arg name="simulation"                 default="false"/>
   <arg name="joystick"                   default="true"/>
   <arg name="mpc"                        default="false"/>
-  <arg name="mpc_track_local_plan"       default="false" />
+  <arg name="mpc_track_local_plan"       default="false"/>
+  <arg name="keyboard_teleop"            default="false"/>
 
   <!-- Load robot description for controller -->
   <include file="$(find smb_description)/launch/load.launch">
@@ -64,5 +65,8 @@
   <include file="$(find smb_mpc)/launch/mpc.launch" if="$(arg mpc)">
     <arg name="track_local_plan" value="$(arg mpc_track_local_plan)"/>
   </include>
+
+  <!-- Launch keyboard twist node -->
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard_teleop" ns="keyboard_teleop" if="$(arg keyboard_teleop)"/>
   
 </launch>
