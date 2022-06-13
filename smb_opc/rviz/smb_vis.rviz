@@ -337,7 +337,7 @@ Visualization Manager:
           Linear Color: 204; 51; 51
           Name: Command Twist
           Queue Size: 10
-          Topic: /smb_mpc/command_twist_stamped
+          Topic: /command_twist_stamped
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -345,7 +345,7 @@ Visualization Manager:
           Axes Radius: 0.10000000149011612
           Class: rviz/Pose
           Color: 255; 25; 0
-          Enabled: true
+          Enabled: false
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
           Name: Current Pose
@@ -353,9 +353,9 @@ Visualization Manager:
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
           Shape: Arrow
-          Topic: /smb_mpc/current_pose
+          Topic: /current_pose
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -377,7 +377,7 @@ Visualization Manager:
           Radius: 0.009999999776482582
           Shaft Diameter: 0.10000000149011612
           Shaft Length: 0.10000000149011612
-          Topic: /smb_mpc/optimal_path
+          Topic: /optimal_path
           Unreliable: false
           Value: true
         - Alpha: 1
@@ -385,7 +385,7 @@ Visualization Manager:
           Axes Radius: 0.10000000149011612
           Class: rviz/Pose
           Color: 255; 25; 0
-          Enabled: true
+          Enabled: false
           Head Length: 0.30000001192092896
           Head Radius: 0.10000000149011612
           Name: Optimal Pose
@@ -393,9 +393,9 @@ Visualization Manager:
           Shaft Length: 1
           Shaft Radius: 0.05000000074505806
           Shape: Arrow
-          Topic: /smb_mpc/optimal_pose
+          Topic: /optimal_pose
           Unreliable: false
-          Value: true
+          Value: false
         - Alpha: 1
           Buffer Length: 1
           Class: rviz/Path
@@ -554,6 +554,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 0
-  Y: 0
+  Width: 1848
+  X: 1992
+  Y: 27

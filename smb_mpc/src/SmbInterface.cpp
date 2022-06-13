@@ -1,166 +1,91 @@
+#include <string>
+
 #include "smb_mpc/SmbInterface.h"
-
-#include "smb_mpc/SmbCostWrapper.h"
-#include "smb_mpc/SmbCost.h"
 #include "smb_mpc/SmbSystemDynamics.h"
+#include "smb_mpc/SmbCost.h"
 
-namespace smb_path_following {
+#include <ocs2_core/initialization/DefaultInitializer.h>
+#include <ocs2_core/misc/LoadData.h>
+#include <ocs2_core/misc/LoadStdVectorOfPair.h>
+#include <ocs2_core/penalties/Penalties.h>
+#include <ocs2_core/soft_constraint/StateInputSoftConstraint.h>
+#include <ocs2_core/soft_constraint/StateSoftConstraint.h>
+#include <ocs2_oc/synchronized_module/ReferenceManager.h>
 
-/******************************************************************************************************/
-/******************************************************************************************************/
-/******************************************************************************************************/
-SmbInterface::SmbInterface() {
-  std::string packagePath =
-      ros::package::getPath("smb_mpc");
+// Boost
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
-  taskFile_ = packagePath + "/config/task.info";
-  std::cerr << "Loading task file: " << taskFile_ << std::endl;
+using namespace ocs2;
 
-  libraryFolder_ = packagePath + "/auto_generated";
-  std::cerr << "Generated library path: " << libraryFolder_ << std::endl;
+namespace smb_mpc
+{
 
-  // load setting from loading file
-  loadSettings(taskFile_);
+  SmbInterface::SmbInterface(const std::string &taskFile, const std::string &libraryFolder)
+  {
+    // check that task file exists
+    boost::filesystem::path taskFilePath(taskFile);
+    if (boost::filesystem::exists(taskFilePath))
+    {
+      std::cerr << "[SmbInterface] Loading task file: " << taskFilePath << std::endl;
+    }
+    else
+    {
+      throw std::invalid_argument("[SmbInterface] Task file not found: " + taskFilePath.string());
+    }
 
-  // MPC
-  resetMpc();
-}
+    // create library folder if it does not exist
+    boost::filesystem::path libraryFolderPath(libraryFolder);
+    boost::filesystem::create_directories(libraryFolderPath);
+    std::cerr << "[SmbInterface] Generated library path: " << libraryFolderPath << std::endl;
 
-/******************************************************************************************************/
-/******************************************************************************************************/
-/******************************************************************************************************/
-void SmbInterface::loadSettings(const std::string &taskFile) {
-  /*
-   * Default initial condition
-   */
+    // read the task file
+    boost::property_tree::ptree pt;
+    boost::property_tree::read_info(taskFile, pt);
 
-  /*
-   * SLQ-MPC settings
-   */
-  ddpSettings_ = ocs2::ddp::loadSettings(taskFile);
-  mpcSettings_ = ocs2::mpc::loadSettings(taskFile);
+    bool recompileLibraries = true;
+    std::cerr << "\n #### Model Settings:";
+    std::cerr << "\n #### =============================================================================\n";
+    loadData::loadPtreeValue(pt, recompileLibraries, "model_settings.recompileLibraries", true);
+    std::cerr << " #### =============================================================================\n";
 
-  /*
-   * Model settings
-   */
-  modelSettings_.loadSettings(taskFile_, true);
+    // Default initial state
+    initialState_.setZero(SmbDefinitions::STATE_DIM);
 
-  /*
-   * Dynamics
-   */
-  auto dynamics = std::make_unique<SmbSystemDynamics>();
-  std::cerr << "The system model name is " << modelSettings_.systemName_
-            << std::endl;
-  dynamics->initialize(modelSettings_.systemName_, "tmp/ocs2",
-                       modelSettings_.recompileLibraries_, true);
-  dynamicsPtr_ = std::move(dynamics);
+    // DDP-MPC settings
+    ddpSettings_ = ddp::loadSettings(taskFile, "ddp", false);
+    mpcSettings_ = mpc::loadSettings(taskFile, "mpc", false);
 
-  /*
-   * Rollout
-   */
-  ocs2::rollout::Settings rolloutSettings =
-      ocs2::rollout::loadSettings(taskFile, "rollout");
-  ddpSmbRolloutPtr_.reset(
-      new time_triggered_rollout_t(*dynamicsPtr_, rolloutSettings));
+    // Reference Manager
+    referenceManagerPtr_.reset(new ReferenceManager);
 
-  /*
-   * Cost function
-   */
+    /*
+     * Optimal control problem
+     */
+    // Cost
+    problem_.costPtr->add("pos_cost", getPositionCost(taskFile, libraryFolder, recompileLibraries));
 
-  // joint space tracking cost
-  ocs2::matrix_t QPosition(3, 3);
-  ocs2::matrix_t QOrientation(3, 3);
-  ocs2::matrix_t R(SmbDefinitions::INPUT_DIM, SmbDefinitions::INPUT_DIM);
+    problem_.dynamicsPtr.reset(new SmbSystemDynamics("dynamics", libraryFolder, recompileLibraries, true));
 
-  ocs2::loadData::loadEigenMatrix(taskFile, "QPosition", QPosition);
-  ocs2::loadData::loadEigenMatrix(taskFile, "QOrientation", QOrientation);
-  ocs2::loadData::loadEigenMatrix(taskFile, "R", R);
+    // Rollout
+    const auto rolloutSettings = rollout::loadSettings(taskFile, "rollout");
+    rolloutPtr_.reset(new TimeTriggeredRollout(*problem_.dynamicsPtr, rolloutSettings));
 
-  std::cerr << "QPosition:       \n" << QPosition << std::endl;
-  std::cerr << "QOrientation:       \n" << QOrientation << std::endl;
-  std::cerr << "R: \n" << R << std::endl;
-
-  auto baseTrackingCost =
-      std::make_unique<SmbCost>(QPosition, QOrientation, R);
-
-  baseTrackingCost->initialize(7, 2, 7, "base_tracking_cost", "tmp/ocs2",
-                               modelSettings_.recompileLibraries_);
-
-  costPtr_ = std::make_unique<SmbCostWrapper>(std::move(baseTrackingCost));
-
-  constraintPtr_.reset(new constraint_t());
-
-  operatingPointPtr_.reset(new SmbOperatingPoint());
-
-  definePartitioningTimes(taskFile, timeHorizon_, numPartitions_,
-                          partitioningTimes_, true);
-}
-
-/******************************************************************************************************/
-/******************************************************************************************************/
-/******************************************************************************************************/
-void SmbInterface::resetMpc() {
-  mpcPtr_.reset(
-      new ocs2::MPC_DDP(ddpSmbRolloutPtr_.get(), dynamicsPtr_.get(),
-                        constraintPtr_.get(), costPtr_.get(),
-                        operatingPointPtr_.get(), ddpSettings_, mpcSettings_));
-}
-
-/******************************************************************************************************/
-/******************************************************************************************************/
-/******************************************************************************************************/
-std::unique_ptr<ocs2::MPC_DDP> &SmbInterface::getMPCPtr() {
-  return mpcPtr_;
-}
-
-ocs2::mpc::Settings &SmbInterface::mpcSettings() {
-  return mpcSettings_;
-}
-
-/******************************************************************************************************/
-/******************************************************************************************************/
-/******************************************************************************************************/
-SmbModelSettings &SmbInterface::modelSettings() {
-  return modelSettings_;
-}
-
-void SmbInterface::definePartitioningTimes(
-    const std::string &taskFile, ocs2::scalar_t &timeHorizon,
-    size_t &numPartitions, ocs2::scalar_array_t &partitioningTimes,
-    bool verbose /*= false*/) {
-  // load from task file
-  loadMpcTimeHorizon(taskFile, timeHorizon, numPartitions);
-
-  if (numPartitions == 0) {
-    throw std::runtime_error("mpcTimeHorizon field is not defined.");
+    // Initialization
+    initializerPtr_.reset(new DefaultInitializer(SmbDefinitions::INPUT_DIM));
   }
 
-  partitioningTimes.resize(numPartitions + 1);
-  partitioningTimes[0] = 0.0;
-  for (size_t i = 0; i < numPartitions; i++) {
-    partitioningTimes[i + 1] =
-        partitioningTimes[i] + timeHorizon / numPartitions;
+  std::unique_ptr<StateInputCost> SmbInterface::getPositionCost(const std::string &taskFile, const std::string &libraryFolder, bool recompileLibraries)
+  {
+    matrix_t QPosition(3, 3);
+    matrix_t QOrientation(3, 3);
+    matrix_t R(SmbDefinitions::INPUT_DIM, SmbDefinitions::INPUT_DIM);
+
+    loadData::loadEigenMatrix(taskFile, "QPosition", QPosition);
+    loadData::loadEigenMatrix(taskFile, "QOrientation", QOrientation);
+    loadData::loadEigenMatrix(taskFile, "R", R);
+
+    return std::unique_ptr<StateInputCost>(new SmbCost(QPosition, QOrientation, R, libraryFolder, recompileLibraries));
   }
-  partitioningTimes[numPartitions] = timeHorizon;
+
 }
-
-void SmbInterface::loadMpcTimeHorizon(const std::string &taskFile,
-                                                   ocs2::scalar_t &timeHorizon,
-                                                   size_t &numPartitions,
-                                                   bool verbose /*= false*/) {
-  ocs2::loadData::loadCppDataType(taskFile, "mpc.timeHorizon",
-                                  timeHorizon);
-  ocs2::loadData::loadCppDataType(taskFile, "mpc.numPartitions",
-                                  numPartitions);
-
-  if (true) {
-    std::cerr << "Time Horizon Settings: " << std::endl;
-    std::cerr << "=====================================" << std::endl;
-    std::cerr << "Time Horizon .................. " << timeHorizon << std::endl;
-    std::cerr << "Number of Partitions .......... " << numPartitions
-              << std::endl
-              << std::endl;
-  }
-}
-
-} // namespace smb_path_following

@@ -20,15 +20,17 @@
 #include <ros/ros.h>
 #include <tf2_ros/transform_listener.h>
 
-#include <ocs2_mpc/MPC_MRT_Interface.h>
-
-namespace smb_path_following {
+#include <ocs2_ros_interfaces/mrt/MRT_ROS_Interface.h>
+#include <ocs2_ros_interfaces/command/TargetTrajectoriesRosPublisher.h>
+#include <ocs2_core/reference/TargetTrajectories.h>
+namespace smb_mpc {
 
 class SmbController {
 public:
   typedef ocs2::SystemObservation Observation;
-  typedef ocs2::MPC_MRT_Interface MpcInterface;
-  typedef ocs2::CostDesiredTrajectories CostDesiredTrajectories;
+  typedef ocs2::MRT_ROS_Interface MpcInterface;
+  typedef ocs2::TargetTrajectories CostDesiredTrajectories;
+  typedef ocs2::TargetTrajectoriesRosPublisher TargetPublisher;
 
   //! Construct SmbController.
   SmbController(ros::NodeHandle &nh);
@@ -37,8 +39,9 @@ public:
   virtual ~SmbController();
 
 protected:
-  SmbInterface mmInterface_;
+  std::shared_ptr<SmbInterface> smbInterface_;
   std::shared_ptr<MpcInterface> mpcInterface_;
+  std::shared_ptr<TargetPublisher> trajectoriesPublisher_;
 
   bool planAvailable_;
   bool observationAvailable_;
@@ -96,6 +99,6 @@ protected:
   void pathCallback(const nav_msgs::PathConstPtr &path);
   void joyTwistInverventionCallback(const geometry_msgs::TwistConstPtr &twist);
   void adjustTimeStamps(nav_msgs::Path &path);
-  void resetMpc();
+  void initializeMPC();
 };
 } // namespace smb_path_following

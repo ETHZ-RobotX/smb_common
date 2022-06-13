@@ -1,7 +1,7 @@
 
 model_settings
 {
-  recompileLibraries             1         ; put this flag to 1 if dynamic libraries are already generated
+  recompileLibraries             true         ; put this flag to true if dynamic libraries are already generated
   systemName smb
 }
 
@@ -47,11 +47,12 @@ ddp
 ; Rollout settings
 rollout
 {
-  AbsTolODE                     1e-5
-  RelTolODE                     1e-3
-  minTimeStep                   1e-3
-  maxNumStepsPerSecond          100000
-  checkNumericalStability       false
+  AbsTolODE                       1e-5
+  RelTolODE                       1e-3
+  timeStep                        1e-2
+  integratorType                  ODE45
+  maxNumStepsPerSecond            100000
+  checkNumericalStability         false
 }
 
 ; MPC settings
@@ -88,13 +89,16 @@ initialState
   (2,0)  0.0     ; theta
 }
 
+
+; TODO: Find suitable weights for position, orientation and control inputs
+
 ; position weight matrix
 QPosition
 {
   scaling 1e+0
 
-  (0,0) 1.0  ; x
-  (1,1) 1.0  ; y
+  (0,0) 0.0  ; x
+  (1,1) 0.0  ; y
   (2,2) 0.0  ; z
 }
 
@@ -105,14 +109,13 @@ QOrientation
 
   (0,0) 0.0  ; x
   (1,1) 0.0  ; y
-  (2,2) 5.0  ; z
+  (2,2) 0.0  ; z
 }
 
-; control weight matrix
 R
 {
   scaling 1e+0
 
-  (0,0) 1.0  ; linear velocity cost
-  (1,1) 1.0  ; angular velocity cost
+  (0,0) 0.0  ; linear velocity cost
+  (1,1) 0.0  ; angular velocity cost
 }
