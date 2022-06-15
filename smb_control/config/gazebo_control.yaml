@@ -38,3 +38,6 @@ gazebo_ros_control:
       has_acceleration_limits: true
       max_acceleration       : 0.2   # rad/s^2
 
+smb_diff_drive:
+  left_wheel: ['LF_WHEEL_JOINT', 'LH_WHEEL_JOINT']
+  right_wheel: ['RF_WHEEL_JOINT', 'RH_WHEEL_JOINT']
