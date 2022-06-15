@@ -11,6 +11,7 @@
   <arg name="launch_rviz"                 default="true"/>
   <arg name="launch_gazebo_gui"           default="false"/>
   <arg name="mpc"                         default="false"/>
+  <arg name="keyboard_teleop"             default="false"/>
 
 
   <include file="$(find smb_control)/launch/smb_control.launch">
@@ -20,6 +21,7 @@
     <arg name="enable_ekf"              value="$(arg enable_ekf)" />
     <arg name="simulation"              value="true"/>
     <arg name="mpc"                     value="$(arg mpc)"/>
+    <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
   </include>
 
   <include file="$(find smb_gazebo)/launch/smb_gazebo.launch">

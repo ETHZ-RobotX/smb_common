@@ -204,7 +204,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
 
   void SmbHWInterface::read(const ros::Time &time, const ros::Duration& elapsedTime) {
     std::scoped_lock lock{smbDriverMutex_};
-    if (!smb_->getWheelSpeeds(wheels_[1].vel, wheels_[0].vel, controllerTimeoutUs_)) {
+    if (!smb_->getWheelSpeeds(wheels_[0].vel, wheels_[1].vel, controllerTimeoutUs_)) {
       ROS_WARN_STREAM("[SmbHWInterface] Failed to get wheel speeds.");
     } else {
       wheels_[0].pos += wheels_[0].vel * elapsedTime.toSec();
