@@ -82,8 +82,8 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
       private_nh_.param<bool>("command_smb", command_smb, true);
 
       // RC velol$city scale
-      nh_.param<double>("smb/lin_vel_scale", lin_vel_scale, 1.5);
-      nh_.param<double>("smb/ang_vel_scale", ang_vel_scale, 1.5);
+      private_nh_.param<double>("smb/lin_vel_scale", lin_vel_scale, 1.5);
+      private_nh_.param<double>("smb/ang_vel_scale", ang_vel_scale, 1.5);
       smb_ = std::make_shared<smb_driver::SmbController>(port, private_nh_, 10, command_smb, lin_vel_scale, ang_vel_scale);
       registerControlInterfaces();
 
