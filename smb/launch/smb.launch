@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<launch> 
-  <arg name="launch_versavis"                       default="true" />
-  <arg name="launch_depth_cam"                     default="false" />
-  <arg name="launch_tracking_cam"                  default="true" />
-  <arg name="use_lidar_odometry"                   default="false" />
-  <arg name="launch_sensors"                       default="true" />
-  <arg name="enable_ekf"                           default="false" />
-  <arg name="launch_gui"                           default="false" />
-  <arg name="mpc"                                  default="false" />
-  <arg name="mpc_track_local_plan"                 default="false" />
-  <arg name="control_namespace"                    default="control"/>
-  <arg name="description_name"                     default="smb_description"/>
-  <arg name="command_smb"                          default="true"/>
-  <arg name="keyboard_teleop"             default="false"/>
+<launch>
+  <!-- launch versavis: ADIS 16448 IMU and FLIR blackfly rgb cam -->
+  <arg name="launch_versavis"                       
+       default="true" 
+       doc="Launch the RGB camera and IMU related nodes (triggered through versavis)"/>
+  
+  <!-- launch depth cam -->
+  <arg name="launch_depth_cam" 
+       default="false" 
+       doc="Launch the depth camera related nodes"/>
+
+  <!-- launch tracking cam -->
+  <arg name="launch_tracking_cam"
+       default="true"
+       doc="Launch the tracking camera related nodes"/>
+
+  <!-- use lidar odometry -->
+  <arg name="use_lidar_odometry"
+       default="false"
+       doc="Use lidar odometry instead of the tracking camera odometry if set to true."/>
+  
+  <!-- launch sensors -->
+  <arg name="launch_sensors"
+       default="true"
+       doc="Launch depth camera, versavis and tracking camera."/>
+
+  <!-- enable ekf -->
+  <arg name="enable_ekf" 
+       default="false"
+       doc="Launch ekf node. Used for the wheel odometry."/>
+
+  <!-- launch rviz -->
+  <arg name="launch_rviz"
+       default="false"
+       doc="Launch rviz to visualize the robot."/>
+
+  <!-- mpc -->
+  <arg name="mpc"
+       default="false"
+       doc="Launch the MPC node."/>
+
+  <arg name="mpc_track_local_plan"
+       default="false"
+       doc="Track the plan published from the mpc_path_publisher.py script in smb_mpc package."/>
+
+  <!-- control namespace -->
+  <arg name="control_namespace"
+      default="control"
+      doc="Namespace for the control node."/>
+
+  <!-- decription name -->
+  <arg name="description_name"
+       default="smb_description"
+       doc="Name for the robot description."/>
+
+  <!-- command smb -->
+  <arg name="command_smb"
+       default="true"
+       doc="Send twist commands from the software stack to the robot."/>
+       
+  <!-- keyboard_teleop -->
+  <arg name="keyboard_teleop"
+        default="false"
+        doc="Launch node to send control commands (twist msgs) using the keyboard"/>
+
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
 
@@ -63,6 +114,6 @@
     <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
   </include>
 
-  <include file="$(find smb_opc)/launch/opc.launch" if="$(arg launch_gui)"/>
+  <include file="$(find smb_opc)/launch/opc.launch" if="$(arg launch_rviz)"/>
 
 </launch>
