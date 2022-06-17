@@ -20,7 +20,7 @@ gazebo_ros_control:
   estimate_velocity_from_position: false
 
   # Wheel separation and radius multipliers
-  wheel_separation_multiplier: 1.875 # default: 1.0
+  wheel_separation_multiplier: 1.0 # default: 1.0
   wheel_radius_multiplier    : 1.0 # default: 1.0
 
   # Velocity and acceleration limits
@@ -28,13 +28,16 @@ gazebo_ros_control:
   linear:
     x:
       has_velocity_limits    : true
-      max_velocity           : 1.1   # m/s
+      max_velocity           : 1.0   # m/s
       has_acceleration_limits: true
-      max_acceleration       : 2.0   # m/s^2
+      max_acceleration       : 0.2   # m/s^2
   angular:
     z:
       has_velocity_limits    : true
-      max_velocity           : 1.1   # rad/s
+      max_velocity           : 1.0   # rad/s
       has_acceleration_limits: true
-      max_acceleration       : 3.0   # rad/s^2
+      max_acceleration       : 0.2   # rad/s^2
 
+smb_diff_drive:
+  left_wheel: ['LF_WHEEL_JOINT', 'LH_WHEEL_JOINT']
+  right_wheel: ['RF_WHEEL_JOINT', 'RH_WHEEL_JOINT']

@@ -5,6 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Lidar Raw1
       Splitter Ratio: 0.5
     Tree Height: 597
   - Class: rviz/Selection
@@ -25,7 +26,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: Lidar Raw
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -98,8 +99,6 @@ Visualization Manager:
           Value: true
         mono_link:
           Value: true
-        odom:
-          Value: true
         realsense_t265:
           Value: true
         realsense_t265_odom_frame:
@@ -119,20 +118,34 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        odom:
-          base_link:
-            LF_WHEEL:
+        base_link:
+          LF_WHEEL:
+            {}
+          LH_WHEEL:
+            {}
+          RF_WHEEL:
+            {}
+          RH_WHEEL:
+            {}
+          base_inertia:
+            {}
+          blackfly0_link:
+            blackfly0_optical_link:
               {}
-            LH_WHEEL:
+          blackfly1_link:
+            blackfly1_optical_link:
               {}
-            RF_WHEEL:
+          blackfly_left_link:
+            blackfly_left_optical_link:
               {}
-            RH_WHEEL:
+          blackfly_right_link:
+            blackfly_right_optical_link:
               {}
-            base_inertia:
+          imu_link:
+            imu:
               {}
-            blackfly0_link:
-              blackfly0_optical_link:
+            realsense_t265:
+              camera_pose_frame:
                 {}
             blackfly1_link:
               blackfly1_optical_link:
@@ -300,16 +313,16 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
+        Max Value: 2.2671430110931396
+        Min Value: -0.21022829413414001
         Value: true
       Axis: Z
       Channel Name: intensity
       Class: rviz/PointCloud2
       Color: 255; 255; 255
-      Color Transformer: Intensity
+      Color Transformer: AxisColor
       Decay Time: 0
-      Enabled: false
+      Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -324,7 +337,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: false
+      Value: true
     - Class: rviz/Group
       Displays:
         - Alpha: 1
@@ -533,9 +546,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.3947964906692505
+      Pitch: 0.6897971630096436
       Target Frame: <Fixed Frame>
-      Yaw: 3.120393991470337
+      Yaw: 2.2653870582580566
     Saved: ~
 Window Geometry:
   Displays:
