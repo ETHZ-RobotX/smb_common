@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+  <!-- General -->
+  <arg name="smb_name"
+       default="$(env SMB_NAME)"
+       doc="Name of the SMB in the format smb26x (relevant for calibrations)" />
+
   <!-- launch versavis: ADIS 16448 IMU and FLIR blackfly rgb cam -->
   <arg name="launch_versavis"                       
        default="true" 
@@ -70,7 +75,8 @@
   <!-- start sensors -->
   <group if="$(arg launch_sensors)">
     <include file="$(find smb)/launch/sensors.launch">
-      <arg name="launch_versavis"           value="$(arg launch_versavis)"/>
+      <arg name="smb_name"                 value="$(arg smb_name)"/>
+      <arg name="launch_versavis"          value="$(arg launch_versavis)"/>
       <arg name="launch_depth_cam"         value="$(arg launch_depth_cam)"/>
       <arg name="launch_tracking_cam"      value="$(arg launch_tracking_cam)"/>
     </include>
