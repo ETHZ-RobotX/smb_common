@@ -1,6 +1,14 @@
 <launch>
 
-    <arg name="launch_state_to_base_link_publisher"  default="true"/>
+    <!-- Arguments -->
+    <arg name="use_sim_time" default="false" />>
+    <arg name="launch_state_to_base_link_publisher"  default="true" />
+    <arg name="launch_rviz" default="true" />
+
+    <!-- Sim -->
+    <param name="use_sim_time" value="$(arg use_sim_time)" /> # be sure to run --clock
+
+    <!-- MSF -->
     <node name="msf_smb" pkg="msf_updates" type="pose_sensor" clear_params="true" output="screen"> #launch-prefix="gdb -ex run --args" 
         <!-- IMU -->
         <remap from="msf_core/imu_state_input" to="/versavis/imu" />
@@ -9,9 +17,14 @@
         <!-- Params -->
         <rosparam file="$(find smb_msf)/param/smb_msf_params.yaml" command="load"/>
     </node>
-    <!-- Initialize service -->
+
+    <!-- Initialize service After MSF Has Started -->
     <node pkg="rosservice" type="rosservice" name="initializer" args="call --wait /msf_smb/pose_sensor/initialize_msf_scale 1.0"/>
 
-      <node pkg="tf" type="static_transform_publisher" name="imu_to_base" respawn="true" args="-0.255 0.024 -0.179 0 0 0 state base_link 100" if="$(arg launch_state_to_base_link_publisher)"/>
+    <!-- Publish extrinsic Calibration if Desired -->
+    <node pkg="tf" type="static_transform_publisher" name="imu_to_base" respawn="true" args="-0.255 0.024 -0.179 0 0 0 state base_link 100" if="$(arg launch_state_to_base_link_publisher)"/>
+
+    <!-- RVIZ -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find smb_msf)/rviz/smb.rviz" required="true" />
 
 </launch>

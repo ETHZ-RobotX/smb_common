@@ -1,0 +1,12 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="odometry_topic" default="/msf_core/odometry"/>
+
+  <!-- Load Parameters -->
+  <param name="plotting_node/odometry_topic" value="$(arg odometry_topic"/>
+
+  <!-- Launch Visualizer Node -->
+  <node name="plotting_node" pkg="smb_msf" type="plotting_node.py" output="screen"/>
+
+</launch>
