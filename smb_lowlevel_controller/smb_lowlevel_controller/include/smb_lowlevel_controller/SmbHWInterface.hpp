@@ -114,6 +114,7 @@ private:
     // std::unique_ptr<TransmissionInterfaceLoader> transmission_loader_;
     // ROS Parameters
     double wheel_diameter_, max_accel_, max_speed_;
+    double lin_vel_scale, ang_vel_scale;
 
     // State and commands
     struct Joint {

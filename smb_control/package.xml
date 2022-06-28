@@ -23,7 +23,6 @@
   <exec_depend>robot_state_publisher</exec_depend>
 
   <exec_depend>smb_description</exec_depend>
-  <exec_depend>smb_mpc</exec_depend>
 
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>diff_drive_controller</exec_depend>

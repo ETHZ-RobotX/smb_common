@@ -147,6 +147,18 @@ Visualization Manager:
             realsense_t265:
               camera_pose_frame:
                 {}
+            blackfly1_link:
+              blackfly1_optical_link:
+                {}
+            blackfly_left_link:
+              blackfly_left_optical_link:
+                {}
+            blackfly_right_link:
+              blackfly_right_optical_link:
+                {}
+            imu_link:
+              imu:
+                {}
               realsense_t265_odom_frame:
                 camera_imu_optical_frame:
                   {}

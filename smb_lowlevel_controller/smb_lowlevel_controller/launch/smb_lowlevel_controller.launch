@@ -21,6 +21,7 @@
     <param name="controller_namespace"       value="$(arg controller_namespace)"/>
     <param name="command_smb"                value="$(arg command_smb)"/>
     <remap from="robot_description"          to="$(arg description_name)"/>
+    <rosparam command="load"  file="$(find smb_lowlevel_controller)/config/hardware.yaml"/>
   </node>
 
 
