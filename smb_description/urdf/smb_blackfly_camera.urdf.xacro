@@ -15,10 +15,8 @@
     <xacro:property name="blackfly_origin_rpy"		value="0 0 0"/>
     <xacro:property name="blackfly_origin_xyz"		value="0.29082 -0.04458 ${0.0955 + chassisHeight/2.0}"/>
 
-    <xacro:property name="blackfly_update_rate"		value="30"/>
+    <xacro:property name="blackfly_update_rate"		value="2"/>
     <xacro:property name="blackfly_link"  			value="blackfly${id}_link"/>
-    <xacro:property name="blackfly_topic" 			value="/blackfly${id}/cam0/image_raw"/>
-
 
     <link name="${blackfly_link}">
       <inertial>
