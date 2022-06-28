@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+	<!-- Arguments -->
+	<arg name="rviz_config" default="$(find  smb_slam)/rviz/open3d_slam.rviz" />
+	<arg name="launch_rviz" default="true" />
+
+	<!-- Launch RVIZ -->
+	<node name="rviz_mapping" pkg="rviz" type="rviz"
+		args="-d $(arg rviz_config)"
+		if="$(arg launch_rviz)">
+	</node>
+	
+</launch>
