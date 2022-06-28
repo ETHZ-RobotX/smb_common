@@ -1,8 +1,0 @@
-- SurfaceNormalDataPointsFilter:
-    knn: 5
-    epsilon: 0.0
-    keepNormals: 0
-    keepDensities: 1
-- MaxDensityDataPointsFilter:
-    maxDensity: 3000
-- RemoveNaNDataPointsFilter:
