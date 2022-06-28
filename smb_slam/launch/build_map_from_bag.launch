@@ -8,11 +8,7 @@
   <arg name="read_from_rosbag"      value="true"/>
   <arg name="rosbag_filepath"       default="$(env HOME)/"/> # Can be used to process rosbag sequentially, usually much faster without missing messages
   <arg name="launch_rviz"           default="false"/>
-  <arg name="launch_sensors"        default="false"/>
   <arg name="use_sim_time"          default="false"/>
-
-  <!-- Potentially launch sensors -->
-  <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
 
   <!-- Launch Map Builder (open3d_slam) -->
   <include file="$(find smb_slam)/launch/open3d_slam/mapping.launch">

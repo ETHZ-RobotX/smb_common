@@ -7,5 +7,5 @@ For the latter case, use the script `build_map_from_bag.launch` and specify the 
 
 An exemplary script with <path_to_launchfile> would be the following:
 ```bash
-roslaunch smb_slam build_map_from_bag.launch rosbag_filepath:=$HOME/<path_to_launchfile> launch_rviz:=true
+roslaunch smb_slam build_map_from_bag.launch rosbag_filepath:=<path_to_bagfile> launch_rviz:=true
 ```
