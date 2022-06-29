@@ -30,6 +30,11 @@
 
 #include<chrono>
 
+// Define values for RC twist publisher
+#define RC_UPPER_LIMIT 10
+#define RC_LOWER_LIMIT -10
+#define RC_MAX_COUNT 8
+
 //Motor one is the LEFT one
 //Both wheel speeds and torques are handled such that positive values are in the forward direction (away from the power switch)
 //The controller's internal watchdog will set the commands to zero if no serial command is received after 500 msec
@@ -118,6 +123,7 @@ private:
     float x_rc_ = 0.0;
     float y_rc_ = 0.0;
     double lin_vel_scale_, ang_vel_scale_;
+    unsigned int rc_count = 0;
 
     HYAMBModes mode_ = OPEN_LOOP;
 
