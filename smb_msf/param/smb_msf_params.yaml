@@ -1,5 +1,5 @@
 core/data_playback: true             # Set to true for playback, set to false on the real system.
-core/msf_output_frame: odom           # Set MSF output frame
+core/msf_output_frame: map           # Set MSF output frame
 ##############################
 #########IMU PARAMETERS#######
 ##############################
