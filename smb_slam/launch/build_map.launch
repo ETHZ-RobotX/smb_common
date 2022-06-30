@@ -14,9 +14,6 @@
   <!-- Potentially launch sensors -->
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
 
-  <!-- TF between open3d_slam frames and ROS frames -->
-  <node pkg="tf" type="static_transform_publisher" name="map_to_map_o3d_tf" args="0 0 0 0 0 0 map map_o3d 10" />
-
   <!-- Launch Map Builder (open3d_slam) -->
   <include file="$(find smb_slam)/launch/open3d_slam/mapping.launch">
     <arg name="cloud_topic"           value="$(arg cloud_topic)" />
