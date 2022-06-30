@@ -144,15 +144,26 @@ bool SmbController::readRCInputs() {
     if(serialDevice->GetValue(_PIC, 2, channel_2) != RQ_SUCCESS){
       res = false;
     }
+    if((channel_1 < RC_UPPER_LIMIT && channel_1 > RC_LOWER_LIMIT) && (channel_2 < RC_UPPER_LIMIT && channel_2 > RC_LOWER_LIMIT)){
+      if(rc_count < RC_MAX_COUNT){
+        ++rc_count;
+        geometry_msgs::Twist twistMsg;
+        twistMsg.linear.x = 0.0;     
+        twistMsg.angular.z = 0.0;
 
-    x_rc_ = channel_1 / 1000.0 - channel_2 / 1000.0;
-    y_rc_ = -channel_1 / 1000.0 - channel_2 / 1000.0;
+        rcTwistPub_.publish(twistMsg);
+      }
+    }else{
+      rc_count = 0;
+      x_rc_ = channel_1 / 1000.0 - channel_2 / 1000.0;
+      y_rc_ = -channel_1 / 1000.0 - channel_2 / 1000.0;
 
-    geometry_msgs::Twist twistMsg;
-    twistMsg.linear.x = x_rc_ * lin_vel_scale_;     
-    twistMsg.angular.z = -y_rc_ * ang_vel_scale_;
+      geometry_msgs::Twist twistMsg;
+      twistMsg.linear.x = x_rc_ * lin_vel_scale_;     
+      twistMsg.angular.z = -y_rc_ * ang_vel_scale_;
 
-    rcTwistPub_.publish(twistMsg);
+      rcTwistPub_.publish(twistMsg);
+    }
 
     return res;
 }
