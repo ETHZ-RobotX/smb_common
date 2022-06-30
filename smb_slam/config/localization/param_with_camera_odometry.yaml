@@ -14,8 +14,8 @@ icp_localization:
   is_provide_odom_frame: true
   gravity_vector_filter_time_constant: 0.01
   fixed_frame: "map"
-  min_num_odom_msgs_before_ready: 300
-
+  min_num_odom_msgs_before_ready: 20
+  use_odometry_after_num_scans: 0 # wait for this amount of time until odometry is used --> sometimes external odometry requires time to converge
 
 calibration:
   imu_to_range_sensor:

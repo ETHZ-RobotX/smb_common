@@ -8,6 +8,7 @@
 
 	<buildtool_depend>catkin</buildtool_depend>
 	<exec_depend>msf_updates</exec_depend>
+	<exec_depend>msf_core</exec_depend>
 
 
 </package>

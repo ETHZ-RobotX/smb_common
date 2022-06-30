@@ -11,18 +11,12 @@
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)">
    </include> 
 
-  <!-- Default is compslam odometry -->
+  <!-- MSF-LiDAR odometry -->
   <group if="$(arg use_lidar_odometry)">
     <include file="$(find icp_localization)/launch/icp_node.launch">
       <arg name="launch_rviz" value="$(arg launch_rviz)"/>
       <arg name="pcd_filepath"  value="$(arg pcd_filepath)"/>
       <arg name="parameter_filepath"   value="$(find smb_slam)/config/localization/param_with_lidar_odometry.yaml"/>
-    </include>
-
-
-    <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch" if="$(arg launch_lidar_odometry)">
-      <arg name="launch_rviz" value="false"/>
-      <arg name="stitch_pointclouds"  value="false"/>
     </include>
 
   </group>

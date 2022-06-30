@@ -1,5 +1,6 @@
 core/data_playback: true             # Set to true for playback, set to false on the real system.
-core/msf_output_frame: odom           # Set MSF output frame
+core/msf_output_frame: map           # Set MSF output frame
+core/msf_state_frame: msf_imu_state
 ##############################
 #########IMU PARAMETERS#######
 ##############################
@@ -26,7 +27,7 @@ core/msf_output_frame: odom           # Set MSF output frame
 core/core_noise_acc: 0.0022563    # [m/s^2/sqrt(Hz)] 
 core/core_noise_gyr: 0.0004       # [rad/s/sqrt(Hz)] 
 
-core/core_fixed_bias: false
+core/core_fixed_bias: true
 core/core_noise_accbias: 0.002     # [m/s^3/sqrt(Hz)]
 core/core_noise_gyrbias: 0.0009    # [rad/s^2/sqrt(Hz)]
 
@@ -65,10 +66,10 @@ pose_sensor/pose_noise_p_ic: 0.0
 pose_sensor/pose_fixed_q_ic: true
 pose_sensor/pose_noise_q_ic: 0.0
 
-pose_sensor/init/q_ic/w: 0.707
+pose_sensor/init/q_ic/w: 1
 pose_sensor/init/q_ic/x: 0.0
 pose_sensor/init/q_ic/y: 0.0
-pose_sensor/init/q_ic/z: 0.707
-pose_sensor/init/p_ic/x: -0.251   
-pose_sensor/init/p_ic/y: 0.024
-pose_sensor/init/p_ic/z: 0.255
+pose_sensor/init/q_ic/z: 0.0
+pose_sensor/init/p_ic/x: 0.0   
+pose_sensor/init/p_ic/y: 0.0
+pose_sensor/init/p_ic/z: 0.0

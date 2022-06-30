@@ -1,17 +1,35 @@
 <launch>
 
-    <arg name="launch_state_to_base_link_publisher"  default="true"/>
+    <!-- Arguments -->
+    <arg name="use_sim_time" default="false" />
+    <arg name="launch_lidar_to_imu_publisher"  default="true" />
+    <arg name="launch_rviz" default="true" />
+    <arg name="imu_topic" default="imu_topic" />
+    <arg name="pose_topic" default="pose_topic" />
+
+    <!-- Sim -->
+    <param name="use_sim_time" value="$(arg use_sim_time)" /> # be sure to run --clock
+
+    <!-- MSF -->
     <node name="msf_smb" pkg="msf_updates" type="pose_sensor" clear_params="true" output="screen"> #launch-prefix="gdb -ex run --args" 
         <!-- IMU -->
-        <remap from="msf_core/imu_state_input" to="/versavis/imu" />
+        <remap from="msf_core/imu_state_input" to="$(arg imu_topic)" />
         <!-- 6DOF Pose -->
-        <remap from="msf_updates/transform_input" to="/transform_aft_mapped_to_init_CORRECTED" />
+        <remap from="msf_updates/transform_input" to="$(arg pose_topic)" />
         <!-- Params -->
         <rosparam file="$(find smb_msf)/param/smb_msf_params.yaml" command="load"/>
     </node>
-    <!-- Initialize service -->
+
+    <!-- Initialize service After MSF Has Started -->
     <node pkg="rosservice" type="rosservice" name="initializer" args="call --wait /msf_smb/pose_sensor/initialize_msf_scale 1.0"/>
 
-      <node pkg="tf" type="static_transform_publisher" name="imu_to_base" respawn="true" args="-0.255 0.024 -0.179 0 0 0 state base_link 100" if="$(arg launch_state_to_base_link_publisher)"/>
+    <!-- Publish extrinsic Calibration if Desired -->
+    <node pkg="tf" type="static_transform_publisher" name="lidar_to_imu" respawn="true" args="-0.024 -0.252 -0.255 0.0 0.0 -0.707 0.707 range_sensor_o3d imu_frame 100" if="$(arg launch_lidar_to_imu_publisher)"/>
+
+    <!-- Publish extrinsic Calibration between map and map_o3d -->
+    <node pkg="tf" type="static_transform_publisher" name="map_to_map_o3d" respawn="true" args="0 0 0 0 0 0 map map_o3d 100" />
+
+    <!-- RVIZ -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find smb_msf)/rviz/smb.rviz" required="true" if="$(arg launch_rviz)"/>
 
 </launch>
