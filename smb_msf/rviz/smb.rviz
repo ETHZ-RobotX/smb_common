@@ -5,10 +5,9 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Grid1
         - /TF1/Frames1
         - /Odometry1/Shape1
+        - /Odometry2/Shape1
       Splitter Ratio: 0.314031183719635
     Tree Height: 836
   - Class: rviz/Selection
@@ -60,8 +59,6 @@ Visualization Manager:
       Frame Timeout: 90
       Frames:
         All Enabled: false
-        base_link:
-          Value: true
         camera_accel_frame:
           Value: true
         camera_accel_optical_frame:
@@ -73,6 +70,8 @@ Visualization Manager:
         camera_link:
           Value: true
         camera_pose_frame:
+          Value: true
+        imu_frame:
           Value: true
         map:
           Value: true
@@ -86,10 +85,8 @@ Visualization Manager:
           Value: true
         raw_rs_o3d:
           Value: true
-        state:
-          Value: true
       Marker Alpha: 1
-      Marker Scale: 3
+      Marker Scale: 2
       Name: TF
       Show Arrows: false
       Show Axes: true
@@ -99,13 +96,11 @@ Visualization Manager:
           map_o3d:
             odom_o3d:
               range_sensor_o3d:
-                {}
+                imu_frame:
+                  {}
             raw_odom_o3d:
               {}
             raw_rs_o3d:
-              {}
-          state:
-            base_link:
               {}
       Update Interval: 0
       Value: true
@@ -127,7 +122,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 10000
+      Keep: 100
       Name: Odometry
       Position Tolerance: 0.15000000596046448
       Queue Size: 10
@@ -138,7 +133,7 @@ Visualization Manager:
         Color: 252; 233; 79
         Head Length: 0.30000001192092896
         Head Radius: 0.10000000149011612
-        Shaft Length: 0.5
+        Shaft Length: 1
         Shaft Radius: 0.05000000074505806
         Value: Arrow
       Topic: /msf_core/odometry
@@ -201,7 +196,7 @@ Visualization Manager:
         Color: 255; 25; 0
         Head Length: 0.30000001192092896
         Head Radius: 0.10000000149011612
-        Shaft Length: 1
+        Shaft Length: 0.5
         Shaft Radius: 0.05000000074505806
         Value: Arrow
       Topic: /mapping_node/scan2map_odometry
@@ -235,6 +230,22 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TFTrajectory
+      Value: true
+      color: 252; 233; 79
+      duration: 1000
+      frame: msf_imu_state
+      line_width: 0.009999999776482582
+    - Class: jsk_rviz_plugin/TFTrajectory
+      Enabled: true
+      Name: TFTrajectory
+      Value: true
+      color: 255; 25; 0
+      duration: 1000
+      frame: range_sensor_o3d
+      line_width: 0.009999999776482582
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -263,7 +274,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 22.195127487182617
+      Distance: 11.839879989624023
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -271,17 +282,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.1842882633209229
-        Y: -3.235231637954712
-        Z: 0.22449667751789093
+        X: 0
+        Y: 0
+        Z: 0
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9603980779647827
+      Pitch: 0.8203981518745422
       Target Frame: <Fixed Frame>
-      Yaw: 0.7403982281684875
+      Yaw: 3.250401496887207
     Saved: ~
 Window Geometry:
   Displays:

@@ -30,5 +30,7 @@ install(
 
 catkin_install_python(PROGRAMS
   smb_msf/plotting_node.py
+  smb_msf/pose_noisifier.py
+  smb_msf/imu_noisifier.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
