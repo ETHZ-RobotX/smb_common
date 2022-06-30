@@ -24,7 +24,7 @@
     <!-- Publish extrinsic Calibration if Desired -->
     <node pkg="tf" type="static_transform_publisher" name="imu_to_base" respawn="true" args="-0.255 0.024 -0.179 0 0 0 state base_link 100" if="$(arg launch_state_to_base_link_publisher)"/>
 
-    <!-- Publish extrinsic Calibration between mao and map__o3d -->
+    <!-- Publish extrinsic Calibration between map and map_o3d -->
     <node pkg="tf" type="static_transform_publisher" name="map_to_map_o3d" respawn="true" args="0 0 0 0 0 0 map map_o3d 100" />
 
     <!-- RVIZ -->
