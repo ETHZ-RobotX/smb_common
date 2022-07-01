@@ -11,6 +11,7 @@
   <arg name="launch_gazebo_gui"           default="false"/>
   <arg name="mpc"                         default="false"/>
   <arg name="keyboard_teleop"             default="false"/>
+  <arg name="world"                       default="WaA"/>
 
 
   <include file="$(find smb_control)/launch/smb_control.launch">
@@ -24,9 +25,10 @@
   </include>
 
   <include file="$(find smb_gazebo)/launch/smb_gazebo.launch">
-    <arg name="description_name"   value="$(arg description_name)"/>
+    <arg name="description_name"    value="$(arg description_name)"/>
     <arg name="control_namespace"   value="$(arg control_namespace)"/>
-    <arg name="run_gui"           value="$(arg launch_gazebo_gui)"/>
+    <arg name="run_gui"             value="$(arg launch_gazebo_gui)"/>
+    <arg name="world"               value="$(arg world)"/>
   </include>
 
   <include file="$(find smb_opc)/launch/opc.launch" if="$(arg launch_rviz)"/>
