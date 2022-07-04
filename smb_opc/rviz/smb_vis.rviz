@@ -78,6 +78,8 @@ Visualization Manager:
           Value: true
         camera_pose_frame:
           Value: true
+        camera_pose_frame_odom:
+          Value: true
         imu:
           Value: true
         imu_link:
@@ -93,6 +95,8 @@ Visualization Manager:
         rslidar_base_link:
           Value: true
         top:
+          Value: true
+        tracking_camera_odom:
           Value: true
       Marker Alpha: 1
       Marker Scale: 1
@@ -131,6 +135,9 @@ Visualization Manager:
               {}
           top:
             {}
+          tracking_camera_odom:
+            camera_pose_frame_odom:
+              {}
       Update Interval: 0
       Value: true
     - Alpha: 1
@@ -235,8 +242,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 2.266014337539673
-        Min Value: -0.21008750796318054
+        Max Value: 0.33104705810546875
+        Min Value: -0.20991763472557068
         Value: true
       Axis: Z
       Channel Name: intensity
@@ -428,7 +435,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: tracking_camera_odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -452,7 +459,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 8.935925483703613
+      Distance: 14.060853004455566
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
