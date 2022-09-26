@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
   
-  <!-- launch versavis: ADIS 16448 IMU and FLIR blackfly rgb cam -->
-  <arg name="launch_versavis"
+  <!-- launch ADIS 16448 IMU related nodes -->
+  <arg name="launch_imu_interface"
        default="true" 
-       doc="Launch the RGB camera and IMU related nodes (triggered through versavis)"/>
+       doc="Launch the IMU related nodes (read out through versavis)"/>
+
+  <!-- launch rgb cam (FLIR blackfly) -->
+  <arg name="launch_rgb_cam"
+       default="false"
+       doc="Launch the RGB camera related nodes"/>
 
   <!-- launch depth cam -->
   <arg name="launch_depth_cam"
@@ -73,13 +78,31 @@
    </include>
   </group>
 
-  <!-- launch versavis: ADIS 16448 IMU and FLIR blackfly rgb cam -->
-  <group if="$(arg launch_versavis)" >
+  <!-- launch imu interface for ADIS 16448 IMU -->
+  <group if="$(arg launch_imu_interface)" >
+    <!-- Run VersaVIS link. -->
+    <node name="rosserial_python" pkg="rosserial_python" type="serial_node.py"
+      args="_port:=/dev/versavis _baud:=250000" respawn="true" output="screen" />
+
+    <!-- Publish IMU messages -->
+    <node name="versavis_imu_receiver" pkg="versavis_adis16448_receiver"
+        type="versavis_imu_receiver" required="true" output="screen">
+      <!-- ADIS16448AMLZ parameters -->
+      <param name="imu_accelerator_sensitivity"           value="0.000833" />
+      <param name="imu_gyro_sensitivity"                  value="0.04" />
+      <param name="imu_acceleration_covariance"           value="0.043864908" /> <!-- no idea where it is from -->
+      <param name="imu_gyro_covariance"                   value="6e-9" /> <!-- no idea where it is from -->
+      <param name="imu_sub_topic"  type="string"          value="/versavis/imu_micro"/>
+    </node>
+  </group>
+
+  <!-- lunch rgb camera (flir camera driver)-->
+  <group if="$(arg launch_rgb_cam)" >
     <!-- camera name prefix -->
-    <arg name="camera_name"             default="BFS" />
+    <arg name="camera_name"             default="rgb_camera" />
     <arg name="camera_type"             default="usb" />
     <!-- camera manager -->
-    <arg name="camera_manager"          value="$(arg camera_name)_camera_manager" />
+    <arg name="camera_manager"          value="camera_nodelet_manager" />
     <arg name="cam0_serial"             value="0" />
     <arg name="node_start_delay_cam0"   value="5.0" />
 
@@ -92,24 +115,22 @@
         <param name="num_worker_threads" value="4" />
     </node>
 
-    <group ns="$(arg camera_name)_$(arg camera_type)_0" >
+    <group ns="$(arg camera_name)" >
       <!-- camera driver nodelet -->
-      <node pkg="nodelet" type="nodelet" name="camera_nodelet"
-            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /$(arg camera_manager)"
-            launch-prefix="bash -c 'sleep $(arg node_start_delay_cam0); $0 $@'" >
+      <node pkg="nodelet" type="nodelet" name="rgb_camera_nodelet"
+            args="load spinnaker_camera_driver/SpinnakerCameraNodelet /$(arg camera_manager)" >
 
         <param name="frame_id" value="blackfly_right_optical_link" />
         <param name="serial" value="$(arg cam0_serial)" />
-        <param name="acquisition_frame_rate_enable" value="false" />
+        <param name="acquisition_frame_rate" value="5" />
+        <param name="acquisition_frame_rate_enable" value="true" />
         <param name="image_format_color_coding" value="BayerRG8" />
         <param name="color_processing_algorithm" value="HQ_LINEAR" />
         <param name="camera_info_url" value="package://smb/config/$(arg smb_name)_cam0.yaml" />
 
         <!-- Trigger related config -->
         <param name="acquisition_mode" value="Continuous" />
-        <param name="trigger_source" value="Line0" /> <!-- Pin 2 -->
-        <param name="enable_trigger" value="On" />
-        <param name="trigger_activation_mode" value="RisingEdge" />
+        <param name="enable_trigger" value="Off" />
 
         <!-- Exposure related config -->
         <param name="exposure_mode" value="Timed" />
@@ -127,39 +148,7 @@
         <param name="auto_gain" value="Continuous" />
         <param name="auto_white_balance" value="Continuous" />
       </node>
-      <node pkg="nodelet" type="nodelet" name="compile_nodelet_cam0"
-            args="load versavis/VersaVISSynchronizerNodelet /$(arg camera_manager)"
-            output="screen"
-            required="true">
-        <param name="driver_topic" type="string" value="/$(arg camera_name)_$(arg camera_type)_0/image_numbered" />
-        <param name="versavis_topic" type="string" value="/versavis/cam0/" />
-        <param name="imu_offset_us" type="int" value="0"/>
-        <param name="publish_slow_images" type="bool" value="true"/>
-        <param name="publish_every_n_image" type="int" value="10"/>
-        <param name="camera_info_topic" type="string" value="camera_info"/>
-      </node>
     </group>
-
-    <!-- Run VersaVIS link. -->
-    <node name="rosserial_python" pkg="rosserial_python" type="serial_node.py"
-      args="_port:=/dev/versavis _baud:=250000" respawn="true" output="screen" />
-
-    <!-- Reset VersaVIS with ros message -->
-    <node pkg="rostopic" type="rostopic" name="resetter"
-      args="pub /versavis/reset std_msgs/Bool false --once" output="screen" />
-
-    <!-- Recieve IMU message. -->
-    <node name="versavis_imu_receiver" pkg="versavis"
-        type="versavis_imu_receiver" required="true" output="screen">
-      <!-- ADIS16448AMLZ parameters -->
-      <param name="imu_accelerator_sensitivity"           value="0.000833" />
-      <!-- <param name="imu_gyro_sensitivity"             value="0.04" /> -->
-      <param name="imu_gyro_sensitivity"                  value="0.04" />
-      <param name="imu_acceleration_covariance"           value="0.043864908" /> <!-- no idea where it is from -->
-      <param name="imu_gyro_covariance"                   value="6e-9" /> <!-- no idea where it is from -->
-      <param name="imu_sub_topic"  type="string"          value="/versavis/imu_micro"/>
-    </node>
-
   </group>
 
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>smb_sensors</name>
-  <version>0.0.2</version>
+  <version>1.0.0</version>
   <description>Metapackage for SuperMegaBot sensor related packages</description>
   <maintainer email="thomas.mantel@mavt.ethz.ch">Thomas Mantel</maintainer>
   <license>TODO</license>
@@ -12,7 +12,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>flir_camera_driver</exec_depend> 
-  <exec_depend>versavis</exec_depend>
+  <exec_depend>versavis_adis16448_receiver</exec_depend>
   <exec_depend>realsense2_camera</exec_depend>
   <exec_depend>rslidar_sdk</exec_depend>
   <exec_depend>smb_powerstatus</exec_depend>
