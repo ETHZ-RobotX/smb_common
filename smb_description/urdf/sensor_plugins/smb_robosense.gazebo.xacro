@@ -3,7 +3,7 @@
 
   <xacro:arg name="simulation"   		default="false"/>
   <xacro:arg name="gpu" 		 		default="false"/>
-  <xacro:arg name="pointcloud_topic"	default="/rslidar_points"/>
+  <xacro:arg name="pointcloud_topic"	default="/rslidar/points"/>
 
   <xacro:property name="gpu" 		value="$(arg gpu)" />
 
@@ -26,7 +26,7 @@
 
       <!--  simulate icp-->
       <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
-      <xacro:odometry_plugin sensor_link="rslidar" topic_name="/rslidar_ground_truth" odom_frame="map" child_odom_frame="lidar" publish_tf="false"/>
+      <xacro:odometry_plugin sensor_link="rslidar" topic_name="/rslidar/ground_truth" odom_frame="map" child_odom_frame="lidar" publish_tf="false"/>
     </xacro:if>
 
     <xacro:unless value="${simulation}">
