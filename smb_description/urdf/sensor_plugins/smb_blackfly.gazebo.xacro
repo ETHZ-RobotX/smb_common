@@ -4,8 +4,8 @@
 
   <xacro:macro name="blackfly_camera_plugin" params="name rate">
 
-    <xacro:property name="camera_topic" value="/versavis/cam0/slow/image_raw" />
-    <xacro:property name="camera_info_topic" value="/versavis/cam0/slow/camera_info" />
+    <xacro:property name="camera_topic" value="/visual_inertial_sensor/cam0/slow/image_raw" />
+    <xacro:property name="camera_info_topic" value="/visual_inertial_sensor/cam0/slow/camera_info" />
 
 
     <gazebo reference="${name}_link">

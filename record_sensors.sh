@@ -22,9 +22,9 @@ fi
 rosparam dump ${outpath}/${now}.yaml
 rosbag record --output-name=${outpath}/${now}"_smb" \
 /tracking_camera/odom/sample \
-/versavis/imu \
+/visual_inertial_sensor/imu \
 /msf_core/odometry \
-/rslidar_points  \
+/rslidar/points  \
 /tf \
 /tf_static
 
