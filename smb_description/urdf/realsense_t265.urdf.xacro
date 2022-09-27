@@ -73,7 +73,7 @@
     </joint>
 
       <xacro:if value="${simulation}">
-            <xacro:odometry_plugin sensor_link="realsense_t265" topic_name="/camera/odom/sample" rate="200" max_linear_speed_before_settle="0.01" max_angular_speed_before_settle="0.05" publish_tf="false"/>
+            <xacro:odometry_plugin sensor_link="realsense_t265" topic_name="/tracking_camera/odom/sample" rate="200" max_linear_speed_before_settle="0.01" max_angular_speed_before_settle="0.05" publish_tf="false"/>
       </xacro:if>
 
       <gazebo reference="realsense_t265_joint">

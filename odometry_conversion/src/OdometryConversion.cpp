@@ -25,7 +25,7 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   odomCameraOdomTransformPublisher_.sendTransform(odomTransform);
 
   odometryPublisher_ = nh.advertise<nav_msgs::Odometry>("/base_odom", 1, false);
-  odometryInSubscriber_ = nh.subscribe("/camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
+  odometryInSubscriber_ = nh.subscribe("/tracking_camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
 }
 
 Eigen::Matrix4d OdometryConversion::toHomTransform(const geometry_msgs::Transform& transform) const {
