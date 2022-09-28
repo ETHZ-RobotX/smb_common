@@ -2,7 +2,7 @@
 
 <robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:macro name="blackfly_camera_stereo_plugin" params="name rate">
+<xacro:macro name="rgbcamera_camera_stereo_plugin" params="name rate">
 
 
 <gazebo reference="${name}_left_link">

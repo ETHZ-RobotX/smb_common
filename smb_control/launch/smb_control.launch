@@ -47,7 +47,7 @@
   </node>
 
 
-  <node pkg="twist_mux" type="twist_mux" name="twist_mux" >
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux" ns="control">
     <rosparam command="load" file="$(find smb_control)/config/twist_mux.yaml" />
     <remap from="cmd_vel_out" to="/control/smb_diff_drive/cmd_vel"/>
   </node>

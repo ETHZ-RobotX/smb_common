@@ -142,7 +142,7 @@
             machine="$(arg rgb_cam_host)"
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /$(arg camera_manager)" >
 
-        <param name="frame_id" value="blackfly_right_optical_link" />
+        <param name="frame_id" value="rgbcamera_right_optical_link" />
         <param name="serial" value="$(arg cam0_serial)" />
         <param name="acquisition_frame_rate" value="4" />
         <param name="acquisition_frame_rate_enable" value="true" />

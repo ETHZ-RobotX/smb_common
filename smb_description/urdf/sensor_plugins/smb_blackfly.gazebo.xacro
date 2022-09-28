@@ -2,7 +2,7 @@
 
 <robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="blackfly_camera_plugin" params="name rate">
+  <xacro:macro name="rgbcamera_camera_plugin" params="name rate">
 
     <xacro:property name="camera_topic" value="/visual_inertial_sensor/cam0/slow/image_raw" />
     <xacro:property name="camera_info_topic" value="/visual_inertial_sensor/cam0/slow/camera_info" />
