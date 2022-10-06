@@ -145,7 +145,7 @@
 
         <param name="frame_id" value="blackfly_right_optical_link" />
         <param name="serial" value="$(arg cam0_serial)" />
-        <param name="acquisition_frame_rate" value="5" />
+        <param name="acquisition_frame_rate" value="4" />
         <param name="acquisition_frame_rate_enable" value="true" />
         <param name="image_format_color_coding" value="BayerRG8" />
         <param name="color_processing_algorithm" value="HQ_LINEAR" />
