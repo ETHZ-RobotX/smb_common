@@ -171,6 +171,10 @@
         <param name="auto_gain" value="Continuous" />
         <param name="auto_white_balance" value="Continuous" />
       </node>
+      <node pkg="nodelet" type="nodelet" name="image_proc_debayer"
+        machine="$(arg rgb_cam_host)"
+        args="load image_proc/debayer /$(arg camera_manager)">
+      </node>
     </group>
   </group>
 
