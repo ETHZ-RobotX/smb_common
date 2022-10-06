@@ -11,7 +11,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>flir_camera_driver</exec_depend> 
   <exec_depend>versavis_adis16448_receiver</exec_depend>
   <exec_depend>realsense2_camera</exec_depend>
   <exec_depend>rslidar_sdk</exec_depend>
