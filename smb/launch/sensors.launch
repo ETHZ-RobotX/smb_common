@@ -8,8 +8,8 @@
 
   <!-- launch rgb cam (FLIR blackfly) -->
   <arg name="launch_rgb_cam"
-       default="false"
-       doc="Launch the RGB camera related nodes"/>
+       default="remote"
+       doc="Launch the RGB camera related nodes? Options: local, remote (on Jetson GPU), false (default)"/>
 
   <!-- launch depth cam -->
   <arg name="launch_depth_cam"
@@ -38,6 +38,27 @@
   <arg name="smb_name"
        default="$(env SMB_NAME)"
        doc="Name of the SMB in the format smb26x (relevant for calibrations)" />
+
+  <arg name="GPU_user" 
+       default="$(env USER)"
+       doc="Username to use on the jetson xavier GPU"/>
+
+
+  <!-- evaluate where to start the rgb camera node (based on argument launch_rgb_cam) -->
+  <arg name="rgb_cam_host"
+       value="" unless="$(eval arg('launch_rgb_cam')=='remote')"
+       doc="Host on which to launch rgb camera related nodes (and camera is connected to) - set based on argument launch_rgb_cam" />
+  <arg name="rgb_cam_host"
+       value="jetson" if="$(eval arg('launch_rgb_cam')=='remote')" 
+       doc="Host on which to launch rgb camera related nodes (and camera is connected to) - set based on argument launch_rgb_cam" />
+/>
+
+  <!-- define Jetson host (machine)-->
+  <machine  name="jetson" 
+            address="jetson-xavier" 
+            env-loader="~/jetson_env.sh" 
+            user="$(arg GPU_user)"
+            default="false"/>
 
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
@@ -93,22 +114,23 @@
       <param name="imu_acceleration_covariance"           value="0.043864908" /> <!-- no idea where it is from -->
       <param name="imu_gyro_covariance"                   value="6e-9" /> <!-- no idea where it is from -->
       <param name="imu_sub_topic"  type="string"          value="/versavis/imu_micro"/>
+      <param name="imu_pub_topic"  type="string"          value="/imu"/>
     </node>
   </group>
 
-  <!-- lunch rgb camera (flir camera driver)-->
-  <group if="$(arg launch_rgb_cam)" >
+  <!-- launch rgb camera (flir camera driver)-->
+  <group if="$(eval arg('launch_rgb_cam')=='local' or arg('launch_rgb_cam')=='remote')">
     <!-- camera name prefix -->
     <arg name="camera_name"             default="rgb_camera" />
     <arg name="camera_type"             default="usb" />
     <!-- camera manager -->
     <arg name="camera_manager"          value="camera_nodelet_manager" />
     <arg name="cam0_serial"             value="0" />
-    <arg name="node_start_delay_cam0"   value="5.0" />
 
     <!-- camera nodelet system -->
     <!-- nodelet manager -->
     <node pkg="nodelet" type="nodelet" name="$(arg camera_manager)"
+          machine="$(arg rgb_cam_host)"
           args="manager"
           output="screen"
           required="true" >
@@ -117,7 +139,8 @@
 
     <group ns="$(arg camera_name)" >
       <!-- camera driver nodelet -->
-      <node pkg="nodelet" type="nodelet" name="rgb_camera_nodelet"
+      <node pkg="nodelet" type="nodelet" name="rgb_camera_nodelet" 
+            machine="$(arg rgb_cam_host)"
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /$(arg camera_manager)" >
 
         <param name="frame_id" value="blackfly_right_optical_link" />

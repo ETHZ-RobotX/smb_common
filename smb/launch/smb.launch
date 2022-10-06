@@ -3,33 +3,38 @@
   <!-- General -->
   <arg name="smb_name"
        default="$(env SMB_NAME)"
-       doc="Name of the SMB in the format smb26x (relevant for calibrations)" />
+       doc="Name of the SMB in the format smb26x (relevant for calibrations)." />
 
-  <!-- launch versavis: ADIS 16448 IMU and FLIR blackfly rgb cam -->
-  <arg name="launch_versavis"                       
+  <!-- launch sensors -->
+  <arg name="launch_sensors"
+       default="true"
+       doc="Launch sensors like IMU, rgb camera etc. Overrides all other sensor arguments if set to false."/>
+
+  <!-- launch IMU interface for ADIS 16448 -->
+  <arg name="launch_imu_interface"                       
        default="true" 
-       doc="Launch the RGB camera and IMU related nodes (triggered through versavis)"/>
+       doc="Launch the IMU related nodes."/>
   
-  <!-- launch depth cam -->
-  <arg name="launch_depth_cam" 
-       default="false" 
-       doc="Launch the depth camera related nodes"/>
+  <!-- launch RGB camera -->
+  <arg name="launch_rgb_cam"                       
+       default="remote" 
+       doc="Define whether and where to run the rgb camera nodes. Options: 'remote' (on Jetson Xavier), 'local' or 'false'."/>
 
   <!-- launch tracking cam -->
   <arg name="launch_tracking_cam"
        default="true"
-       doc="Launch the tracking camera related nodes"/>
+       doc="Launch the tracking camera related nodes."/>
+  
+  <!-- launch depth cam -->
+  <arg name="launch_depth_cam" 
+       default="false" 
+       doc="Launch the depth camera related nodes."/>
 
   <!-- use lidar odometry -->
   <arg name="use_lidar_odometry"
        default="false"
        doc="Use lidar odometry instead of the tracking camera odometry if set to true."/>
   
-  <!-- launch sensors -->
-  <arg name="launch_sensors"
-       default="true"
-       doc="Launch depth camera, versavis and tracking camera."/>
-
   <!-- enable ekf -->
   <arg name="enable_ekf" 
        default="false"
@@ -67,7 +72,7 @@
   <!-- keyboard_teleop -->
   <arg name="keyboard_teleop"
         default="false"
-        doc="Launch node to send control commands (twist msgs) using the keyboard"/>
+        doc="Launch node to send control commands (twist msgs) using the keyboard."/>
 
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
@@ -76,7 +81,8 @@
   <group if="$(arg launch_sensors)">
     <include file="$(find smb)/launch/sensors.launch">
       <arg name="smb_name"                 value="$(arg smb_name)"/>
-      <arg name="launch_versavis"          value="$(arg launch_versavis)"/>
+      <arg name="launch_imu_interface"     value="$(arg launch_imu_interface)"/>
+      <arg name="launch_rgb_cam"           value="$(arg launch_rgb_cam)"/>
       <arg name="launch_depth_cam"         value="$(arg launch_depth_cam)"/>
       <arg name="launch_tracking_cam"      value="$(arg launch_tracking_cam)"/>
     </include>
