@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>smb</name>
-  <version>0.1.4</version>
-  <description>smb_highlevel_controller</description>
-  <maintainer email="pankertj@ethz.ch">Johannes Pankert</maintainer>
+  <version>1.0.0</version>
+  <description>SuperMegaBot package for the ETHZ Robotic Summer School</description>
+  <maintainer email="thomas.mantel@mavt.ethz.ch">Thomas Mantel</maintainer>
   <license>Proprietary</license>
   <author email="pankertj@ethz.ch">Johannes Pankert</author>
   <buildtool_depend>catkin</buildtool_depend>
