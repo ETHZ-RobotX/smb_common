@@ -51,7 +51,6 @@
   <arg name="rgb_cam_host"
        value="jetson" if="$(eval arg('launch_rgb_cam')=='remote')" 
        doc="Host on which to launch rgb camera related nodes (and camera is connected to) - set based on argument launch_rgb_cam" />
-/>
 
   <!-- define Jetson host (machine)-->
   <machine  name="jetson" 
