@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
+    <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
+    <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
+    <param name="out_odom_frame" value="tracking_camera_odom"/>
+    <param name="out_sensor_frame" value="base_link"/>
+  </node>
+</launch>
