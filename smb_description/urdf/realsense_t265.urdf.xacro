@@ -52,7 +52,8 @@
     <gazebo reference="tracking_camera_joint">
       <disableFixedJointLumping>true</disableFixedJointLumping>
     </gazebo>
-
+    
+    <!--
     <link name="tracking_camera_pose_frame" />
     <joint name="tracking_camera_pose_frame_joint" type="fixed">
       <parent link="tracking_camera_link"/>
@@ -66,6 +67,7 @@
       <child link="tracking_camera_odom_frame"/>
       <origin xyz="0 ${realsense_t265_housing_center_x_offset} 0 " rpy="${0.5*PI} 0 ${-0.5*PI}" />
     </joint>
+    -->
 
     <!--
     <link name="tracking_camera_optical_frame" />
