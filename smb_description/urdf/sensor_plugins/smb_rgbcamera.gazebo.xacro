@@ -2,14 +2,14 @@
 
 <robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:macro name="rgbcamera_camera_plugin" params="name rate">
+  <xacro:macro name="rgbcamera_camera_plugin" params="name link_name rate">
 
-    <xacro:property name="camera_topic" value="/visual_inertial_sensor/cam0/slow/image_raw" />
-    <xacro:property name="camera_info_topic" value="/visual_inertial_sensor/cam0/slow/camera_info" />
+    <xacro:property name="camera_topic" value="/${name}/image_raw" />
+    <xacro:property name="camera_info_topic" value="/${name}/camera_info" />
 
 
-    <gazebo reference="${name}_link">
-      <sensor type="camera" name="${name}_cam">
+    <gazebo reference="${link_name}">
+      <sensor type="camera" name="${name}">
         <pose>0.0066 0 0 0 0 0</pose>
         <visualize>false</visualize>
         <update_rate>${rate}</update_rate>
@@ -26,10 +26,6 @@
           </clip>
           <noise>
             <type>gaussian</type>
-            <!-- Noise parameters based on published spec for Hokuyo laser
-                achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
-                stddev of 0.01m will put 99.7% of samples within 0.03m of the true
-                reading. -->
             <mean>0.0</mean>
             <stddev>0.007</stddev>
           </noise>
@@ -37,7 +33,7 @@
         <plugin name="gazebo_ros_camera_controller" filename="libgazebo_ros_camera.so">
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
-          <cameraName>${name}_cam</cameraName>
+          <cameraName>${name}</cameraName>
           <imageTopicName>${camera_topic}</imageTopicName>
           <cameraInfoTopicName>${camera_info_topic}</cameraInfoTopicName>
           <frameName>${name}_optical_link</frameName>

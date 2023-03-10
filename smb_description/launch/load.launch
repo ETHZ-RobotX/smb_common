@@ -6,7 +6,6 @@
   <arg name="description_name"   default="smb_description"/>
   <arg name="wheel_joint_type"   default="fixed"/>
   <arg name="simulation"         default="true"/>
-  <arg name="use_ros_skid_steer" default="false"/>
   <arg name="use_ros_control"    default="false"/>
   <arg name="robot_namespace"    default="/"/>
   <arg name="lidar"              default="true"/>
@@ -22,7 +21,6 @@
     robot_namespace:=$(arg robot_namespace)
     lidar:=$(arg lidar)
     use_ros_control:=$(arg use_ros_control)
-    use_ros_skid_steer:=$(arg use_ros_skid_steer)
     description_name_xacro:=$(arg description_name)
     publish_tf:=$(arg publish_tf)
     tracking_camera:=$(arg tracking_camera)"/>

@@ -60,7 +60,9 @@
     </node>
   </group>
 
-  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)"/>
+  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)">
+    <arg name="joystick_name_space" value="$(arg control_namespace)/joy_teleop"/>
+  </include>
 
   <include file="$(find smb_mpc)/launch/mpc.launch" if="$(arg mpc)">
     <arg name="track_local_plan" value="$(arg mpc_track_local_plan)"/>

@@ -1,6 +1,6 @@
 topics:
 - name    : RC
-  topic   : /rc_twist
+  topic   : rc_twist
   timeout : 0.5
   priority: 15
 - name    : joy
@@ -16,11 +16,11 @@ topics:
   timeout : 0.5
   priority: 8
 - name    : mpc_command_twist
-  topic   : /smb_mpc/command_twist
+  topic   : smb_mpc/command_twist
   timeout : 0.2
   priority: 5
 - name    : teb_planner_twist
-  topic   : /teb_planner_twist
+  topic   : teb_planner_twist
   timeout : 1.0
   priority: 3
 locks:

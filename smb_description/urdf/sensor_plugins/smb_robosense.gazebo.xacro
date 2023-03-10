@@ -7,13 +7,13 @@
 
   <xacro:property name="gpu" 		value="$(arg gpu)" />
 
-  <xacro:macro name="LIDAR" params="base_link simulation">
+  <xacro:macro name="LIDAR" params="parent_link simulation">
 
     <xacro:if value="${simulation}">
       <xacro:include filename="$(find robosense_description)/urdf/RS-16.urdf.xacro"/>
 
-      <xacro:RS-16 parent="${base_link}" name="rslidar" topic="$(arg pointcloud_topic)" hz="10" samples="440" gpu="${gpu}">
-        <origin xyz="0.0245 0 ${payloadHeight+lidarBoxHeight+chassisHeight/2.0}" rpy="0 0 0" />
+      <xacro:RS-16 parent="${parent_link}" name="rslidar" topic="$(arg pointcloud_topic)" hz="10" samples="440" gpu="${gpu}">
+        <origin xyz="0.0 0.0 ${lidarBoxHeight}" rpy="0 0 0" />
       </xacro:RS-16>
 
       <gazebo reference="rslidar_base_mount_joint">
@@ -25,8 +25,10 @@
       </gazebo>
 
       <!--  simulate icp-->
+      <!--
       <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
       <xacro:odometry_plugin sensor_link="rslidar" topic_name="/rslidar/ground_truth" odom_frame="map" child_odom_frame="lidar" publish_tf="false"/>
+      -->
     </xacro:if>
 
     <xacro:unless value="${simulation}">
@@ -47,10 +49,10 @@
           </visual>
       </link>
 
-      <joint name="base_to_rslidar" type="fixed">
-        <parent link="${base_link}"/>
+      <joint name="${parent_link}_to_rslidar" type="fixed">
+        <parent link="${parent_link}"/>
         <child link="rslidar"/>
-        <origin xyz="0.0245 0 ${payloadHeight+lidarBoxHeight+chassisHeight/2.0+0.038}" rpy="0 0 0"/>
+        <origin xyz="0.0 0.0 ${lidarBoxHeight+0.039}" rpy="0 0 0"/>
       </joint>
     </xacro:unless>
 

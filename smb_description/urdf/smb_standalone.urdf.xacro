@@ -4,7 +4,6 @@
   <!-- Arguments -->
   <xacro:arg name="wheel_joint_type"          default="fixed"/> <!-- continuous for gazebo -->
   <xacro:arg name="simulation"                default="false"/>
-  <xacro:arg name="use_ros_skid_steer"        default="false"/> <!-- Specify one! -->
   <xacro:arg name="use_ros_control"           default="false"/>
   <xacro:arg name="lidar"                     default="true"/>
   <xacro:arg name="robot_namespace"           default=""/>

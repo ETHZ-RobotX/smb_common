@@ -6,7 +6,7 @@
 <robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- INCLUDE PLUGIN -->
-  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_blackfly.gazebo.xacro"/>
+  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_rgbcamera.gazebo.xacro"/>
 
 
   <xacro:macro name="rgbcamera_cam" params="*origin id base_link simulation">
@@ -62,7 +62,7 @@
     </joint>
 
     <xacro:if value="${simulation}">
-        <xacro:rgbcamera_camera_plugin name="rgbcamera${id}" rate="${rgbcamera_update_rate}"/>
+        <xacro:rgbcamera_camera_plugin name="rgb_camera" link_name="${rgbcamera_link}" rate="${rgbcamera_update_rate}"/>
     </xacro:if>
 
 
