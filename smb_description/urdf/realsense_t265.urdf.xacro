@@ -53,7 +53,6 @@
       <disableFixedJointLumping>true</disableFixedJointLumping>
     </gazebo>
     
-    <!--
     <link name="tracking_camera_pose_frame" />
     <joint name="tracking_camera_pose_frame_joint" type="fixed">
       <parent link="tracking_camera_link"/>
@@ -61,6 +60,7 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
     </joint>
 
+    <!--
     <link name="tracking_camera_odom_frame" />
     <joint name="tracking_camera_odom_joint" type="fixed">
       <parent link="tracking_camera_link"/>

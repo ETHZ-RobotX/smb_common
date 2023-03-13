@@ -104,8 +104,8 @@
 
   <group ns="odometry" unless="$(arg use_lidar_odometry)">
     <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
-      <param name="in_odom_frame" value="camera_pose_frame"/>
-      <param name="in_sensor_frame" value="camera_pose_frame"/>
+      <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
+      <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
       <param name="out_odom_frame" value="tracking_camera_odom"/>
       <param name="out_sensor_frame" value="base_link"/>
     </node>
