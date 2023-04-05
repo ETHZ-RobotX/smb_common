@@ -13,6 +13,7 @@ find_package(catkin REQUIRED
     roscpp
     std_msgs
     roslib
+    ddynamic_reconfigure
 )
 
 catkin_package(
@@ -28,6 +29,7 @@ catkin_package(
     roscpp
     std_msgs
     roslib
+    ddynamic_reconfigure
 )
 
 add_definitions(-std=c++17)

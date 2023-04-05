@@ -17,7 +17,7 @@ RF_WHEEL_JOINT_dc_controller:
   p: 50.0
   i: 0.0
   d: 0.0
-  i_clamp: 0.0
+  i_clamp: 1000
   antiwindup: True
   publish_state: True
 
@@ -25,6 +25,6 @@ LF_WHEEL_JOINT_dc_controller:
   p: 50.0
   i: 0.0
   d: 0.0
-  i_clamp: 0.0
+  i_clamp: 1000
   antiwindup: True
   publish_state: True
