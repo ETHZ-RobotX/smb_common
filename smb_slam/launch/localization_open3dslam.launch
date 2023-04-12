@@ -2,9 +2,11 @@
 <launch>
 
   <!-- Arguments -->
+  <!-- Make sure to Set the correct absolute Map path in $(find smb_slam)/config/open3d_slam/param_rs16_localization.lua -->
+  <!-- Without setting the map path, it will throw an error-->
   <arg name="cloud_topic"           default="/rslidar_points"/>
-  <arg name="parameter_filename"    default="param_robosense_rs16.lua"/>
-	<arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/"/>
+  <arg name="parameter_filename"    default="param_rs16_localization.lua"/>
+  <arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/"/>
   <arg name="launch_rviz"           default="true"/>
   <arg name="launch_sensors"        default="false"/>
 
