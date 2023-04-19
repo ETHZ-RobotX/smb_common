@@ -288,7 +288,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
 
     void WheelVelocityControl::update(const ros::Time& time, const ros::Duration& period, double velocity_set)
     {
-      *setPoint_ = velocity_set;
+      //*setPoint_ = velocity_set;
       double error = *setPoint_ - *processValue_;
 
       // Set the PID error and compute the PID command with nonuniform time
