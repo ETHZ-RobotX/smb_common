@@ -14,8 +14,8 @@
 namespace smb_lowlevel_controller {
 
 SmbHWInterface::SmbHWInterface() {
-    currentPIDs_.emplace_back(&(velCmd_[0]), &(iCmd_[0]), &(wheels_[0].vel));
-    currentPIDs_.emplace_back(&(velCmd_[1]), &(iCmd_[1]), &(wheels_[1].vel));
+    currentPIDs_.emplace_back(&(velCmd_[0]), &(velCmd_[1]), &(iCmd_[0]), &(wheels_[0].vel));
+    currentPIDs_.emplace_back(&(velCmd_[1]), &(velCmd_[0]), &(iCmd_[1]), &(wheels_[1].vel));
 }
 
 
@@ -265,8 +265,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     }
 
 
-    WheelVelocityControl::WheelVelocityControl(double* const setPoint, double* const command, const double * const processValue) :
-     setPoint_(setPoint),  command_(command),  processValue_(processValue), loop_count_(0)
+    WheelVelocityControl::WheelVelocityControl(double* const setPoint, double* const otherSetPoint, double* const command, const double * const processValue) :
+     setPoint_(setPoint), otherSetPoint_(otherSetPoint),  command_(command),  processValue_(processValue), loop_count_(0)
     {}
 
     WheelVelocityControl::~WheelVelocityControl() {delete controller_state_publisher_;};
@@ -294,7 +294,20 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       // Set the PID error and compute the PID command with nonuniform time
       // step size. The derivative error is computed from the change in the error
       // and the timestep dt.
-      *command_ = pid_controller_.computeCommand(error, period);
+      if (std::abs(*setPoint_) >= 0.01) {
+        *command_ = pid_controller_.computeCommand(error, period);
+        *command_ += *setPoint_ > 0 ? 25 : -25;
+        if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
+          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
+          *command_ += *setPoint_ > 0 ? 150 : -150;
+        }
+      } else {
+        *command_ = 0;
+        pid_controller_.reset();
+      }
+
+
+      // *command_ = pid_controller_.computeCommand(error, period);
 
 
       ROS_INFO("velocity set: %f", *command_);

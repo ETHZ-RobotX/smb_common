@@ -35,7 +35,7 @@ namespace smb_lowlevel_controller {
   class WheelVelocityControl {
 public:
 
-  WheelVelocityControl(double* const setPoint, double* const command, const double * const processValue);
+  WheelVelocityControl(double* const setPoint, double* const otherSetPoint, double* const command, const double * const processValue);
   ~WheelVelocityControl();
 
   bool init(ros::NodeHandle& n, const std::string& nhprefix, bool publishControllerState=false);
@@ -46,6 +46,7 @@ public:
 
   control_toolbox::Pid pid_controller_;
   double* const setPoint_;
+  double* const otherSetPoint_;
   double* const command_;
   const double * const processValue_;
 private:
