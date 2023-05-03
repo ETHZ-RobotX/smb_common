@@ -1,7 +1,7 @@
 # SMB_SLAM
 This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping.
 
-For creating the map, [open3d_slam](https://github.com/leggedrobotics/open3d_slam) can be used. We have created a new branch for the robotics summer school. Make sure that you are using the correct branch. [robotics_summer_school_2023](https://github.com/leggedrobotics/open3d_slam/tree/robotics_summer_school_2023)
+For creating the map, [open3d_slam](https://github.com/leggedrobotics/open3d_slam) can be used. We have created a new branch for the robotics summer school. Make sure that you are using the correct branch ([robotics_summer_school_2023](https://github.com/leggedrobotics/open3d_slam/tree/robotics_summer_school_2023)).
 
 The map generation is both possible in real-time on the system or from a rosbag, as well as by directly reading from the rosbag.
 
