@@ -29,3 +29,4 @@ Here are different modes of operation:
       ```
       roslaunch smb_slam localization_open3dslam.launch
       ```
+     Initial estimate for the robot in the map will need to be provided. This can be done by using the 2D pose estimate in RVIZ.
