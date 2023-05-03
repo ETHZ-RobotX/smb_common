@@ -9,6 +9,7 @@
   <arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/"/>
   <arg name="launch_rviz"           default="true"/>
   <arg name="launch_sensors"        default="false"/>
+  <arg name="pcd_file_path"         default="$(find smb_slam)/data/maps/map.pcd"/>
 
   <!-- Potentially launch sensors -->
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
@@ -19,6 +20,7 @@
     <arg name="parameter_folder_path" value="$(arg parameter_folder_path)"/>
     <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
     <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
+    <arg name="pcd_file_path"         value="$(arg pcd_file_path)"/>
   </include>
 
 </launch>
