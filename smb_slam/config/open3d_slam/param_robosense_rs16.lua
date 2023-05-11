@@ -63,7 +63,7 @@ params.motion_compensation.is_undistort_scan = true
 
 --SAVING
 params.saving.save_map = true
-params.saving.save_at_mission_end = true
+params.saving.save_at_mission_end = false
 params.saving.save_submaps = true
 params.saving.save_dense_submaps = false
 

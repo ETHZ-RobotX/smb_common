@@ -7,7 +7,7 @@
   <arg name="cloud_topic"           default="/rslidar_points"/>
   <arg name="parameter_filename"    default="param_rs16_localization.lua"/>
   <arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/"/>
-  <arg name="launch_rviz"           default="true"/>
+  <arg name="launch_rviz"           default="false"/>
   <arg name="launch_sensors"        default="false"/>
   <arg name="pcd_file_path"         default="$(find smb_slam)/data/maps/map.pcd"/>
 
@@ -23,6 +23,6 @@
     <arg name="pcd_file_path"         value="$(arg pcd_file_path)"/>
   </include>
 
-  <node pkg="tf" type="static_transform_publisher" name="range_sensor_to_base_link" respawn="true" args="0 0 0 -1.57 0 0 range_sensor_o3d base_link 100"/>
+    <node pkg="tf" type="static_transform_publisher" name="range_sensor_to_base_link" respawn="true" args="-0.0245 0 -0.4645 0 0 0 range_sensor_o3d base_link 100"/>
 
 </launch>
