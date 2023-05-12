@@ -20,7 +20,7 @@ Here are different modes of operation:
       Make sure that `smb smb.launch` is running correctly. Now simply run the following command to start running online SLAM. You can save the map at any point by using rosservice or the map will automatically get saved upon closing the node.
       
       ```
-      roslaunch smb_slam build_map.launch
+      roslaunch smb_slam online_slam.launch
       ```
 
 3. Localization Mode:
