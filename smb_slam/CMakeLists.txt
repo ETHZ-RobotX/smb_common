@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 
 set(PACKAGE_DEPENDENCIES
         roscpp
-        nav_msgs
         roslib
         open3d_slam_ros
         )
@@ -14,10 +13,8 @@ set(PACKAGE_DEPENDENCIES
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})
 
 catkin_package(
-        INCLUDE_DIRS
-          include 
         LIBRARIES
-          ${PROJECT_NAME}
+        ${PROJECT_NAME}
         CATKIN_DEPENDS
         ${PACKAGE_DEPENDENCIES}
 )
