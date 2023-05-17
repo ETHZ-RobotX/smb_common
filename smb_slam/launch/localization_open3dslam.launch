@@ -10,6 +10,7 @@
   <arg name="launch_rviz"           default="false"/>
   <arg name="launch_sensors"        default="false"/>
   <arg name="pcd_file_path"         default="$(find smb_slam)/data/maps/map.pcd"/>
+  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/"/>
 
   <!-- Potentially launch sensors -->
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
@@ -21,6 +22,7 @@
     <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
     <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
     <arg name="pcd_file_path"         value="$(arg pcd_file_path)"/>
+    <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
   </include>
 
   <node pkg="tf2_ros" type="static_transform_publisher" name="range_sensor_to_base_link" respawn="true" args="-0.0245 0 -0.4645 0 0 0 range_sensor_o3d base_link" />
