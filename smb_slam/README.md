@@ -3,7 +3,7 @@ This package contains a bunch of commodity scripts for running (simultaneous) lo
 
 For creating the map, [open3d_slam](https://github.com/leggedrobotics/open3d_slam) can be used. We have created a new branch for the robotics summer school. Make sure that you are using the correct branch ([robotics_summer_school_2023](https://github.com/leggedrobotics/open3d_slam/tree/robotics_summer_school_2023)).
 
-It is necessary to follow the instructions [here](https://open3d-slam.readthedocs.io/en/latest/installation.html) to install all dependencies before compile `smb_slam`.
+It is necessary to follow the instructions [here](https://open3d-slam.readthedocs.io/en/latest/installation.html) to install all dependencies before compiling `smb_slam`.
 
 You can then proceed to build the `smb_slam` package using the following command from the worksapce: `catkin build smb_slam`
 

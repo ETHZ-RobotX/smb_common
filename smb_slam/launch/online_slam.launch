@@ -2,12 +2,12 @@
 <launch>
 
   <!-- Arguments -->
-  <arg name="cloud_topic"           default="/rslidar_points"/>
-  <arg name="parameter_filename"    default="param_robosense_rs16.lua"/>
-	<arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/"/>
-  <arg name="launch_rviz"           default="false"/>
-  <arg name="launch_sensors"        default="false"/>
-  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/"/>
+  <arg name="cloud_topic"           default="/rslidar_points" doc="input topic for the lidar pointcloud"/>
+  <arg name="parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
+	<arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/" doc="directory for the parameter files"/>
+  <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
+  <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
+  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" "Path for saving the map"/>
 
   <!-- Potentially launch sensors -->
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
@@ -21,6 +21,7 @@
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
   </include>
 
+  <!-- Static TF publisher between range_sensor and base_link-->
   <node pkg="tf2_ros" type="static_transform_publisher" name="range_sensor_to_base_link" respawn="true" args="-0.0245 0 -0.4645 0 0 0 range_sensor_o3d base_link" />
 
 </launch>
