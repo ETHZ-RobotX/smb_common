@@ -13,7 +13,7 @@
       <xacro:include filename="$(find robosense_description)/urdf/RS-16.urdf.xacro"/>
 
       <xacro:RS-16 parent="${base_link}" name="rslidar" topic="$(arg pointcloud_topic)" hz="10" samples="440" gpu="${gpu}">
-        <origin xyz="0.00445 0 ${0.298+chassisHeight/2.0}" rpy="0 0 ${M_PI/2.0}" />
+        <origin xyz="0.0245 0 ${payloadHeight+lidarBoxHeight+chassisHeight/2.0}" rpy="0 0 0" />
       </xacro:RS-16>
 
       <gazebo reference="rslidar_base_mount_joint">
@@ -50,7 +50,7 @@
       <joint name="base_to_rslidar" type="fixed">
         <parent link="${base_link}"/>
         <child link="rslidar"/>
-        <origin xyz="0.00445 0 ${0.298+chassisHeight/2.0+0.038}" rpy="0 0 ${M_PI/2.0}"/>
+        <origin xyz="0.0245 0 ${payloadHeight+lidarBoxHeight+chassisHeight/2.0+0.038}" rpy="0 0 0"/>
       </joint>
     </xacro:unless>
 

@@ -10,12 +10,7 @@
 	<buildtool_depend>catkin</buildtool_depend>
 
 	<depend>roscpp</depend>
-	<depend>nav_msgs</depend>
-	<depend>pointmatcher_ros</depend>
-	<depend>libpointmatcher</depend>
+	<depend>open3d_slam_ros</depend>
 	<depend>roslib</depend>
-	<depend>icp_localization</depend>
-	
-	<build_depend>libgoogle-glog-dev</build_depend>
 
 </package>

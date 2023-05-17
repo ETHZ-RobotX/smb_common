@@ -8,12 +8,12 @@
     <!--                              Imu  Properties 				          	-->
     <xacro:property name="mount_base_link"		value="${base_link}"/>
     <xacro:property name="mount_origin_rpy"		value="0 0 0"/>
-    <xacro:property name="mount_origin_xyz"		value="0.00445 0 ${0.228+chassisHeight/2.0}"/>
+    <xacro:property name="mount_origin_xyz"		value="0.0245 0 ${payloadHeight+chassisHeight/2.0}"/>
 
     <link name="lidar_mount_link">
       <visual>
         <geometry>
-          <mesh filename="package://smb_description/urdf/new_payload/meshes/SMB_lidar_mount.dae"/>
+          <mesh filename="package://smb_description/urdf/new_payload/meshes/LidarBoxV2.dae"/>
         </geometry>
       </visual>
       <inertial>
