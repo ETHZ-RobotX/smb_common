@@ -21,7 +21,7 @@ params.mapper_localizer.scan_to_map_registration.scan_processing.scan_cropping.c
 params.mapper_localizer.scan_to_map_registration.icp.max_correspondence_dist = 0.8
 
 --MAP_INITIALIZER
-params.map_initializer.pcd_file_path = "/home/robotx/catkin_workspaces/smb_dev/src/core/smb_slam/data/maps/map.pcd"
+params.map_initializer.pcd_file_path = "" --Make sure to set the correct path in launch file (default is $(find smb_slam)/data/maps/map.pcd)
 params.map_initializer.init_pose.x = 0.0
 params.map_initializer.init_pose.y = 0.0
 params.map_initializer.init_pose.z = 0.0

@@ -9,6 +9,9 @@
     <xacro:property name="chassisMass" value="40"/>
     <xacro:property name="M_PI"          value="3.14159265358"/>
 
+    <xacro:property name="payloadHeight" value="0.228"/>
+    <xacro:property name="lidarBoxHeight" value="0.1"/>
+
     <xacro:property name="topXOffset" value="-0.070"/>
     <xacro:property name="topHeight" value="0.180"/>
     <xacro:property name="topLength" value="0.535"/>
