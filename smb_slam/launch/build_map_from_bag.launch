@@ -2,6 +2,7 @@
 
 <launch>
 
+	<!-- Arguments -->
 	<arg name="launch_prefix" 				default="" doc="gdb -ex run --args"/>
 	<arg name="launch_rviz" 				default="true" doc="whether to launch rviz"/>
 	<arg name="cloud_topic" 				default="/rslidar_points" doc="input topic for the lidar pointcloud"/>
@@ -31,7 +32,8 @@
 		<arg name="launch_prefix" 				value="$(arg launch_prefix)"/>
 		<arg name="map_saving_folder" 			value="$(arg map_saving_folder)"/>
 	</include>
-
+	
+	<!-- Potentially playback the ros bag file -->
 	<node pkg="rosbag" type="play" name="rosbag"
 		args="'$(arg rosbag_full_path)' --delay '$(arg play_delay)' --rate '$(arg play_rate)' --clock -s 0" unless="$(arg is_read_from_rosbag)"/>
 
