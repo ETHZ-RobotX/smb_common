@@ -3,7 +3,13 @@ This package contains a bunch of commodity scripts for running (simultaneous) lo
 
 For creating the map, [open3d_slam](https://github.com/leggedrobotics/open3d_slam) can be used. We have created a new branch for the robotics summer school. Make sure that you are using the correct branch ([robotics_summer_school_2023](https://github.com/leggedrobotics/open3d_slam/tree/robotics_summer_school_2023)).
 
-The map generation is both possible in real-time on the system or from a rosbag, as well as by directly reading from the rosbag.
+It is necessary to follow the instructions [here](https://open3d-slam.readthedocs.io/en/latest/installation.html) to install all dependencies before compile `smb_slam`.
+
+You can then proceed to build the `smb_slam` package using the following command from the worksapce: `catkin build smb_slam`
+
+### Running Open3d SLAM
+
+The map generation is both possible in real-time on the system or from a rosbag, as well as by directly reading from the rosbag. 
 
 Here are different modes of operation:
 
@@ -30,3 +36,11 @@ Here are different modes of operation:
       roslaunch smb_slam localization_open3dslam.launch
       ```
      Initial estimate for the robot in the map will need to be provided. This can be done by using the 2D pose estimate in RVIZ.
+
+### Map Saving
+
+The map can be saved at any point by using rosservice from a new terminal. Run the following command from a new sourced terminal:
+```
+rosservice call /mapping_node/save_map
+```
+Alternatively there is an option for autosaving upon exit which can be switched on from the param files (`params.saving.save_at_mission_end = true`). This is switched off by default.
