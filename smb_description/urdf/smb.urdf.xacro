@@ -3,6 +3,7 @@
 
     <!-- TODO: replace this arg by other ones like sensors, legacy, etc -->
     <xacro:arg name="lidar" default="true"/>
+    <xacro:arg name="tracking_camera" default="false"/>
 
     <!-- Defines colors and calculates typical inertias -->
     <xacro:include filename="$(find smb_description)/urdf/smb_utils.urdf.xacro" />
@@ -15,7 +16,9 @@
     <!-- Defines odometry macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
     <!-- Defines realsense_t265 (tracking camera) macro -->
-    <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
+    <xacro:if value="$(arg tracking_camera)">
+        <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
+    </xacro:if>
     <!-- Defines blackfly rgbcamera camera macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_rgbcamera.urdf.xacro"/>
     <!-- Defines lidar macro -->
@@ -26,7 +29,7 @@
         <joint name="${prefix}_WHEEL_JOINT" type="${wheel_joint_type}">
             <parent link="${base_link_name}"/>
             <child link="${prefix}_WHEEL"/>
-            <origin xyz="${X} ${Y} ${wheelHeight - chassisHeight/2.0}" rpy="-${0.5*PI} 0 0" />
+            <origin xyz="${X} ${Y} ${wheelHeight - chassisHeight/2.0}" rpy="-${0.5*M_PI} 0 0" />
             <axis xyz="0 0 1" rpy="0 0 0" />
             <dynamics damping="1.0" friction="0.0"/>
             <limit effort="100" velocity="10"/>
@@ -155,7 +158,7 @@
 
     </xacro:macro>
 
-    <xacro:macro name="smb" params="wheel_joint_type:=continuous lidar:=${lidar} tracking_camera:=true simulation:=true">
+    <xacro:macro name="smb" params="wheel_joint_type:=continuous lidar:=$(arg lidar) tracking_camera:=$(arg tracking_camera) simulation:=true">
         <xacro:chassis/>
 
         <xacro:wheel prefix="LF" X="${frontWheelX}"
