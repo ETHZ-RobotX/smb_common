@@ -71,6 +71,6 @@
   </include>
 
   <!-- Launch keyboard twist node -->
-  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard_teleop" ns="keyboard_teleop" if="$(arg keyboard_teleop)"/>
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard_teleop" ns="control/keyboard_teleop" if="$(arg keyboard_teleop)"/>
   
 </launch>
