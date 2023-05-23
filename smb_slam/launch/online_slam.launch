@@ -7,7 +7,7 @@
 	<arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/" doc="directory for the parameter files"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
   <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
-  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" "Path for saving the map"/>
+  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map"/>
 
   <!-- Potentially launch sensors -->
   <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
