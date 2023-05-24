@@ -72,10 +72,6 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
       nh_ = nh;
       private_nh_= private_nh;
 
-
-      ddr_.reset(new ddynamic_reconfigure::DDynamicReconfigure(private_nh_));
-      ddr_->registerVariable("velocity", &set_velocity, "Velocity", -10.0, 10.0);
-      ddr_->publishServicesTopics();
       // private_nh_.param<double>("wheel_diameter", wheel_diameter_, 0.3302);
       // private_nh_.param<double>("max_accel", max_accel_, 5.0);
       // private_nh_.param<double>("max_speed", max_speed_, 1.0);
@@ -214,8 +210,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     } else {
       wheels_[0].pos += wheels_[0].vel * elapsedTime.toSec();
       wheels_[1].pos += wheels_[1].vel * elapsedTime.toSec();
-      // currentPIDs_[0].update(time, elapsedTime, set_velocity);
-      // currentPIDs_[1].update(time, elapsedTime, set_velocity);
+      // currentPIDs_[0].update(time, elapsedTime);
+      // currentPIDs_[1].update(time, elapsedTime);
     }
     double batteryVoltage = 0;
     if (smb_->getBatteryVoltage(batteryVoltage, 1000)){
@@ -253,7 +249,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
         case SmbMode::MODE_DC_CMD:
           velocitySoftLimitsInterface_.enforceLimits(elapsedTime);
           // ROS_DEBUG("[SmbHWInterface] %f ", iCmd_[i]);
-          currentPIDs_[i].update(time, elapsedTime, set_velocity);
+          currentPIDs_[i].update(time, elapsedTime);
           //! Note that we explicitly switch the order here to make the turning directions correct
           smb_->setMotorPower(iCmd_[i], 2-i);
           break;
@@ -275,6 +271,12 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       if (publishControllerState) {
         controller_state_publisher_ = new realtime_tools::RealtimePublisher<control_msgs::JointControllerState>(nh, "iPID_state", 1);
       }
+
+      if(!nh.getParam("FF_VALUES/ff_general", ff_general_) || !nh.getParam("FF_VALUES/ff_pure_rotation_", ff_pure_rotation_)){
+        ROS_ERROR("Could not parse the feedforward parameter");
+        return false;
+      }
+
       pid_controller_.initParam(nhprefix);
       return true;
     }
@@ -286,31 +288,25 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       pid_controller_.reset();
     }
 
-    void WheelVelocityControl::update(const ros::Time& time, const ros::Duration& period, double velocity_set)
+    void WheelVelocityControl::update(const ros::Time& time, const ros::Duration& period)
     {
-      //*setPoint_ = velocity_set;
       double error = *setPoint_ - *processValue_;
 
       // Set the PID error and compute the PID command with nonuniform time
       // step size. The derivative error is computed from the change in the error
       // and the timestep dt.
+
       if (std::abs(*setPoint_) >= 0.01) {
         *command_ = pid_controller_.computeCommand(error, period);
-        *command_ += *setPoint_ > 0 ? 25 : -25;
+        *command_ += *setPoint_ > 0 ? ff_general_ : -ff_general_;
         if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
           ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
-          *command_ += *setPoint_ > 0 ? 150 : -150;
+          *command_ += *setPoint_ > 0 ? ff_pure_rotation_ : -ff_pure_rotation_;
         }
       } else {
         *command_ = 0;
         pid_controller_.reset();
       }
-
-
-      // *command_ = pid_controller_.computeCommand(error, period);
-
-
-      ROS_INFO("velocity set: %f", *command_);
 
       if(loop_count_ % 20 == 0)
       {

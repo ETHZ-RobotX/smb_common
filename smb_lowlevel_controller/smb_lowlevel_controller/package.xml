@@ -25,6 +25,5 @@
   <depend>transmission_interface</depend>
   <depend>std_msgs</depend>
   <depend>roslib</depend>
-  <depend>ddynamic_reconfigure</depend>
   <exec_depend>smb_description</exec_depend>
 </package>

@@ -28,8 +28,6 @@
 #include <smb_lowlevel_controller/SmbModes.hpp>
 #include <smb_driver/SmbController.h>
 
-#include <ddynamic_reconfigure/ddynamic_reconfigure.h>
-
 namespace smb_lowlevel_controller {
 
   class WheelVelocityControl {
@@ -42,7 +40,7 @@ public:
 
   void starting(const ros::Time& time);
 
-  void update(const ros::Time& time, const ros::Duration& period, double velocity_set);
+  void update(const ros::Time& time, const ros::Duration& period);
 
   control_toolbox::Pid pid_controller_;
   double* const setPoint_;
@@ -50,6 +48,9 @@ public:
   double* const command_;
   const double * const processValue_;
 private:
+  // ROS Parameters
+  double ff_general_, ff_pure_rotation_;
+  
   realtime_tools::RealtimePublisher<control_msgs::JointControllerState>* controller_state_publisher_;
   int loop_count_;
   ros::Time lastUpdate_;
@@ -75,11 +76,6 @@ private:
 
   private:
     static constexpr std::size_t nActuators = 2;
-
-
-    std::unique_ptr<ddynamic_reconfigure::DDynamicReconfigure> ddr_;
-    double set_velocity = 0.0;
-
 
     // Hardware Driver
     const int controllerTimeoutUs_ = 500; // [us]
