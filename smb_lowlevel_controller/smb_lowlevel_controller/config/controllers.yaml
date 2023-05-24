@@ -12,10 +12,6 @@ RF_WHEEL_velocity_controller:
   joint: "RF_WHEEL_JOINT"
   pid: {p: 100.0, i: 0.01, d: 10.0}
 
-FF_VALUES:
-  ff_general: 25
-  ff_pure_rotation: 150
-
 # The current PID loop
 RF_WHEEL_JOINT_dc_controller:
   p: 50.0

@@ -48,8 +48,6 @@ public:
   double* const command_;
   const double * const processValue_;
 private:
-  // ROS Parameters
-  double ff_general_, ff_pure_rotation_;
   
   realtime_tools::RealtimePublisher<control_msgs::JointControllerState>* controller_state_publisher_;
   int loop_count_;

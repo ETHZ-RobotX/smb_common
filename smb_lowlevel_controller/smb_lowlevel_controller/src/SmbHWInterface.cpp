@@ -272,11 +272,6 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
         controller_state_publisher_ = new realtime_tools::RealtimePublisher<control_msgs::JointControllerState>(nh, "iPID_state", 1);
       }
 
-      if(!nh.getParam("FF_VALUES/ff_general", ff_general_) || !nh.getParam("FF_VALUES/ff_pure_rotation_", ff_pure_rotation_)){
-        ROS_ERROR("Could not parse the feedforward parameter");
-        return false;
-      }
-
       pid_controller_.initParam(nhprefix);
       return true;
     }
@@ -295,13 +290,15 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       // Set the PID error and compute the PID command with nonuniform time
       // step size. The derivative error is computed from the change in the error
       // and the timestep dt.
+      double ff_gen=25;
+      double ff_rot=100;
 
       if (std::abs(*setPoint_) >= 0.01) {
         *command_ = pid_controller_.computeCommand(error, period);
-        *command_ += *setPoint_ > 0 ? ff_general_ : -ff_general_;
+        *command_ += *setPoint_ > 0 ? ff_gen : -ff_gen;
         if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
           ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
-          *command_ += *setPoint_ > 0 ? ff_pure_rotation_ : -ff_pure_rotation_;
+          *command_ += *setPoint_ > 0 ? ff_rot : -ff_rot;
         }
       } else {
         *command_ = 0;
