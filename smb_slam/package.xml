@@ -15,6 +15,7 @@
 	<depend>libpointmatcher</depend>
 	<depend>roslib</depend>
 	<depend>icp_localization</depend>
+	<depend>open3d_slam_ros</depend>
 	
 	<build_depend>libgoogle-glog-dev</build_depend>
 
