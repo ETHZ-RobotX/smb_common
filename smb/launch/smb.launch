@@ -124,6 +124,7 @@
     <arg name="mpc"               value="$(arg mpc)"/>
     <arg name="mpc_track_local_plan" value="$(arg mpc_track_local_plan)"/>
     <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
+    <arg name="tracking_camera"    value="$(arg launch_tracking_cam)"/>
   </include>
 
   <include file="$(find smb_opc)/launch/opc.launch" if="$(arg launch_rviz)"/>
