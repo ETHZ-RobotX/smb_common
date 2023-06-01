@@ -22,15 +22,15 @@ odom0_queue_size: 100
 odom0_differential: false
 odom0_relative: false
 
-imu0: imu/data
-imu0_config: [false, false, false,
+imu: imu/data
+imu_config: [false, false, false,
               true, true, true,
               false, false, false,
               true, true, true,
               false, false, false]
-imu0_differential: true
-imu0_queue_size: 10
-imu0_remove_gravitational_acceleration: true
+imu_differential: true
+imu_queue_size: 10
+imu_remove_gravitational_acceleration: true
 
 # twist0: example/twist
 # twist0_config: [false, false, false,

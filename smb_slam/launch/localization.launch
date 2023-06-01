@@ -2,7 +2,7 @@
 <launch>
 
   <!-- Arguments -->
-  <arg name="cloud_topic"           default="/rslidar_points"  doc="input topic for the lidar pointcloud"/>
+  <arg name="cloud_topic"           default="/rslidar/points"  doc="input topic for the lidar pointcloud"/>
   <arg name="parameter_filename"    default="param_rs16_localization.lua" doc="param file name"/>
   <arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/" doc="directory for the parameter files"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>

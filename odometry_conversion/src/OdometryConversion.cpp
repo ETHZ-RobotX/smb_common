@@ -12,7 +12,7 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
 
   auto sensorTransform = buffer_.lookupTransform(outSensorFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
   sensorTransformHom_ = toHomTransform(sensorTransform.transform);
-  sensorTransformHom_.block<3, 3>(0, 0) = sensorTransformHom_.block<3, 3>(0, 0).transpose();
+  sensorTransformHom_.block<3, 3>(0, 0) = sensorTransformHom_.block<3, 3>(0, 0).transpose().eval();
   sensorTransformHom_.block<3, 1>(0, 3) = -sensorTransformHom_.block<3, 3>(0, 0) * sensorTransformHom_.block<3, 1>(0, 3);
 
   auto odomTransform = buffer_.lookupTransform(outSensorFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
@@ -25,7 +25,7 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   odomCameraOdomTransformPublisher_.sendTransform(odomTransform);
 
   odometryPublisher_ = nh.advertise<nav_msgs::Odometry>("/base_odom", 1, false);
-  odometryInSubscriber_ = nh.subscribe("/camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
+  odometryInSubscriber_ = nh.subscribe("/tracking_camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
 }
 
 Eigen::Matrix4d OdometryConversion::toHomTransform(const geometry_msgs::Transform& transform) const {
@@ -98,11 +98,12 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   // publish base odom frame via tf
   geometry_msgs::TransformStamped odomTransform;
   odomTransform.header.stamp = odomIn.header.stamp;
-  odomTransform.header.frame_id = outSensorFrame_;
-  odomTransform.child_frame_id = outOdomFrame_;
-  Eigen::Matrix3d odomTransformRot = outHom.block<3, 3>(0, 0).transpose();
-  tf::quaternionEigenToMsg(Eigen::Quaterniond(odomTransformRot), odomTransform.transform.rotation);
-  tf::vectorEigenToMsg(Eigen::Vector3d(-odomTransformRot * outHom.block<3, 1>(0, 3)), odomTransform.transform.translation);
+  odomTransform.header.frame_id = outOdomFrame_;
+  odomTransform.child_frame_id = outSensorFrame_;
+  odomTransform.transform = fromHomTransform(outHom);
+  // Eigen::Matrix3d odomTransformRot = outHom.block<3, 3>(0, 0);
+  // tf::quaternionEigenToMsg(Eigen::Quaterniond(odomTransformRot), odomTransform.transform.rotation);
+  // tf::vectorEigenToMsg(Eigen::Vector3d(outHom.block<3, 1>(0, 3)), odomTransform.transform.translation);
   odomPublisher_.sendTransform(odomTransform);
 
   Eigen::Affine3d odomTransformEigen;

@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
   rospy.Subscriber("joy", Joy, joyCallback)
   eStopPublisher = rospy.Publisher("e_stop", Bool, queue_size=10)
-  cancelNavigationPlanPublisher = rospy.Publisher("/move_base/cancel", GoalID, queue_size=10)
+  cancelNavigationPlanPublisher = rospy.Publisher("/control/move_base/cancel", GoalID, queue_size=10)
 
   rospy.spin()
 

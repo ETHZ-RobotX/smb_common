@@ -9,13 +9,13 @@ class PoseNoisifier:
 
   def __init__(self):
 
-    self.imu_topic_name = "/versavis/imu"
+    self.imu_topic_name = "/visual_inertial_sensor/imu"
 
     # ROS
     rospy.init_node("PoseNoisifierNode", anonymous=True)
 
     # Publisher
-    self.imu_publisher = rospy.Publisher("/versavis/imu_noisified", Imu, queue_size=10)
+    self.imu_publisher = rospy.Publisher("/visual_inertial_sensor/imu_noisified", Imu, queue_size=10)
 
   def subscriber_callback(self, imu):
     print("Received imu message.")

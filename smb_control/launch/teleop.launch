@@ -2,7 +2,6 @@
 <launch>
 
   <arg name="joy_dev" default="$(optenv SMB_JOY_DEVICE /dev/input/js0)" />
-  <arg name="joystick" default="true" />
   <arg name="joystick_name_space" default="joy_teleop"/>
 
 

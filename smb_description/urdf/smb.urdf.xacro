@@ -3,26 +3,24 @@
 
     <!-- TODO: replace this arg by other ones like sensors, legacy, etc -->
     <xacro:arg name="lidar" default="true"/>
+    <xacro:arg name="tracking_camera" default="false"/>
 
     <!-- Defines colors and calculates typical inertias -->
     <xacro:include filename="$(find smb_description)/urdf/smb_utils.urdf.xacro" />
     <!-- Defines IMU macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_imu.gazebo.xacro"/>
-    <!-- Defines GPS macro -->
-    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_gps.gazebo.xacro"/>
+    <!-- Defines Lidar macro -->
     <xacro:if value="$(arg lidar)">
         <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_robosense.gazebo.xacro"/>
     </xacro:if>
     <!-- Defines odometry macro -->
     <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_odometry.gazebo.xacro"/>
-    <!-- Defines lidar macro -->
-    <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
-    <!-- Defines camera macro -->
-    <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_mono.gazebo.xacro"/>
-    <!-- Defines blackfly camera macro -->
-    <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera.urdf.xacro"/>
-    <!-- Defines blackfly stereo macro -->
-    <xacro:include filename="$(find smb_description)/urdf/smb_blackfly_camera_stereo.urdf.xacro"/>
+    <!-- Defines realsense_t265 (tracking camera) macro -->
+    <xacro:if value="$(arg tracking_camera)">
+        <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
+    </xacro:if>
+    <!-- Defines blackfly rgbcamera camera macro -->
+    <xacro:include filename="$(find smb_description)/urdf/smb_rgbcamera.urdf.xacro"/>
     <!-- Defines lidar macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_lidar_mount.urdf.xacro"/>
 
@@ -31,7 +29,7 @@
         <joint name="${prefix}_WHEEL_JOINT" type="${wheel_joint_type}">
             <parent link="${base_link_name}"/>
             <child link="${prefix}_WHEEL"/>
-            <origin xyz="${X} ${Y} ${wheelHeight - chassisHeight/2.0}" rpy="-${0.5*PI} 0 0" />
+            <origin xyz="${X} ${Y} ${wheelHeight - chassisHeight/2.0}" rpy="-${0.5*M_PI} 0 0" />
             <axis xyz="0 0 1" rpy="0 0 0" />
             <dynamics damping="1.0" friction="0.0"/>
             <limit effort="100" velocity="10"/>
@@ -160,7 +158,7 @@
 
     </xacro:macro>
 
-    <xacro:macro name="smb" params="wheel_joint_type:=continuous lidar:=${lidar} tracking_camera:=true tracking_camera_rear_facing:=false simulation:=true">
+    <xacro:macro name="smb" params="wheel_joint_type:=continuous lidar:=$(arg lidar) tracking_camera:=$(arg tracking_camera) simulation:=true">
         <xacro:chassis/>
 
         <xacro:wheel prefix="LF" X="${frontWheelX}"
@@ -187,35 +185,21 @@
 
         <!-- <xacro:GPS base_link="${base_link_name}" simulation="${simulation}"/> -->
 
-        <!-- <xacro:mono_cam base_link="${base_link_name}" simulation="${simulation}"/> -->
-        <xacro:blackfly_cam id="_right" base_link="${base_link_name}" simulation="${simulation}">
+        <xacro:rgbcamera_cam id="" base_link="${base_link_name}" simulation="${simulation}">
             <origin xyz="0.29082 -0.04542 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
-        </xacro:blackfly_cam>
-        <!--
-        <xacro:blackfly_cam id="_left" base_link="${base_link_name}" simulation="${simulation}">
-            <origin xyz="0.29082 0.04458 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
-        </xacro:blackfly_cam>
+        </xacro:rgbcamera_cam>
 
-        <xacro:blackfly_cam_stereo base_link="${base_link_name}" simulation="${simulation}"/> -->
 
         <xacro:if value="${lidar}">
-            <xacro:LIDAR base_link="${base_link_name}" simulation="${simulation}"/>
             <xacro:lidar_mount base_link="${base_link_name}"/>
+            <xacro:LIDAR parent_link="lidar_mount_link" simulation="${simulation}"/>
         </xacro:if>
 
         <xacro:if value="${tracking_camera}">
-            <xacro:unless value="${tracking_camera_rear_facing}">
-                <xacro:REALSENSE_T265 base_link="imu_link"
-                    t265_origin_xyz="0.0537 0.0321 0.172"
-                    t265_origin_rpy="0 0 0"
-                    simulation="${simulation}"/>
-            </xacro:unless>
-            <xacro:if value="${tracking_camera_rear_facing}">
-                <xacro:REALSENSE_T265 base_link="imu_link"
-                    t265_origin_xyz="${0.0537-0.6} 0.0321 0.172"
-                    t265_origin_rpy="0 0 ${PI}"    
-                    simulation="${simulation}"/>
-            </xacro:if>
+            <xacro:REALSENSE_T265 base_link="base_link"
+                t265_origin_xyz="0.309 0.008 0.352"
+                t265_origin_rpy="0 0 0"
+                simulation="${simulation}"/>
         </xacro:if>
 
 

@@ -69,7 +69,7 @@
 
   <!-- Intel RealSense Tracking Camera T265 -->
   <group if="$(arg launch_tracking_cam)" >
-    <arg name="camera_name" value="camera" />
+    <arg name="camera_name" value="tracking_camera" />
 	  <group ns="$(arg camera_name)">
       <param name="tracking_module/enable_mapping"           type="bool"   value="false"/>
       <param name="tracking_module/enable_pose_jumping"      type="bool"   value="false"/>
@@ -82,6 +82,7 @@
 	      <arg name="enable_pose"              value="true"/>
 	      <arg name="enable_accel"             value="true"/>
 	      <arg name="enable_gyro"              value="true"/>
+	      <arg name="publish_tf"               value="false"/>
 	      <arg name="publish_odom_tf"          value="false"/>
 	      <arg name="topic_odom_in"            value="/control/smb_diff_drive/odom"/>
 	      <arg name="unite_imu_method"         value="linear_interpolation"/>
@@ -93,7 +94,7 @@
   <!-- Intel RealSense Depth Camera D435 -->
   <group if="$(arg launch_depth_cam)" >
    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
-     <arg name="camera" value="depth_cam" />
+     <arg name="camera" value="depth_camera" />
      <arg name="device_type" value="d435" />
    </include>
   </group>
@@ -142,7 +143,7 @@
             machine="$(arg rgb_cam_host)"
             args="load spinnaker_camera_driver/SpinnakerCameraNodelet /$(arg camera_manager)" >
 
-        <param name="frame_id" value="blackfly_right_optical_link" />
+        <param name="frame_id" value="rgb_camera_optical_link" />
         <param name="serial" value="$(arg cam0_serial)" />
         <param name="acquisition_frame_rate" value="4" />
         <param name="acquisition_frame_rate_enable" value="true" />

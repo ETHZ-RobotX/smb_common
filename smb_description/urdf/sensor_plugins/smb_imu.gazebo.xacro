@@ -13,7 +13,7 @@
 
     <xacro:property name="imu_update_rate"		value="400"/>
     <xacro:property name="imu_link"  			value="imu_link"/>
-    <xacro:property name="imu_topic" 			value="/imu0"/>
+    <xacro:property name="imu_topic" 			value="/imu"/>
     <xacro:property name="imu_calibration_service_name" value="/imu/calibrate"/>
     <xacro:property name="acceleration_offset"          value="0.0 0.0 0.0"/>
     <xacro:property name="acceleration_drift"           value="0.0 0.0 0.0"/>

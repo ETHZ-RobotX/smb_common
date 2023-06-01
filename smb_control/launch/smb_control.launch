@@ -4,7 +4,8 @@
   <arg name="description_name"           default="smb_description"/>
   <arg name="control_namespace"          default="control"/>
   <arg name="enable_ekf"                 default="false"/>
-  <arg name="laser_enabled"              default="true"/>
+  <arg name="lidar"                      default="true"/>
+  <arg name="tracking_camera"            default="false"/>
   <arg name="joint_states_topic"         default="joint_states"/>
   <arg name="description_file"           default="$(find smb_description)/urdf/smb_standalone.urdf.xacro"/>
   <arg name="simulation"                 default="false"/>
@@ -15,7 +16,8 @@
 
   <!-- Load robot description for controller -->
   <include file="$(find smb_description)/launch/load.launch">
-    <arg name="lidar"            value="$(arg laser_enabled)"/>
+    <arg name="lidar"            value="$(arg lidar)"/>
+    <arg name="tracking_camera"  value="$(arg tracking_camera)"/>
     <arg name="simulation"       value="$(arg simulation)"/>
     <arg name="use_ros_control"  value="true"/>
     <arg name="description_name" value="$(arg description_name)"/>
@@ -47,7 +49,7 @@
   </node>
 
 
-  <node pkg="twist_mux" type="twist_mux" name="twist_mux" >
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux" ns="control">
     <rosparam command="load" file="$(find smb_control)/config/twist_mux.yaml" />
     <remap from="cmd_vel_out" to="/control/smb_diff_drive/cmd_vel"/>
   </node>
@@ -60,13 +62,15 @@
     </node>
   </group>
 
-  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)"/>
+  <include file="$(find smb_control)/launch/teleop.launch" if="$(arg joystick)">
+    <arg name="joystick_name_space" value="$(arg control_namespace)/joy_teleop"/>
+  </include>
 
   <include file="$(find smb_mpc)/launch/mpc.launch" if="$(arg mpc)">
     <arg name="track_local_plan" value="$(arg mpc_track_local_plan)"/>
   </include>
 
   <!-- Launch keyboard twist node -->
-  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard_teleop" ns="keyboard_teleop" if="$(arg keyboard_teleop)"/>
+  <node pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" name="keyboard_teleop" ns="control/keyboard_teleop" if="$(arg keyboard_teleop)"/>
   
 </launch>

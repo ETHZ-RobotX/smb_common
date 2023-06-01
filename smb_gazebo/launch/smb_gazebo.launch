@@ -38,6 +38,8 @@
   <arg name="description_name"                     default="robot_description"/>
   <arg name="control_namespace"                    default="control"/>
   <remap from="/$(arg control_namespace)/robot_description" to="$(arg description_name)"/>
+  
+  <arg name="tracking_camera"                       default="false"/>
 
   <!-- Load parameters -->
   <param name="gazebo/publishing_time_step"     value="$(arg publishing_time_step)"/>
@@ -61,6 +63,10 @@
     output="screen"/>
 
   <!-- Publish camera odometry tf-->
-  <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion"/>
-
+  <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion" if="$(arg tracking_camera)">
+    <param name="in_odom_frame" value="tracking_camera_link"/>
+    <param name="in_sensor_frame" value="tracking_camera_link"/>
+    <param name="out_odom_frame" value="tracking_camera_odom"/>
+    <param name="out_sensor_frame" value="base_link"/>
+  </node>
 </launch>

@@ -69,21 +69,21 @@ Visualization Manager:
           Value: true
         base_link:
           Value: true
-        blackfly0_link:
+        rgbcamera0_link:
           Value: true
-        blackfly0_optical_link:
+        rgbcamera0_optical_link:
           Value: true
-        blackfly1_link:
+        rgbcamera1_link:
           Value: true
-        blackfly1_optical_link:
+        rgbcamera1_optical_link:
           Value: true
-        blackfly_left_link:
+        rgbcamera_left_link:
           Value: true
-        blackfly_left_optical_link:
+        rgbcamera_left_optical_link:
           Value: true
-        blackfly_right_link:
+        rgbcamera_right_link:
           Value: true
-        blackfly_right_optical_link:
+        rgbcamera_right_optical_link:
           Value: true
         camera_imu_optical_frame:
           Value: true
@@ -129,17 +129,17 @@ Visualization Manager:
             {}
           base_inertia:
             {}
-          blackfly0_link:
-            blackfly0_optical_link:
+          rgbcamera0_link:
+            rgbcamera0_optical_link:
               {}
-          blackfly1_link:
-            blackfly1_optical_link:
+          rgbcamera1_link:
+            rgbcamera1_optical_link:
               {}
-          blackfly_left_link:
-            blackfly_left_optical_link:
+          rgbcamera_left_link:
+            rgbcamera_left_optical_link:
               {}
-          blackfly_right_link:
-            blackfly_right_optical_link:
+          rgbcamera_right_link:
+            rgbcamera_right_optical_link:
               {}
           imu_link:
             imu:
@@ -147,14 +147,14 @@ Visualization Manager:
             realsense_t265:
               camera_pose_frame:
                 {}
-            blackfly1_link:
-              blackfly1_optical_link:
+            rgbcamera1_link:
+              rgbcamera1_optical_link:
                 {}
-            blackfly_left_link:
-              blackfly_left_optical_link:
+            rgbcamera_left_link:
+              rgbcamera_left_optical_link:
                 {}
-            blackfly_right_link:
-              blackfly_right_optical_link:
+            rgbcamera_right_link:
+              rgbcamera_right_optical_link:
                 {}
             imu_link:
               imu:
@@ -218,39 +218,39 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        blackfly0_link:
+        rgbcamera0_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        blackfly0_optical_link:
+        rgbcamera0_optical_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        blackfly1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        blackfly1_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        blackfly_left_link:
+        rgbcamera1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        blackfly_left_optical_link:
+        rgbcamera1_optical_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        blackfly_right_link:
+        rgbcamera_left_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        blackfly_right_optical_link:
+        rgbcamera_left_optical_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rgbcamera_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rgbcamera_right_optical_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -333,7 +333,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Flat Squares
-      Topic: /rslidar_points
+      Topic: /rslidar/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -506,7 +506,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: tracking_camera_odom
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
