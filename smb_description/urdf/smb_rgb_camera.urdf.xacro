@@ -6,19 +6,19 @@
 <robot name="smb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- INCLUDE PLUGIN -->
-  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_rgbcamera.gazebo.xacro"/>
+  <xacro:include filename="$(find smb_description)/urdf/sensor_plugins/smb_rgb_camera.gazebo.xacro"/>
 
 
-  <xacro:macro name="rgbcamera_cam" params="*origin id base_link simulation">
+  <xacro:macro name="rgb_camera_cam" params="*origin id base_link simulation">
     <!--                              Camera  Properties 				          	-->
-    <xacro:property name="rgbcamera_base_link"		value="${base_link}"/>
-    <xacro:property name="rgbcamera_origin_rpy"		value="0 0 0"/>
-    <xacro:property name="rgbcamera_origin_xyz"		value="0.29082 -0.04458 ${0.0955 + chassisHeight/2.0}"/>
+    <xacro:property name="rgb_camera_base_link"		value="${base_link}"/>
+    <xacro:property name="rgb_camera_origin_rpy"		value="0 0 0"/>
+    <xacro:property name="rgb_camera_origin_xyz"		value="0.29082 -0.04458 ${0.0955 + chassisHeight/2.0}"/>
 
-    <xacro:property name="rgbcamera_update_rate"		value="2"/>
-    <xacro:property name="rgbcamera_link"  			value="rgbcamera${id}_link"/>
+    <xacro:property name="rgb_camera_update_rate"		value="2"/>
+    <xacro:property name="rgb_camera_link"  			value="rgb_camera${id}_link"/>
 
-    <link name="${rgbcamera_link}">
+    <link name="${rgb_camera_link}">
       <inertial>
         <mass value="0.01" /> <!-- [kg] -->
         <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
@@ -38,31 +38,31 @@
         </material>
     </link>
 
-      <gazebo reference="${rgbcamera_link}">
+      <gazebo reference="${rgb_camera_link}">
         <material>Gazebo/Red</material>
       </gazebo>
 
-    <joint name="rgbcamera${id}_camera_joint" type="fixed">
-      <!-- <origin xyz="${rgbcamera_origin_xyz}" rpy="${rgbcamera_origin_rpy}"/> -->
+    <joint name="rgb_camera${id}_camera_joint" type="fixed">
+      <!-- <origin xyz="${rgb_camera_origin_xyz}" rpy="${rgb_camera_origin_rpy}"/> -->
       <xacro:insert_block name="origin"/>
-      <parent link="${rgbcamera_base_link}"/>
-      <child link="${rgbcamera_link}"/>
+      <parent link="${rgb_camera_base_link}"/>
+      <child link="${rgb_camera_link}"/>
     </joint>
 
-      <gazebo reference="rgbcamera${id}_camera_joint">
+      <gazebo reference="rgb_camera${id}_camera_joint">
         <disableFixedJointLumping>true</disableFixedJointLumping>
       </gazebo>
 
-    <link name="rgbcamera${id}_optical_link"/>
+    <link name="rgb_camera${id}_optical_link"/>
 
-    <joint name="rgbcamera${id}_camera_optical_joint" type="fixed">
+    <joint name="rgb_camera${id}_camera_optical_joint" type="fixed">
       <origin xyz="0.0066 0 0" rpy="-1.57 0 -1.57"/>
-      <parent link="${rgbcamera_link}"/>
-      <child link="rgbcamera${id}_optical_link"/>
+      <parent link="${rgb_camera_link}"/>
+      <child link="rgb_camera${id}_optical_link"/>
     </joint>
 
     <xacro:if value="${simulation}">
-        <xacro:rgbcamera_camera_plugin name="rgb_camera" link_name="${rgbcamera_link}" rate="${rgbcamera_update_rate}"/>
+        <xacro:rgb_camera_camera_plugin name="rgb_camera" link_name="${rgb_camera_link}" rate="${rgb_camera_update_rate}"/>
     </xacro:if>
 
 

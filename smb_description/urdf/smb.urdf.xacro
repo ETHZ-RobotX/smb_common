@@ -19,8 +19,8 @@
     <xacro:if value="$(arg tracking_camera)">
         <xacro:include filename="$(find smb_description)/urdf/realsense_t265.urdf.xacro"/>
     </xacro:if>
-    <!-- Defines blackfly rgbcamera camera macro -->
-    <xacro:include filename="$(find smb_description)/urdf/smb_rgbcamera.urdf.xacro"/>
+    <!-- Defines blackfly rgb_camera camera macro -->
+    <xacro:include filename="$(find smb_description)/urdf/smb_rgb_camera.urdf.xacro"/>
     <!-- Defines lidar macro -->
     <xacro:include filename="$(find smb_description)/urdf/smb_lidar_mount.urdf.xacro"/>
 
@@ -185,9 +185,9 @@
 
         <!-- <xacro:GPS base_link="${base_link_name}" simulation="${simulation}"/> -->
 
-        <xacro:rgbcamera_cam id="" base_link="${base_link_name}" simulation="${simulation}">
+        <xacro:rgb_camera_cam id="" base_link="${base_link_name}" simulation="${simulation}">
             <origin xyz="0.29082 -0.04542 ${0.0955 + chassisHeight/2.0}" rpy="0 0 0" />
-        </xacro:rgbcamera_cam>
+        </xacro:rgb_camera_cam>
 
 
         <xacro:if value="${lidar}">
