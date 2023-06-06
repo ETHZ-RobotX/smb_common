@@ -36,7 +36,7 @@ public:
   WheelVelocityControl(double* const setPoint, double* const otherSetPoint, double* const command, const double * const processValue);
   ~WheelVelocityControl();
 
-  bool init(ros::NodeHandle& n, const std::string& nhprefix, bool publishControllerState=false);
+  bool init(ros::NodeHandle& nh, ros::NodeHandle& private_nh, const std::string& nhprefix, bool publishControllerState=false);
 
   void starting(const ros::Time& time);
 
@@ -52,6 +52,9 @@ private:
   realtime_tools::RealtimePublisher<control_msgs::JointControllerState>* controller_state_publisher_;
   int loop_count_;
   ros::Time lastUpdate_;
+
+  // ROS Parameters
+  double ff_general_, ff_pure_rotation_;
 
  };
 
