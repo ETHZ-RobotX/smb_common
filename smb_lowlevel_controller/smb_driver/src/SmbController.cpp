@@ -28,9 +28,9 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
   command_packets_.set_capacity(vecSize_);
 //  this->startAcquisition();
 
-  wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("/wheelSpeeds", 1);
+  wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("wheelSpeeds", 1);
 
-  rcTwistPub_ = nh_.advertise<geometry_msgs::Twist>("/rc_twist", 1);
+  rcTwistPub_ = nh_.advertise<geometry_msgs::Twist>("rc_twist", 1);
 
   //interchange wheel labels
   wheelSpeedMsg_.layout.dim.resize(1);
