@@ -273,8 +273,13 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
         controller_state_publisher_ = new realtime_tools::RealtimePublisher<control_msgs::JointControllerState>(nh, "iPID_state", 1);
       }
 
-      private_nh.param<double>("/control/lowlevel_controller/WHEEL_JOINT_ff_param/ff_general", ff_general_, 1.5);
-      private_nh.param<double>("/control/lowlevel_controller/WHEEL_JOINT_ff_param/ff_pure_rotation", ff_pure_rotation_, 1.5);
+      std::string control_ns;
+      std::string controller_ns;
+      private_nh.param<std::string>("control_namespace", control_ns, "control");
+      private_nh.param<std::string>("controller_namespace", controller_ns, "lowlevel_controller");
+
+      private_nh.param<double>(control_ns + "/" + controller_ns + "/WHEEL_JOINT_ff_param/ff_general", ff_general_, 0.0);
+      private_nh.param<double>(control_ns + "/" + controller_ns + "/WHEEL_JOINT_ff_param/ff_pure_rotation", ff_pure_rotation_, 0.0);
 
       pid_controller_.initParam(nhprefix);
       return true;

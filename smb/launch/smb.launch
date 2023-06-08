@@ -112,6 +112,7 @@
   </group>
 
   <include file="$(find smb_lowlevel_controller)/launch/smb_lowlevel_controller.launch" ns="$(arg control_namespace)">
+	  <arg name="control_namespace"            value="/$(arg control_namespace)"/>
 	  <arg name="description_name"            value="/$(arg description_name)"/>
 	  <arg name="command_smb"                 value="$(arg command_smb)"/>
   </include>
