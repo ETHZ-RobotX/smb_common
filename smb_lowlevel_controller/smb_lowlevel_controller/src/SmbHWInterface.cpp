@@ -14,8 +14,9 @@
 namespace smb_lowlevel_controller {
 
 SmbHWInterface::SmbHWInterface() {
-    currentPIDs_.emplace_back(&(velCmd_[0]), &(iCmd_[0]), &(wheels_[0].vel));
-    currentPIDs_.emplace_back(&(velCmd_[1]), &(iCmd_[1]), &(wheels_[1].vel));
+    currentPIDs_.reserve(2);
+    currentPIDs_.emplace_back(&(velCmd_[0]), &(velCmd_[1]), &(iCmd_[0]), &(wheels_[0].vel));
+    currentPIDs_.emplace_back(&(velCmd_[1]), &(velCmd_[0]), &(iCmd_[1]), &(wheels_[1].vel));
 }
 
 
@@ -71,6 +72,7 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
   bool SmbHWInterface::init(ros::NodeHandle& nh, ros::NodeHandle & private_nh) {
       nh_ = nh;
       private_nh_= private_nh;
+
       // private_nh_.param<double>("wheel_diameter", wheel_diameter_, 0.3302);
       // private_nh_.param<double>("max_accel", max_accel_, 5.0);
       // private_nh_.param<double>("max_speed", max_speed_, 1.0);
@@ -141,7 +143,7 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
           if (!registerLimits(jointVelHandle))
             ROS_WARN_STREAM("Could not load controller joint limits, are they set?");
 
-          currentPIDs_[i].init(nh_, controller_ns + name + "_dc_controller");
+          currentPIDs_[i].init(nh_, private_nh_, controller_ns + name + "_dc_controller");
 
       }  // end for each joint
 
@@ -209,8 +211,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     } else {
       wheels_[0].pos += wheels_[0].vel * elapsedTime.toSec();
       wheels_[1].pos += wheels_[1].vel * elapsedTime.toSec();
-      currentPIDs_[0].update(time, elapsedTime);
-      currentPIDs_[1].update(time, elapsedTime);
+      // currentPIDs_[0].update(time, elapsedTime);
+      // currentPIDs_[1].update(time, elapsedTime);
     }
     double batteryVoltage = 0;
     if (smb_->getBatteryVoltage(batteryVoltage, 1000)){
@@ -260,16 +262,25 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     }
 
 
-    WheelVelocityControl::WheelVelocityControl(double* const setPoint, double* const command, const double * const processValue) :
-     setPoint_(setPoint),  command_(command),  processValue_(processValue), loop_count_(0)
+    WheelVelocityControl::WheelVelocityControl(double* const setPoint, double* const otherSetPoint, double* const command, const double * const processValue) :
+     setPoint_(setPoint), otherSetPoint_(otherSetPoint),  command_(command),  processValue_(processValue), loop_count_(0)
     {}
 
     WheelVelocityControl::~WheelVelocityControl() {delete controller_state_publisher_;};
 
-    bool WheelVelocityControl::init(ros::NodeHandle& nh, const std::string& nhprefix, bool publishControllerState) {
+    bool WheelVelocityControl::init(ros::NodeHandle& nh, ros::NodeHandle& private_nh, const std::string& nhprefix, bool publishControllerState) {
       if (publishControllerState) {
         controller_state_publisher_ = new realtime_tools::RealtimePublisher<control_msgs::JointControllerState>(nh, "iPID_state", 1);
       }
+
+      std::string control_ns;
+      std::string controller_ns;
+      private_nh.param<std::string>("control_namespace", control_ns, "control");
+      private_nh.param<std::string>("controller_namespace", controller_ns, "lowlevel_controller");
+
+      private_nh.param<double>(control_ns + "/" + controller_ns + "/WHEEL_JOINT_ff_param/ff_general", ff_general_, 0.0);
+      private_nh.param<double>(control_ns + "/" + controller_ns + "/WHEEL_JOINT_ff_param/ff_pure_rotation", ff_pure_rotation_, 0.0);
+
       pid_controller_.initParam(nhprefix);
       return true;
     }
@@ -288,7 +299,17 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       // Set the PID error and compute the PID command with nonuniform time
       // step size. The derivative error is computed from the change in the error
       // and the timestep dt.
-      *command_ = pid_controller_.computeCommand(error, period);
+      if (std::abs(*setPoint_) >= 0.01) {
+        *command_ = pid_controller_.computeCommand(error, period);
+        *command_ += *setPoint_ > 0 ? ff_general_ : -ff_general_;
+        if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
+          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
+          *command_ += *setPoint_ > 0 ? ff_pure_rotation_ : -ff_pure_rotation_;
+        }
+      } else {
+        *command_ = 0;
+        pid_controller_.reset();
+      }
 
       if(loop_count_ % 20 == 0)
       {

@@ -33,10 +33,10 @@ namespace smb_lowlevel_controller {
   class WheelVelocityControl {
 public:
 
-  WheelVelocityControl(double* const setPoint, double* const command, const double * const processValue);
+  WheelVelocityControl(double* const setPoint, double* const otherSetPoint, double* const command, const double * const processValue);
   ~WheelVelocityControl();
 
-  bool init(ros::NodeHandle& n, const std::string& nhprefix, bool publishControllerState=false);
+  bool init(ros::NodeHandle& nh, ros::NodeHandle& private_nh, const std::string& nhprefix, bool publishControllerState=false);
 
   void starting(const ros::Time& time);
 
@@ -44,12 +44,17 @@ public:
 
   control_toolbox::Pid pid_controller_;
   double* const setPoint_;
+  double* const otherSetPoint_;
   double* const command_;
   const double * const processValue_;
 private:
+  
   realtime_tools::RealtimePublisher<control_msgs::JointControllerState>* controller_state_publisher_;
   int loop_count_;
   ros::Time lastUpdate_;
+
+  // ROS Parameters
+  double ff_general_, ff_pure_rotation_;
 
  };
 
@@ -72,7 +77,6 @@ private:
 
   private:
     static constexpr std::size_t nActuators = 2;
-
 
     // Hardware Driver
     const int controllerTimeoutUs_ = 500; // [us]

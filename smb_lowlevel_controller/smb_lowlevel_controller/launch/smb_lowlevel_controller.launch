@@ -6,6 +6,7 @@
   <arg name="enable_controllers"         default="false" />
   <!-- <arg name="publish_measurements"  default="true"/> -->
   <arg name="launch_prefix"         default="nice -n -20" />
+  <arg name="control_namespace"      default="control"/>
   <arg name="controller_namespace"      default="lowlevel_controller"/>
   <arg name="description_name"      default="robot_description"/>
   <arg name="port"                       default="/dev/ttyUSB0"/>
@@ -18,6 +19,7 @@
   <!-- Launch the lowlevel controller -->
   <node pkg="smb_lowlevel_controller" type="smb_lowlevel_controller_node" name="smb_lowlevel_controller" output="$(arg output)" launch-prefix="$(arg launch_prefix)">
     <param name="port"                       value="$(arg port)"/>
+    <param name="control_namespace"       value="$(arg control_namespace)"/>
     <param name="controller_namespace"       value="$(arg controller_namespace)"/>
     <param name="command_smb"                value="$(arg command_smb)"/>
     <remap from="robot_description"          to="$(arg description_name)"/>
