@@ -1,10 +1,10 @@
 <launch>
 
 	<arg name="odom_topic" default="/tracking_camera/odom/sample"/>
-
+	<arg name="cmd_vel_topic" default="/control/joy_teleop/cmd_vel"/>
+	
 	<node name="smb_path_tracker_node" pkg="smb_path_tracker" type="smb_path_tracker_ros_node" output="screen">
-		<remap from="cmd_vel" to="/control/joy_teleop/cmd_vel" /> 
-		<!-- <remap from="cmd_vel" to="/teb_planner_twist" />  -->
+		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" /> 
 		<remap from="odometry" to="$(arg odom_topic)" />
 		<param name="critical_angle" value="0.52"/>
 		<param name="max_ang_vel" value="0.5"/>
