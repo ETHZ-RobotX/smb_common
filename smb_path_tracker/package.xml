@@ -3,7 +3,8 @@
   <name>smb_path_tracker</name>
   <version>0.0.0</version>
   <description>Path tracker for SuperMegaBot</description>
-  <maintainer email="mdharmadhikari@nevada.unr.edu">Mihir Dharmadhikari</maintainer>
+  <author email="mdharmadhikari@nevada.unr.edu">Mihir Dharmadhikari</author>
+  <maintainer email="patelm@ethz.ch">Manthan Patel</maintainer>
   <license>None</license>
 
   <buildtool_depend>catkin</buildtool_depend>
