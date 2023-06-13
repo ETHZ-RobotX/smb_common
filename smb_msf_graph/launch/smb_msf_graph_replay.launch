@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<launch>
+    
+    <!-- Alias to smb_estimator_graph replay script -->
+    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph_replay.launch"/>
+
+    <!-- Load Description -->
+    <include file="$(find smb_description)/launch/load.launch"/>
+
+</launch>
