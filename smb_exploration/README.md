@@ -28,3 +28,18 @@ You will need to carry out an initialization maneuver before starting the planne
 
 ## Frontier-based Exploration Planner
 
+[GMapping](http://wiki.ros.org/gmapping) is used to create a 2D Occupancy map of the environment which is then used by the exploration planner to generate a goal point based on frontiers. You can have a look into the parameters [here](http://wiki.ros.org/explore_lite). Some tuning might also be required for GMapping. The goal provided by the exploration algorithm is then reached using movebase.
+
+### Run Instructions 
+
+The instructions are pretty much the same for running the planner in simulation or on the real-robot. Once you have the simulation (or real robot smb.launch) running, from a separate sourced terminal run the following command to launch the planner (Note: you will have had to build smb_navigation package before as well). Also make sure that you provide the correct global frame:
+```
+roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom
+```
+Now, in a new sourced terminal, run the following command to launch GMapping and the frontier-based exploration planner
+```
+roslaunch smb_exploration smb_rss_frontier.launch
+```
+You can visualize the 2D Occupancy map on the ```/map``` topic and the frontiers on the ```/explore/frontiers``` in RViz.
+
+
