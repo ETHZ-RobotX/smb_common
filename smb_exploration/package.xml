@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+	<name>smb_exploration</name>
+	<version>0.1.0</version>
+	<description>SMB exploration</description>
+	<maintainer email="patelm@ethz.ch">Manthan Patel</maintainer>
+	<license>BSD-3</license>
+	<author email="patelm@ethz.ch">Manthan Patel</author>
+
+	<buildtool_depend>catkin</buildtool_depend>
+  	<buildtool_depend>catkin_simple</buildtool_depend>
+	<depend>gbplanner_ros</depend>
+	<depend>gbplanner_ui</depend>
+	<depend>pci_general</depend>
+	<depend>explore_lite</depend>
+	<depend>gmapping</depend>
+	<depend>smb_path_tracker</depend>
+
+</package>
