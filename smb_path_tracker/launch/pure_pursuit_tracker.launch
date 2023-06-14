@@ -1,7 +1,7 @@
 <launch>
 
 	<arg name="odom_topic" default="/tracking_camera/odom/sample"/>
-	<arg name="cmd_vel_topic" default="/control/joy_teleop/cmd_vel"/>
+	<arg name="cmd_vel_topic" default="/control/pure_pursuit/cmd_vel"/>
 	
 	<node name="smb_path_tracker_node" pkg="smb_path_tracker" type="smb_path_tracker_ros_node" output="screen">
 		<remap from="cmd_vel" to="$(arg cmd_vel_topic)" /> 

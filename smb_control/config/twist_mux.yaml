@@ -23,6 +23,10 @@ topics:
   topic   : teb_planner_twist
   timeout : 1.0
   priority: 3
+- name    : pure_pursuit_twist
+  topic   : pure_pursuit/cmd_vel
+  timeout : 1.0
+  priority: 4
 locks:
 - name    : e_stop
   topic   : joy_teleop/e_stop
