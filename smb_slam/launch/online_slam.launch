@@ -22,6 +22,6 @@
   </include>
 
   <!-- Static TF publisher between range_sensor and base_link-->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="range_sensor_to_base_link" respawn="true" args="-0.0245 0 -0.4645 0 0 0 range_sensor_o3d base_link" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_range_sensor" respawn="true" args="0.0245 0 0.4645 0 0 0 base_link range_sensor_o3d" />
 
 </launch>
