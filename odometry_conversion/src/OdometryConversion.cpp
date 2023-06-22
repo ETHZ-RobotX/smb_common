@@ -15,7 +15,13 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   // sensorTransformHom_.block<3, 3>(0, 0) = sensorTransformHom_.block<3, 3>(0, 0).transpose().eval();
   // sensorTransformHom_.block<3, 1>(0, 3) = -sensorTransformHom_.block<3, 3>(0, 0) * sensorTransformHom_.block<3, 1>(0, 3);
 
-  auto odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
+  // if frame exists, otherwise make a new frame at the same place
+  if (buffer_.canTransform(outOdomFrame_, inOdomFrame_)) {
+      auto odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
+  }
+  else {
+      auto odomTransform = buffer_.lookupTransform(inOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
+  }
   odomTransformHom_ = toHomTransform(odomTransform.transform);
 
   // the odom frame of the tracking camera is gravity aligned. In case the camera is mounted with an angle, remove pitch and roll of this
