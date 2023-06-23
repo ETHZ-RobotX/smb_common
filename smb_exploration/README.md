@@ -12,7 +12,7 @@ catkin build smb_exploration
 
 ## GBPlanner
 
-This planner makes use of Voxblox to create a 3D Occupancy map after which the exploration waypoints are calculated using information gain by raycasting. The planner planner then provides a trajectory which is tracked by using a simple path tracking algorithm such as pure pursuit. Checkout the [official documentation](https://github.com/ntnu-arl/gbplanner_ros/wiki) to know more about the planner and the different params. 
+This planner makes use of Voxblox to create a 3D Occupancy map after which the exploration waypoints are calculated using information gain by raycasting. The planner then provides a trajectory which is tracked by using a simple path tracking algorithm such as pure pursuit. Checkout the [official documentation](https://github.com/ntnu-arl/gbplanner_ros/wiki) to know more about the planner and the different params. 
 
 ### Run Instructions 
 
@@ -32,7 +32,7 @@ You will need to carry out an initialization maneuver before starting the planne
 
 ### Run Instructions 
 
-The instructions are pretty much the same for running the planner in simulation or on the real-robot. Once you have the simulation (or real robot smb.launch) running, from a separate sourced terminal run the following command to launch the planner (Note: you will have had to build smb_navigation package before as well). Also make sure that you provide the correct global frame:
+The instructions are pretty much the same for running the planner in simulation or on the real-robot. Once you have the simulation (or real robot smb.launch) running, from a separate sourced terminal run the following command to launch the planner (Note: you will have had to build smb_navigation package before as well). Also make sure that you provide the correct global frame, e.g. when using only the tracking camera for odometry:
 ```
 roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom
 ```
