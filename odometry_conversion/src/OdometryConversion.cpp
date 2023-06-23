@@ -9,14 +9,16 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   outOdomFrame_ = nh.param<std::string>("out_odom_frame", outOdomFrame_);
   inSensorFrame_ = nh.param<std::string>("in_sensor_frame", inSensorFrame_);
   outSensorFrame_ = nh.param<std::string>("out_sensor_frame", outSensorFrame_);
-  odomChild_ = nh.param<std::string>("is_odom_child", odomChild_);
+  odomChild_ = nh.param<bool>("is_odom_child", odomChild_);
 
   auto sensorTransform = buffer_.lookupTransform(outSensorFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
   sensorTransformHom_ = toHomTransform(sensorTransform.transform);
 
+  ROS_INFO("1 ENTER");
   // if frame exists, otherwise make a new frame at the same place
   auto odomTransform = buffer_.lookupTransform(inOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));;
   if (buffer_.canTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10))) {
+      ROS_INFO("CAN TRANSFORM");
       odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
   }
   odomTransformHom_ = toHomTransform(odomTransform.transform);
@@ -91,14 +93,20 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
 
   Eigen::Vector3d inRotVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.angular, inRotVel);
-  Eigen::Vector3d outRotVel = sensorTransformHom_.block<3, 3>(0, 0) * inRotVel;
-  tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
+  Eigen::Vector3d outRotVel = odomTransformHom_.block<3, 3>(0, 0) * inRotVel;
 
   Eigen::Vector3d inLinVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.linear, inLinVel);
-  Eigen::Vector3d inLinVelOutFrame = sensorTransformHom_.block<3, 3>(0, 0) * inLinVel;
-  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(sensorTransformHom_.block<3, 1>(0, 3));
-  tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);
+  Eigen::Vector3d inLinVelOutFrame = odomTransformHom_.block<3, 3>(0, 0) * inLinVel;
+  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(odomTransformHom_.block<3, 1>(0, 3));
+  if (odomChild_) {
+    tf::vectorEigenToMsg(-outRotVel, odomOut.twist.twist.angular);
+    tf::vectorEigenToMsg(-outLinVel, odomOut.twist.twist.linear);
+  } else {
+    tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
+    tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);
+  }
+  
 
   // covariance is symbolic for RS-T265. We do not need to transform this properly.
   odomOut.pose.covariance = odomIn.pose.covariance;
