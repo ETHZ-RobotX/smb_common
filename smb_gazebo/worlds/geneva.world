@@ -87,15 +87,15 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>1763 249000000</sim_time>
-      <real_time>62 969823473</real_time>
-      <wall_time>1687500875 896890289</wall_time>
-      <iterations>62534</iterations>
-      <model name='block'>
-        <pose>0.74153 9.5827 0 0 -0 0</pose>
+      <sim_time>1934 769000000</sim_time>
+      <real_time>174 496808870</real_time>
+      <wall_time>1687523895 563756131</wall_time>
+      <iterations>171520</iterations>
+      <model name='block_clone_clone'>
+        <pose>0.953362 8.93782 1.20002 3.1e-05 -0.00015 -0.00307</pose>
         <scale>1 1 1</scale>
         <link name='link_1'>
-          <pose>0.74153 9.5827 0 0 -0 0</pose>
+          <pose>0.758503 9.70875 0.499998 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -287,7 +287,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-8.18807 10.3213 79.6621 1.7e-05 1.5698 -1.34649</pose>
+        <pose>-5.75812 8.26248 12.1391 0 0.925798 0.196682</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -2732,7 +2732,7 @@
       <allow_auto_disable>1</allow_auto_disable>
       <pose>2.2552 -4.76317 0 0 -0 0</pose>
     </model>
-    <model name='block'>
+    <model name='block_clone_clone'>
       <link name='link_1'>
         <inertial>
           <mass>1</mass>
@@ -2746,16 +2746,16 @@
           </inertia>
           <pose>0 0 0 0 -0 0</pose>
         </inertial>
-        <pose>0 0 0 0 -0 0</pose>
+        <pose>-0.19733 0.770303 -0.700016 -3.1e-05 0.00015 0.00307</pose>
         <gravity>1</gravity>
         <self_collide>0</self_collide>
         <kinematic>0</kinematic>
         <enable_wind>0</enable_wind>
         <visual name='visual'>
-          <pose>0 0.3 0 0 -0 0.25</pose>
+          <pose>0 0 0.75 0 -0 0.3</pose>
           <geometry>
             <box>
-              <size>0.4 0.4 2.4</size>
+              <size>0.4 0.4 2.5</size>
             </box>
           </geometry>
           <material>
@@ -2778,10 +2778,10 @@
         <collision name='collision'>
           <laser_retro>0</laser_retro>
           <max_contacts>10</max_contacts>
-          <pose>0 0.3 0 0 -0 0.25</pose>
+          <pose>0 0 0.75 0 -0 0.3</pose>
           <geometry>
             <box>
-              <size>0.4 0.4 2.4</size>
+              <size>0.4 0.4 2.5</size>
             </box>
           </geometry>
           <surface>
@@ -2833,7 +2833,7 @@
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose>0.98077 9.13155 1.20002 3.1e-05 -0.00015 -0.00307</pose>
+      <pose>0.953362 8.93782 1.20002 3.1e-05 -0.00015 -0.00307</pose>
     </model>
   </world>
 </sdf>
