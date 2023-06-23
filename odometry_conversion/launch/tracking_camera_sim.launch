@@ -5,5 +5,6 @@
     <param name="in_sensor_frame" value="tracking_camera_link"/>
     <param name="out_odom_frame" value="tracking_camera_odom"/>
     <param name="out_sensor_frame" value="base_link"/>
+    <param name="is_odom_child" value="true"/>
   </node>
 </launch>
