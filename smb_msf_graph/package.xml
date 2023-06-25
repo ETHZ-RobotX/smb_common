@@ -9,5 +9,8 @@
 	<buildtool_depend>catkin</buildtool_depend>
 	<exec_depend>smb_estimator_graph</exec_depend>
 	<exec_depend>smb_description</exec_depend>
+	<exec_depend>compslam_lio</exec_depend>
+	<exec_depend>open3d_slam_ros</exec_depend>
+	<exec_depend>smb_slam</exec_depend>
 
 </package>

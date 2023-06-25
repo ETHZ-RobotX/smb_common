@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
 
+  <!-- Parameters -->
+  <arg name="use_sim_time" default="false"/>
+
   <!-- Arguments -->
   <arg name="cloud_topic"           default="/rslidar/points" doc="input topic for the lidar pointcloud"/>
   <arg name="parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
@@ -10,7 +13,7 @@
   <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map"/>
 
   <!-- Potentially launch sensors -->
-  <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"> </include> 
+  <include file="$(find smb)/launch/sensors.launch" if="$(arg launch_sensors)"/>
 
   <!-- Launch Map Builder (open3d_slam) -->
   <include file="$(find open3d_slam_ros)/launch/mapping.launch">
@@ -19,6 +22,7 @@
     <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
     <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
+    <arg name="use_sim_time"          value="$(arg use_sim_time)"/>
   </include>
 
   <!-- Static TF publisher between range_sensor and base_link-->

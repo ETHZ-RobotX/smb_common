@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<launch>
+
+    <!-- Parameters -->
+    <arg name="use_sim_time"              value="true" />
+
+    <!-- Parameters -->
+    <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
+    <arg name="launch_o3d_slam" default="true"/>
+
+    <!-- Alias to smb_estimator_graph replay script -->
+    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph_replay.launch">
+        <arg name="lidar_odometry_topic_name" value="$(arg lidar_odometry_topic_name)" />
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
+
+    <!-- Load Description -->
+    <include file="$(find smb_description)/launch/load.launch"/>
+
+    <!-- Launch compslam -->
+    <include file="$(find smb_slam)/launch/online_slam.launch" if="$(arg launch_o3d_slam)">
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
+
+</launch>
