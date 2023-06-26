@@ -78,7 +78,7 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   odomOut.child_frame_id = outSensorFrame_;
   
   Eigen::Matrix4d inHom = toHomTransform(odomIn.pose.pose);
-  Eigen::Matrix4d outHom = sensorTransformHom_.inverse() * inHom * odomTransformHom_;
+  Eigen::Matrix4d outHom = sensorTransformHom_.inverse() * inHom * sensorTransformHom_ * odomTransformHom_;
   odomOut.pose.pose = fromHomTransformToPose(outHom);
 
   Eigen::Vector3d inRotVel;
