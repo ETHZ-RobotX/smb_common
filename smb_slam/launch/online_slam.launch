@@ -21,7 +21,4 @@
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
   </include>
 
-  <!-- Static TF publisher between range_sensor and base_link-->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_range_sensor" respawn="true" args="0.0245 0 0.4645 0 0 0 base_link range_sensor_o3d" />
-
 </launch>
