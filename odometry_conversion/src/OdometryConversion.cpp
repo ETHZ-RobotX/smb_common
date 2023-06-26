@@ -14,11 +14,9 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   auto sensorTransform = buffer_.lookupTransform(outSensorFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
   sensorTransformHom_ = toHomTransform(sensorTransform.transform);
 
-  ROS_INFO("1 ENTER");
   // if frame exists, otherwise make a new frame at the same place
-  auto odomTransform = buffer_.lookupTransform(inOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));;
+  auto odomTransform = buffer_.lookupTransform(outSensorFrame_, outSensorFrame_, ros::Time(0), ros::Duration(10));  // identity
   if (buffer_.canTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10))) {
-      ROS_INFO("CAN TRANSFORM");
       odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
   }
   odomTransformHom_ = toHomTransform(odomTransform.transform);
@@ -76,37 +74,23 @@ geometry_msgs::Pose OdometryConversion::fromHomTransformToPose(const Eigen::Matr
 void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   nav_msgs::Odometry odomOut;
   odomOut.header.stamp = odomIn.header.stamp;
-  if (odomChild_) {
-    odomOut.header.frame_id = outSensorFrame_;
-    odomOut.child_frame_id = outOdomFrame_;
-  } else {
-    odomOut.header.frame_id = outOdomFrame_;
-    odomOut.child_frame_id = outSensorFrame_;
-  }
+  odomOut.header.frame_id = outOdomFrame_;
+  odomOut.child_frame_id = outSensorFrame_;
   
   Eigen::Matrix4d inHom = toHomTransform(odomIn.pose.pose);
   Eigen::Matrix4d outHom = sensorTransformHom_.inverse() * inHom * odomTransformHom_;
-  if (odomChild_) {
-    outHom = outHom.inverse();
-  }
   odomOut.pose.pose = fromHomTransformToPose(outHom);
 
   Eigen::Vector3d inRotVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.angular, inRotVel);
-  Eigen::Vector3d outRotVel = odomTransformHom_.block<3, 3>(0, 0) * inRotVel;
+  Eigen::Vector3d outRotVel = sensorTransformHom_.block<3, 3>(0, 0) * inRotVel;
 
   Eigen::Vector3d inLinVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.linear, inLinVel);
   Eigen::Vector3d inLinVelOutFrame = odomTransformHom_.block<3, 3>(0, 0) * inLinVel;
-  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(odomTransformHom_.block<3, 1>(0, 3));
-  if (odomChild_) {
-    tf::vectorEigenToMsg(-outRotVel, odomOut.twist.twist.angular);
-    tf::vectorEigenToMsg(-outLinVel, odomOut.twist.twist.linear);
-  } else {
-    tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
-    tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);
-  }
-  
+  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(odomTransformHom_.inverse().block<3, 1>(0, 3));
+  tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
+  tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);  
 
   // covariance is symbolic for RS-T265. We do not need to transform this properly.
   odomOut.pose.covariance = odomIn.pose.covariance;
@@ -117,12 +101,16 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   // publish base odom frame via tf
   geometry_msgs::TransformStamped odomTransform;
   odomTransform.header.stamp = odomIn.header.stamp;
-  // odomTransform.header.frame_id = outOdomFrame_;
-  // odomTransform.child_frame_id = outSensorFrame_;
-  odomTransform.header.frame_id = outSensorFrame_;
-  odomTransform.child_frame_id = outOdomFrame_;
+  if (odomChild_) {
+    odomTransform.header.frame_id = outSensorFrame_;
+    odomTransform.child_frame_id = outOdomFrame_;
+    odomTransform.transform = fromHomTransform(outHom.inverse());
+  } else {
+    odomTransform.header.frame_id = outOdomFrame_;
+    odomTransform.child_frame_id = outSensorFrame_;
+    odomTransform.transform = fromHomTransform(outHom);
+  }
   // odomTransform.transform = fromHomTransform(outHom);
-  odomTransform.transform = fromHomTransform(outHom);
   // Eigen::Matrix3d odomTransformRot = outHom.block<3, 3>(0, 0);
   // tf::quaternionEigenToMsg(Eigen::Quaterniond(odomTransformRot), odomTransform.transform.rotation);
   // tf::vectorEigenToMsg(Eigen::Vector3d(outHom.block<3, 1>(0, 3)), odomTransform.transform.translation);
