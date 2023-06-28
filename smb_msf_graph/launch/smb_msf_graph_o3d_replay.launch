@@ -2,7 +2,7 @@
 <launch>
 
     <!-- Parameters -->
-    <arg name="use_sim_time"              value="true" />
+    <arg name="use_sim_time"              value="false" />
 
     <!-- Parameters -->
     <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
@@ -15,9 +15,9 @@
     </include>
 
     <!-- Load Description -->
-    <include file="$(find smb_description)/launch/load.launch"/>
+    <include file="$(find smb_description)/launch/load.launch" if="$(arg use_sim_time)"/>
 
-    <!-- Launch compslam -->
+    <!-- Launch Open3D SLAM -->
     <include file="$(find smb_slam)/launch/online_slam.launch" if="$(arg launch_o3d_slam)">
         <arg name="use_sim_time" value="$(arg use_sim_time)" />
     </include>
