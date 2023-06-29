@@ -1,12 +1,13 @@
 <launch>
 
-  <arg name="scan_topic"  default="/scan" />
-  <arg name="base_frame"  default="base_link"/>
-  <arg name="odom_frame"  default="tracking_camera_odom"/>
-  <arg name="map_frame"  default="map"/>
-  <arg name="publish_odom_to_map" default="False"/>
-  <!-- Occupancy Mapping (GMapping) -->
+  <arg name="scan_topic"  default="/scan"                   doc="input topic for the 2D lidar scan"/>
+  <arg name="base_frame"  default="base_link"               doc="frame for the robot base"/>
+  <arg name="odom_frame"  default="tracking_camera_odom"    doc="Odometry frame"/>
+  <arg name="map_frame"   default="map"                     doc="Frame used for publishing the Gmapping Map"/>
+  <arg name="publish_odom_to_map" default="False"           doc="Whether to publish the TF form odom to map or the inverse"/>
 
+  <!-- Occupancy Mapping (GMapping) -->
+  <!-- Please refer to the following http://wiki.ros.org/gmapping for details on the parameters-->
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
     <param name="base_frame" value="$(arg base_frame)"/>
     <param name="odom_frame" value="$(arg odom_frame)"/>
@@ -48,7 +49,7 @@
   </node>
 
 <!-- Frontier Exploration (explore_lite) -->
-
+<!-- Please refer to the following http://wiki.ros.org/explore_lite for details on the parameters-->
 <node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
   <param name="robot_base_frame" value="$(arg base_frame)"/>
   <param name="costmap_topic" value="map"/>
