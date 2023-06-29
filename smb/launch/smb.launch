@@ -93,8 +93,10 @@
       <param name="in_odom_frame" value="rslidar"/>
       <param name="in_sensor_frame" value="imu"/>
       <param name="out_odom_frame" value="lidar_odom_base"/>
-      <param name="out_sensor_frame" value="base_link"/>
-      <remap from="/tracking_camera/odom/sample" to="/msf_core/odometry"/>
+      <param name="out_base_frame" value="base_link"/>
+      <param name="in_odom_topic" value="/msf_core/odometry"/>
+      <param name="out_odom_topic" value="/base_odom"/>
+      <param name="is_odom_child" value="true"/>
     </node>
     <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
       <arg name="launch_rviz" value="false"/>
@@ -107,7 +109,10 @@
       <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
       <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
       <param name="out_odom_frame" value="tracking_camera_odom"/>
-      <param name="out_sensor_frame" value="base_link"/>
+      <param name="out_base_frame" value="base_link"/>
+      <param name="in_odom_topic" value="/tracking_camera/odom/sample"/>
+      <param name="out_odom_topic" value="/base_odom"/>
+      <param name="is_odom_child" value="true"/>
     </node>
   </group>
 

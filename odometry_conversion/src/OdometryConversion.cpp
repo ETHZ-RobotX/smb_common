@@ -8,21 +8,17 @@ OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transfo
   inOdomFrame_ = nh.param<std::string>("in_odom_frame", inOdomFrame_);  // parent frame of the input odometry
   outOdomFrame_ = nh.param<std::string>("out_odom_frame", outOdomFrame_);  // new parent frame of the output odometry
   inSensorFrame_ = nh.param<std::string>("in_sensor_frame", inSensorFrame_);  // child frame of the input odometry
-  outSensorFrame_ = nh.param<std::string>("out_sensor_frame", outSensorFrame_);  // new child of the output odometry
+  outBaseFrame_ = nh.param<std::string>("out_base_frame", outBaseFrame_);  // new child of the output odometry
   inOdomTopic_ = nh.param<std::string>("in_odom_topic", inOdomTopic_);  // input odometry topic name
   outOdomTopic_ = nh.param<std::string>("out_odom_topic", outOdomTopic_);  // output odometry topic name
   odomChild_ = nh.param<bool>("is_odom_child", odomChild_);
 
   
-  auto sensorTransform = buffer_.lookupTransform(outSensorFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));  // T_(inSens, outSens)
+  auto sensorTransform = buffer_.lookupTransform(outBaseFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
   sensorTransformHom_ = toHomTransform(sensorTransform.transform);
 
-  // transform to be applied to inOdomFrame_ as the odometry should start from the outSensorFrame_ initial pose
-  // auto odomTransform = buffer_.lookupTransform(outSensorFrame_, outSensorFrame_, ros::Time(0), ros::Duration(10));  // identity
-  auto odomTransform = buffer_.lookupTransform(outSensorFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));  // T_(inOdom, outSens)
-  // if (buffer_.canTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10))) {
-  //     odomTransform = buffer_.lookupTransform(outOdomFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
-  // }
+  // transform to be applied to inOdomFrame_ as the odometry should start from the outBaseFrame_ initial pose
+  auto odomTransform = buffer_.lookupTransform(outBaseFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
   odomTransformHom_ = toHomTransform(odomTransform.transform);
 
   // the odom frame of the tracking camera is gravity aligned. In case the camera is mounted with an angle, remove pitch and roll of this
@@ -79,7 +75,7 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   nav_msgs::Odometry odomOut;
   odomOut.header.stamp = odomIn.header.stamp;
   odomOut.header.frame_id = outOdomFrame_;
-  odomOut.child_frame_id = outSensorFrame_;
+  odomOut.child_frame_id = outBaseFrame_;
   
   Eigen::Matrix4d inHom = toHomTransform(odomIn.pose.pose);
   Eigen::Matrix4d outHom = odomTransformHom_ * inHom * sensorTransformHom_.inverse();
@@ -106,12 +102,12 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   geometry_msgs::TransformStamped odomTransform;
   odomTransform.header.stamp = odomIn.header.stamp;
   if (odomChild_) {
-    odomTransform.header.frame_id = outSensorFrame_;
+    odomTransform.header.frame_id = outBaseFrame_;
     odomTransform.child_frame_id = outOdomFrame_;
     odomTransform.transform = fromHomTransform(outHom.inverse());
   } else {
     odomTransform.header.frame_id = outOdomFrame_;
-    odomTransform.child_frame_id = outSensorFrame_;
+    odomTransform.child_frame_id = outBaseFrame_;
     odomTransform.transform = fromHomTransform(outHom);
   }
   // odomTransform.transform = fromHomTransform(outHom);
