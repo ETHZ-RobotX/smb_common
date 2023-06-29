@@ -2,7 +2,7 @@
 <launch>
 
     <!-- Parameters -->
-    <arg name="use_sim_time"              value="false" />
+    <arg name="use_sim_time"              value="true" />
 
     <!-- Parameters -->
     <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
