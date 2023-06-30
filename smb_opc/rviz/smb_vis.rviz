@@ -5,6 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Robot1/Sensors1/Lidar Raw1
+        - /SLAM1/Map1
       Splitter Ratio: 0.5
     Tree Height: 442
   - Class: rviz/Selection
@@ -71,8 +73,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 6.201653480529785
-                Min Value: -0.8322100043296814
+                Max Value: 3.040191173553467
+                Min Value: -0.38809776306152344
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -89,7 +91,7 @@ Visualization Manager:
               Queue Size: 10
               Selectable: true
               Size (Pixels): 3
-              Size (m): 0.009999999776482582
+              Size (m): 0.029999999329447746
               Style: Flat Squares
               Topic: /rslidar/points
               Unreliable: false
@@ -123,6 +125,8 @@ Visualization Manager:
                   Value: true
                 lidar_mount_link:
                   Value: true
+                map_gmap:
+                  Value: true
                 map_graph_msf:
                   Value: true
                 map_o3d:
@@ -145,8 +149,6 @@ Visualization Manager:
                   Value: true
                 tracking_camera_pose_frame:
                   Value: true
-                tracking_camera_pose_frame_odom:
-                  Value: true
                 world_graph_msf:
                   Value: true
               Marker Alpha: 1
@@ -156,40 +158,41 @@ Visualization Manager:
               Show Axes: true
               Show Names: true
               Tree:
-                tracking_camera_odom:
-                  base_link:
-                    LF_WHEEL:
+                base_link:
+                  LF_WHEEL:
+                    {}
+                  LH_WHEEL:
+                    {}
+                  RF_WHEEL:
+                    {}
+                  RH_WHEEL:
+                    {}
+                  base_inertia:
+                    {}
+                  imu_link:
+                    imu:
                       {}
-                    LH_WHEEL:
+                  lidar_mount_link:
+                    rslidar:
+                      odom_o3d:
+                        map_o3d:
+                          {}
+                  odom:
+                    map_gmap:
                       {}
-                    RF_WHEEL:
+                    map_graph_msf:
                       {}
-                    RH_WHEEL:
+                    world_graph_msf:
                       {}
-                    base_inertia:
+                  rgb_camera_link:
+                    rgb_camera_optical_link:
                       {}
-                    imu_link:
-                      imu:
-                        {}
-                    lidar_mount_link:
-                      rslidar:
-                        odom_o3d:
-                          map_o3d:
-                            {}
-                    odom:
-                      map_graph_msf:
-                        {}
-                      world_graph_msf:
-                        {}
-                    rgb_camera_link:
-                      rgb_camera_optical_link:
-                        {}
-                    top:
+                  top:
+                    {}
+                  tracking_camera_link:
+                    tracking_camera_pose_frame:
                       {}
-                    tracking_camera_link:
-                      tracking_camera_pose_frame:
-                        {}
-                  tracking_camera_pose_frame_odom:
+                  tracking_camera_odom:
                     {}
               Update Interval: 0
               Value: true
@@ -471,7 +474,7 @@ Visualization Manager:
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.009999999776482582
+          Size (m): 0.05000000074505806
           Style: Flat Squares
           Topic: /mapping_node/assembled_map
           Unreliable: false
@@ -555,7 +558,15 @@ Visualization Manager:
       Enabled: true
       Name: StateEstimation
     - Class: rviz/Group
-      Displays: ~
+      Displays:
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /explore/frontiers
+          Name: Frontiers
+          Namespaces:
+            frontiers: true
+          Queue Size: 100
+          Value: true
       Enabled: true
       Name: Exploration
     - Class: rviz/Group
@@ -566,7 +577,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: odom
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -590,7 +601,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.485519886016846
+      Distance: 20.282756805419922
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -606,9 +617,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.9597972631454468
+      Pitch: 1.0347968339920044
       Target Frame: <Fixed Frame>
-      Yaw: 2.455390453338623
+      Yaw: 3.3253982067108154
     Saved: ~
 Window Geometry:
   Displays:
