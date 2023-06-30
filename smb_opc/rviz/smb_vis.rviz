@@ -4,10 +4,12 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /Global Options1
-        - /Lidar Raw1
+        - /Robot1
+        - /Robot1/Sensors1
+        - /Robot1/Description1
+        - /PathPlanner1
       Splitter Ratio: 0.5
-    Tree Height: 597
+    Tree Height: 442
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -23,7 +25,6 @@ Panels:
     Name: Views
     Splitter Ratio: 0.5
   - Class: rviz/Time
-    Experimental: false
     Name: Time
     SyncMode: 0
     SyncSource: Lidar Raw
@@ -52,292 +53,223 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: true
-        LF_WHEEL:
-          Value: true
-        LH_WHEEL:
-          Value: true
-        RF_WHEEL:
-          Value: true
-        RH_WHEEL:
-          Value: true
-        base_inertia:
-          Value: true
-        base_link:
-          Value: true
-        rgb_camera0_link:
-          Value: true
-        rgb_camera0_optical_link:
-          Value: true
-        rgb_camera1_link:
-          Value: true
-        rgb_camera1_optical_link:
-          Value: true
-        rgb_camera_left_link:
-          Value: true
-        rgb_camera_left_optical_link:
-          Value: true
-        rgb_camera_right_link:
-          Value: true
-        rgb_camera_right_optical_link:
-          Value: true
-        camera_imu_optical_frame:
-          Value: true
-        camera_pose_frame:
-          Value: true
-        camera_pose_frame_odom:
-          Value: true
-        imu:
-          Value: true
-        imu_link:
-          Value: true
-        lidar_mount_link:
-          Value: true
-        mono_link:
-          Value: true
-        realsense_t265:
-          Value: true
-        realsense_t265_odom_frame:
-          Value: true
-        rslidar:
-          Value: true
-        rslidar_base_link:
-          Value: true
-        top:
-          Value: true
-        tracking_camera_odom:
-          Value: true
-      Marker Alpha: 1
-      Marker Scale: 1
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        base_link:
-          LF_WHEEL:
-            {}
-          LH_WHEEL:
-            {}
-          RF_WHEEL:
-            {}
-          RH_WHEEL:
-            {}
-          base_inertia:
-            {}
-          rgb_camera0_link:
-            rgb_camera0_optical_link:
-              {}
-          rgb_camera1_link:
-            rgb_camera1_optical_link:
-              {}
-          rgb_camera_left_link:
-            rgb_camera_left_optical_link:
-              {}
-          rgb_camera_right_link:
-            rgb_camera_right_optical_link:
-              {}
-          imu_link:
-            imu:
-              {}
-            realsense_t265:
-              camera_pose_frame:
-                {}
-            rgb_camera1_link:
-              rgb_camera1_optical_link:
-                {}
-            rgb_camera_left_link:
-              rgb_camera_left_optical_link:
-                {}
-            rgb_camera_right_link:
-              rgb_camera_right_optical_link:
-                {}
-            imu_link:
-              imu:
-                {}
-              realsense_t265:
-                camera_pose_frame:
-                  {}
-                realsense_t265_odom_frame:
-                  camera_imu_optical_frame:
+    - Class: rviz/Group
+      Displays:
+        - Class: rviz/Group
+          Displays:
+            - Class: smb_rviz_plugins/SMBPowerMotor
+              Enabled: true
+              Name: SMBPowerMotor
+              Topic Power Motor: /control/base_battery_state
+              Value: true
+            - Class: smb_rviz_plugins/SMBPowerPayload
+              Enabled: true
+              Name: SMBPowerPayload
+              Show/Hide:
+                Show Battery 1: true
+                Show Battery 2: true
+                Show Plug: true
+              Topic Power Payload: /smb_powerstatus/payload
+              Value: true
+            - Alpha: 1
+              Autocompute Intensity Bounds: true
+              Autocompute Value Bounds:
+                Max Value: 5.668055534362793
+                Min Value: -0.36869657039642334
+                Value: true
+              Axis: Z
+              Channel Name: intensity
+              Class: rviz/PointCloud2
+              Color: 255; 255; 255
+              Color Transformer: AxisColor
+              Decay Time: 0
+              Enabled: true
+              Invert Rainbow: false
+              Max Color: 255; 255; 255
+              Min Color: 0; 0; 0
+              Name: Lidar Raw
+              Position Transformer: XYZ
+              Queue Size: 10
+              Selectable: true
+              Size (Pixels): 3
+              Size (m): 0.009999999776482582
+              Style: Flat Squares
+              Topic: /rslidar/points
+              Unreliable: false
+              Use Fixed Frame: true
+              Use rainbow: true
+              Value: true
+          Enabled: true
+          Name: Sensors
+        - Class: rviz/Group
+          Displays:
+            - Class: rviz/TF
+              Enabled: true
+              Frame Timeout: 15
+              Frames:
+                All Enabled: true
+                LF_WHEEL:
+                  Value: true
+                LH_WHEEL:
+                  Value: true
+                RF_WHEEL:
+                  Value: true
+                RH_WHEEL:
+                  Value: true
+                base_inertia:
+                  Value: true
+                base_link:
+                  Value: true
+                imu:
+                  Value: true
+                imu_link:
+                  Value: true
+                lidar_mount_link:
+                  Value: true
+                rgb_camera_link:
+                  Value: true
+                rgb_camera_optical_link:
+                  Value: true
+                rslidar:
+                  Value: true
+                top:
+                  Value: true
+                tracking_camera_link:
+                  Value: true
+                tracking_camera_odom:
+                  Value: true
+                tracking_camera_pose_frame:
+                  Value: true
+                tracking_camera_pose_frame_odom:
+                  Value: true
+              Marker Alpha: 1
+              Marker Scale: 1
+              Name: TF
+              Show Arrows: true
+              Show Axes: true
+              Show Names: true
+              Tree:
+                tracking_camera_odom:
+                  base_link:
+                    LF_WHEEL:
+                      {}
+                    LH_WHEEL:
+                      {}
+                    RF_WHEEL:
+                      {}
+                    RH_WHEEL:
+                      {}
+                    base_inertia:
+                      {}
+                    imu_link:
+                      imu:
+                        {}
+                    lidar_mount_link:
+                      rslidar:
+                        {}
+                    rgb_camera_link:
+                      rgb_camera_optical_link:
+                        {}
+                    top:
+                      {}
+                    tracking_camera_link:
+                      tracking_camera_pose_frame:
+                        {}
+                  tracking_camera_pose_frame_odom:
                     {}
-            lidar_mount_link:
-              {}
-            mono_link:
-              {}
-            rslidar_base_link:
-              rslidar:
-                {}
-            top:
-              {}
-            tracking_camera_odom:
-              camera_pose_frame_odom:
-                {}
-      Update Interval: 0
-      Value: true
-    - Alpha: 1
-      Class: rviz/RobotModel
-      Collision Enabled: false
+              Update Interval: 0
+              Value: true
+            - Alpha: 1
+              Class: rviz/RobotModel
+              Collision Enabled: false
+              Enabled: true
+              Links:
+                All Links Enabled: true
+                Expand Joint Details: false
+                Expand Link Details: false
+                Expand Tree: false
+                LF_WHEEL:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                LH_WHEEL:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                Link Tree Style: Links in Alphabetic Order
+                RF_WHEEL:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                RH_WHEEL:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                base_inertia:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                base_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                imu:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                imu_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                lidar_mount_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                rgb_camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                rgb_camera_optical_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                rslidar:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                top:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                tracking_camera_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+                  Value: true
+                tracking_camera_pose_frame:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
+              Name: RobotModel
+              Robot Description: smb_description
+              TF Prefix: ""
+              Update Interval: 0
+              Value: true
+              Visual Enabled: true
+          Enabled: true
+          Name: Description
       Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        LF_WHEEL:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        LH_WHEEL:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        Link Tree Style: Links in Alphabetic Order
-        RF_WHEEL:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        RH_WHEEL:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        base_inertia:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rgb_camera0_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rgb_camera0_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rgb_camera1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rgb_camera1_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rgb_camera_left_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rgb_camera_left_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rgb_camera_right_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rgb_camera_right_optical_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_imu_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_pose_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        imu:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        imu_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        lidar_mount_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        mono_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        realsense_t265:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        realsense_t265_odom_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rslidar:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        rslidar_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        top:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-      Name: RobotModel
-      Robot Description: smb_description
-      TF Prefix: ""
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 2.2671430110931396
-        Min Value: -0.21022829413414001
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: AxisColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Min Color: 0; 0; 0
-      Name: Lidar Raw
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.009999999776482582
-      Style: Flat Squares
-      Topic: /rslidar/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
+      Name: Robot
     - Class: rviz/Group
       Displays:
         - Alpha: 1
@@ -437,71 +369,87 @@ Visualization Manager:
           Value: true
       Enabled: true
       Name: MPC
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 0.699999988079071
+          Class: rviz/Map
+          Color Scheme: map
+          Draw Behind: false
+          Enabled: true
+          Name: GlobalCostmap
+          Topic: /move_base/global_costmap/costmap
+          Unreliable: false
+          Use Timestamp: false
+          Value: true
+        - Alpha: 0.699999988079071
+          Class: rviz/Map
+          Color Scheme: map
+          Draw Behind: false
+          Enabled: false
+          Name: LocalCostmap
+          Topic: /move_base/local_costmap/costmap
+          Unreliable: false
+          Use Timestamp: false
+          Value: false
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 25; 255; 0
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Lines
+          Line Width: 0.029999999329447746
+          Name: GlobalPath
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic: /move_base/TebLocalPlannerROS/global_plan
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Arrow Length: 0.30000001192092896
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
+          Class: rviz/PoseArray
+          Color: 255; 25; 0
+          Enabled: true
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
+          Name: LocalPath
+          Queue Size: 10
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
+          Shape: Arrow (Flat)
+          Topic: /move_base/TebLocalPlannerROS/teb_poses
+          Unreliable: false
+          Value: true
       Enabled: true
-      Name: Map
-      Topic: /move_base/global_costmap/costmap
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 25; 255; 0
+      Name: PathPlanner
+    - Class: rviz/Group
+      Displays: ~
       Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Lines
-      Line Width: 0.029999999329447746
-      Name: Path
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Queue Size: 10
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /move_base/OmplPlanner/plan
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Arrow Length: 0.30000001192092896
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz/PoseArray
-      Color: 255; 25; 0
+      Name: SLAM
+    - Class: rviz/Group
+      Displays: ~
       Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: PoseArray
-      Queue Size: 10
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic: /move_base/TebLocalPlannerROS/teb_poses
-      Unreliable: false
-      Value: true
-    - Class: smb_rviz_plugins/SMBPowerPayload
+      Name: StateEstimation
+    - Class: rviz/Group
+      Displays: ~
       Enabled: true
-      Name: SMBPowerPayload
-      Show/Hide:
-        Show Battery 1: true
-        Show Battery 2: true
-        Show Plug: true
-      Topic Power Payload: /smb_powerstatus/payload
-      Value: true
-    - Class: smb_rviz_plugins/SMBPowerMotor
+      Name: Exploration
+    - Class: rviz/Group
+      Displays: ~
       Enabled: true
-      Name: SMBPowerMotor
-      Topic Power Motor: /control/base_battery_state
-      Value: true
+      Name: Object Detection
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -553,10 +501,10 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1136
+  Height: 1016
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000174000003d2fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003d000002e0000000c900fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f00720100000323000000730000007300fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f00610064010000039c000000730000007300ffffff000000010000010f000003d2fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003d000003d2000000a400fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007380000003efc0100000002fb0000000800540069006d0065010000000000000738000002eb00fffffffb0000000800540069006d00650100000000000004500000000000000000000004a9000003d200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000019d0000034afc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000006200fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c00610079007301000000490000024a000000d800fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000002990000007a0000007a00fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f0061006401000003190000007a0000007a00ffffff000000010000010f0000034afc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a0056006900650077007301000000490000034a000000b000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073c00000041fc0100000002fb0000000800540069006d006501000000000000073c000003e400fffffffb0000000800540069006d00650100000000000004500000000000000000000004840000034a00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   SMBPowerMotor:
     collapsed: false
   SMBPowerPayload:
@@ -569,6 +517,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1848
-  X: 1992
+  Width: 1852
+  X: 68
   Y: 27
