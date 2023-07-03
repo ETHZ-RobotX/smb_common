@@ -5,27 +5,30 @@
 using namespace odometry_conversion;
 
 OdometryConversion::OdometryConversion(ros::NodeHandle& nh) : buffer_(), transformListener_(buffer_) {
-  inOdomFrame_ = nh.param<std::string>("in_odom_frame", inOdomFrame_);
-  outOdomFrame_ = nh.param<std::string>("out_odom_frame", outOdomFrame_);
-  inSensorFrame_ = nh.param<std::string>("in_sensor_frame", inSensorFrame_);
-  outSensorFrame_ = nh.param<std::string>("out_sensor_frame", outSensorFrame_);
+  inOdomFrame_ = nh.param<std::string>("in_odom_frame", inOdomFrame_);  // parent frame of the input odometry
+  outOdomFrame_ = nh.param<std::string>("out_odom_frame", outOdomFrame_);  // new parent frame of the output odometry
+  inSensorFrame_ = nh.param<std::string>("in_sensor_frame", inSensorFrame_);  // child frame of the input odometry
+  outBaseFrame_ = nh.param<std::string>("out_base_frame", outBaseFrame_);  // new child of the output odometry
+  inOdomTopic_ = nh.param<std::string>("in_odom_topic", inOdomTopic_);  // input odometry topic name
+  outOdomTopic_ = nh.param<std::string>("out_odom_topic", outOdomTopic_);  // output odometry topic name
+  odomChild_ = nh.param<bool>("is_odom_child", odomChild_);
 
-  auto sensorTransform = buffer_.lookupTransform(outSensorFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
+  
+  auto sensorTransform = buffer_.lookupTransform(outBaseFrame_, inSensorFrame_, ros::Time(0), ros::Duration(10));
   sensorTransformHom_ = toHomTransform(sensorTransform.transform);
-  sensorTransformHom_.block<3, 3>(0, 0) = sensorTransformHom_.block<3, 3>(0, 0).transpose().eval();
-  sensorTransformHom_.block<3, 1>(0, 3) = -sensorTransformHom_.block<3, 3>(0, 0) * sensorTransformHom_.block<3, 1>(0, 3);
 
-  auto odomTransform = buffer_.lookupTransform(outSensorFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
+  // transform to be applied to inOdomFrame_ as the odometry should start from the outBaseFrame_ initial pose
+  auto odomTransform = buffer_.lookupTransform(outBaseFrame_, inOdomFrame_, ros::Time(0), ros::Duration(10));
   odomTransformHom_ = toHomTransform(odomTransform.transform);
 
   // the odom frame of the tracking camera is gravity aligned. In case the camera is mounted with an angle, remove pitch and roll of this
   // transformation
-  odomTransform.header.frame_id = outOdomFrame_;
-  odomTransform.child_frame_id = inOdomFrame_ + "_odom";
-  odomCameraOdomTransformPublisher_.sendTransform(odomTransform);
+  // odomTransform.header.frame_id = outOdomFrame_;
+  // odomTransform.child_frame_id = inOdomFrame_ + "_odom";
+  // odomCameraOdomTransformPublisher_.sendTransform(odomTransform);
 
-  odometryPublisher_ = nh.advertise<nav_msgs::Odometry>("/base_odom", 1, false);
-  odometryInSubscriber_ = nh.subscribe("/tracking_camera/odom/sample", 1, &OdometryConversion::odometryInCallback, this);
+  odometryPublisher_ = nh.advertise<nav_msgs::Odometry>(outOdomTopic_, 1, false);
+  odometryInSubscriber_ = nh.subscribe(inOdomTopic_, 1, &OdometryConversion::odometryInCallback, this);
 }
 
 Eigen::Matrix4d OdometryConversion::toHomTransform(const geometry_msgs::Transform& transform) const {
@@ -72,22 +75,22 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   nav_msgs::Odometry odomOut;
   odomOut.header.stamp = odomIn.header.stamp;
   odomOut.header.frame_id = outOdomFrame_;
-  odomOut.child_frame_id = outSensorFrame_;
-
+  odomOut.child_frame_id = outBaseFrame_;
+  
   Eigen::Matrix4d inHom = toHomTransform(odomIn.pose.pose);
-  Eigen::Matrix4d outHom = odomTransformHom_ * inHom * sensorTransformHom_;
+  Eigen::Matrix4d outHom = odomTransformHom_ * inHom * sensorTransformHom_.inverse();
   odomOut.pose.pose = fromHomTransformToPose(outHom);
 
   Eigen::Vector3d inRotVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.angular, inRotVel);
-  Eigen::Vector3d outRotVel = sensorTransformHom_.block<3, 3>(0, 0).transpose() * inRotVel;
-  tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
+  Eigen::Vector3d outRotVel = sensorTransformHom_.block<3, 3>(0, 0) * inRotVel;
 
   Eigen::Vector3d inLinVel;
   tf::vectorMsgToEigen(odomIn.twist.twist.linear, inLinVel);
-  Eigen::Vector3d inLinVelOutFrame = sensorTransformHom_.block<3, 3>(0, 0).transpose() * inLinVel;
-  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(sensorTransformHom_.block<3, 1>(0, 3));
-  tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);
+  Eigen::Vector3d inLinVelOutFrame = sensorTransformHom_.block<3, 3>(0, 0) * inLinVel;
+  Eigen::Vector3d outLinVel = inLinVelOutFrame + outRotVel.cross(sensorTransformHom_.inverse().block<3, 1>(0, 3));
+  tf::vectorEigenToMsg(outRotVel, odomOut.twist.twist.angular);
+  tf::vectorEigenToMsg(outLinVel, odomOut.twist.twist.linear);  
 
   // covariance is symbolic for RS-T265. We do not need to transform this properly.
   odomOut.pose.covariance = odomIn.pose.covariance;
@@ -98,9 +101,16 @@ void OdometryConversion::odometryInCallback(const nav_msgs::Odometry& odomIn) {
   // publish base odom frame via tf
   geometry_msgs::TransformStamped odomTransform;
   odomTransform.header.stamp = odomIn.header.stamp;
-  odomTransform.header.frame_id = outOdomFrame_;
-  odomTransform.child_frame_id = outSensorFrame_;
-  odomTransform.transform = fromHomTransform(outHom);
+  if (odomChild_) {
+    odomTransform.header.frame_id = outBaseFrame_;
+    odomTransform.child_frame_id = outOdomFrame_;
+    odomTransform.transform = fromHomTransform(outHom.inverse());
+  } else {
+    odomTransform.header.frame_id = outOdomFrame_;
+    odomTransform.child_frame_id = outBaseFrame_;
+    odomTransform.transform = fromHomTransform(outHom);
+  }
+  // odomTransform.transform = fromHomTransform(outHom);
   // Eigen::Matrix3d odomTransformRot = outHom.block<3, 3>(0, 0);
   // tf::quaternionEigenToMsg(Eigen::Quaterniond(odomTransformRot), odomTransform.transform.rotation);
   // tf::vectorEigenToMsg(Eigen::Vector3d(outHom.block<3, 1>(0, 3)), odomTransform.transform.translation);

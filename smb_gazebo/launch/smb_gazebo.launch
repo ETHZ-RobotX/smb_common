@@ -64,9 +64,12 @@
 
   <!-- Publish camera odometry tf-->
   <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion" if="$(arg tracking_camera)">
-    <param name="in_odom_frame" value="tracking_camera_link"/>
-    <param name="in_sensor_frame" value="tracking_camera_link"/>
+    <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
+    <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
     <param name="out_odom_frame" value="tracking_camera_odom"/>
-    <param name="out_sensor_frame" value="base_link"/>
+    <param name="out_base_frame" value="base_link"/>
+    <param name="in_odom_topic" value="/tracking_camera/odom/sample"/>
+    <param name="out_odom_topic" value="/base_odom"/>
+    <param name="is_odom_child" value="true"/>
   </node>
 </launch>
