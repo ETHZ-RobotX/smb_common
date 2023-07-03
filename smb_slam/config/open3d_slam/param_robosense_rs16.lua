@@ -11,7 +11,7 @@ params.odometry.scan_processing.scan_cropping.cropping_radius_max = 40.0
 
 
 --MAPPER_LOCALIZER
-params.mapper_localizer.is_attempt_loop_closures = false -- Changed by JN
+params.mapper_localizer.is_attempt_loop_closures = false -- Change this to true while building offline map
 params.mapper_localizer.is_merge_scans_into_map = false
 params.mapper_localizer.is_build_dense_map = false
 params.mapper_localizer.is_use_map_initialization = false
