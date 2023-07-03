@@ -4,11 +4,7 @@ project(smb_slam)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(PACKAGE_DEPENDENCIES
-        roscpp
-        roslib
-        open3d_slam_ros
-        )
+set(PACKAGE_DEPENDENCIES)
 
 find_package(catkin REQUIRED COMPONENTS ${PACKAGE_DEPENDENCIES})
 

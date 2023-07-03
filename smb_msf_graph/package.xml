@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+	<name>smb_msf_graph</name>
+	<version>0.0.0</version>
+	<description>msf for smb</description>
+	<maintainer email="nubertj@ethz.ch">Julian Nubert</maintainer>
+	<license>BSD</license>
+
+	<buildtool_depend>catkin</buildtool_depend>
+	<exec_depend>smb_estimator_graph</exec_depend>
+	<exec_depend>smb_description</exec_depend>
+	<exec_depend>compslam_lio</exec_depend>
+	<exec_depend>open3d_slam_ros</exec_depend>
+	<exec_depend>smb_slam</exec_depend>
+
+</package>

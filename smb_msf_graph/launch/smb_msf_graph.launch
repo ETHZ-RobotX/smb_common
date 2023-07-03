@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<launch>
+
+    <!-- Parameters -->
+    <arg name="use_sim_time"                value="false" />
+    <arg name="launch_o3d_slam"             default="true" />
+    <arg name="lidar_odometry_topic_name"   default="/mapping_node/scan2map_odometry"/>
+    
+    <!-- Arguments -->
+
+    <arg name="cloud_topic"           default="/rslidar/points" doc="input topic for the lidar pointcloud"/>
+    <arg name="parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
+	<arg name="parameter_folder_path" default="$(find smb_slam)/config/open3d_slam/" doc="directory for the parameter files"/>
+    <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
+    <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
+    <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map"/>
+
+    <!-- Alias to smb_estimator_graph replay script -->
+    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph.launch"/>
+
+    <group if="$(arg launch_o3d_slam)">
+        <!-- Launch online_slam -->
+        <include file="$(find smb_slam)/launch/online_slam.launch">
+            <arg name="use_sim_time" value="$(arg use_sim_time)" />
+            <arg name="cloud_topic" value="$(arg cloud_topic)" />
+            <arg name="parameter_filename" value="$(arg parameter_filename)" />
+            <arg name="parameter_folder_path" value="$(arg parameter_folder_path)" />
+            <arg name="launch_rviz" value="$(arg launch_rviz)" />
+            <arg name="launch_sensors" value="$(arg launch_sensors)" />
+            <arg name="map_saving_folder" value="$(arg map_saving_folder)" />
+        </include>
+    </group>
+
+</launch>

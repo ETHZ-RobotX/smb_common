@@ -1,0 +1,21 @@
+<launch>
+
+  <!-- Arguments -->
+  <arg name="noisify_pose" default="false" />
+  <arg name="noisify_imu" default="false" />_
+
+  <!-- Launch Pose Noisifier -->
+  <group if="$(arg noisify_pose)">
+    <node name="pose_noisifier_node" pkg="smb_msf" type="pose_noisifier.py" output="screen" />
+  </group>
+
+  <!-- Launch Pose Noisifier -->
+  <group if="$(arg noisify_imu)">
+    <node name="imu_noisifier_node" pkg="smb_msf" type="imu_noisifier.py" output="screen" />
+  </group>
+
+  <!-- Launch Visualizer Node -->
+  <node name="plotting_node" pkg="smb_msf" type="plotting_node.py" output="screen" />
+
+
+</launch>

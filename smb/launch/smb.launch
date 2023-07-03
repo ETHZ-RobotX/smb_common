@@ -89,19 +89,7 @@
   </group>
 
   <group ns="odometry" if="$(arg use_lidar_odometry)">
-    <node pkg="odometry_conversion" type="odometry_conversion_node" name="lidar_odometry_conversion">
-      <param name="in_odom_frame" value="rslidar"/>
-      <param name="in_sensor_frame" value="imu"/>
-      <param name="out_odom_frame" value="lidar_odom_base"/>
-      <param name="out_base_frame" value="base_link"/>
-      <param name="in_odom_topic" value="/msf_core/odometry"/>
-      <param name="out_odom_topic" value="/base_odom"/>
-      <param name="is_odom_child" value="true"/>
-    </node>
-    <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
-      <arg name="launch_rviz" value="false"/>
-      <arg name="stitch_pointclouds"  value="false"/>
-    </include>
+    <include file="$(find smb_msf_graph)/launch/smb_msf_graph.launch" />
   </group>
 
   <group ns="odometry" unless="$(arg use_lidar_odometry)">
