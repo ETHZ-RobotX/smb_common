@@ -7,9 +7,9 @@ Panels:
         - /Global Options1
         - /Robot1/Sensors1/Lidar Raw1
         - /SLAM1/Map1
-        - /Object Detection1/3D Object Poses1
+        - /Object Detection1
       Splitter Ratio: 0.5
-    Tree Height: 375
+    Tree Height: 372
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -74,8 +74,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 4.732000350952148
-                Min Value: -0.3468741178512573
+                Max Value: 4.302511692047119
+                Min Value: -0.29804784059524536
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -140,8 +140,6 @@ Visualization Manager:
                   Value: true
                 tracking_camera_pose_frame:
                   Value: true
-                tracking_camera_pose_frame_odom:
-                  Value: true
               Marker Alpha: 1
               Marker Scale: 1
               Name: TF
@@ -149,33 +147,32 @@ Visualization Manager:
               Show Axes: true
               Show Names: true
               Tree:
-                tracking_camera_odom:
-                  base_link:
-                    LF_WHEEL:
+                base_link:
+                  LF_WHEEL:
+                    {}
+                  LH_WHEEL:
+                    {}
+                  RF_WHEEL:
+                    {}
+                  RH_WHEEL:
+                    {}
+                  base_inertia:
+                    {}
+                  imu_link:
+                    imu:
                       {}
-                    LH_WHEEL:
+                  lidar_mount_link:
+                    rslidar:
                       {}
-                    RF_WHEEL:
+                  rgb_camera_link:
+                    rgb_camera_optical_link:
                       {}
-                    RH_WHEEL:
+                  top:
+                    {}
+                  tracking_camera_link:
+                    tracking_camera_pose_frame:
                       {}
-                    base_inertia:
-                      {}
-                    imu_link:
-                      imu:
-                        {}
-                    lidar_mount_link:
-                      rslidar:
-                        {}
-                    rgb_camera_link:
-                      rgb_camera_optical_link:
-                        {}
-                    top:
-                      {}
-                    tracking_camera_link:
-                      tracking_camera_pose_frame:
-                        {}
-                  tracking_camera_pose_frame_odom:
+                  tracking_camera_odom:
                     {}
               Update Interval: 0
               Value: true
@@ -572,7 +569,7 @@ Visualization Manager:
           Unreliable: false
           Value: true
         - Class: rviz/Image
-          Enabled: true
+          Enabled: false
           Image Topic: /object_detector/detections_in_image
           Max Value: 1
           Median window: 5
@@ -582,7 +579,19 @@ Visualization Manager:
           Queue Size: 2
           Transport Hint: raw
           Unreliable: false
-          Value: true
+          Value: false
+        - Class: rviz/Image
+          Enabled: false
+          Image Topic: /rgb_camera/image_raw
+          Max Value: 1
+          Median window: 5
+          Min Value: 0
+          Name: Raw Image
+          Normalize Range: true
+          Queue Size: 2
+          Transport Hint: raw
+          Unreliable: false
+          Value: false
       Enabled: true
       Name: Object Detection
   Enabled: true
@@ -613,7 +622,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 7.9369964599609375
+      Distance: 11.82022476196289
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -629,9 +638,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.1497962474822998
+      Pitch: 0.8647964596748352
       Target Frame: <Fixed Frame>
-      Yaw: 1.7103904485702515
+      Yaw: 2.480391502380371
     Saved: ~
 Window Geometry:
   Displays:
@@ -641,7 +650,9 @@ Window Geometry:
   Hide Right Dock: false
   Image bounding Boxes:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000396000004cefc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b000fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000006e0000026f0000018200fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000002e900000134000000e000fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f00610064010000042900000113000000e000ffffff00000001000001c3000004cefc0200000004fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000006e000002b10000013200fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073010000032b000002110000002600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000ab00000005efc0100000002fb0000000800540069006d0065010000000000000ab0000006dc00fffffffb0000000800540069006d006501000000000000045000000000000000000000053f000004ce00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000396000004cefc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b000fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000006e0000026c0000018200fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000002e600000134000000e000fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f00610064010000042600000116000000e000ffffff00000001000001c3000004cefc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000006e000004ce0000013200fffffffb0000001200520061007700200049006d00610067006500000003a20000019a0000002600fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073000000032b000002110000002600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000ab00000005efc0100000002fb0000000800540069006d0065010000000000000ab0000006dc00fffffffb0000000800540069006d006501000000000000045000000000000000000000053f000004ce00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Raw Image:
+    collapsed: false
   SMBPowerMotor:
     collapsed: false
   SMBPowerPayload:
