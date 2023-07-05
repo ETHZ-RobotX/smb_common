@@ -33,7 +33,7 @@ Here are different modes of operation:
 
       If you have already created a map of the environment and would like to localize the robot in this prebuilt map, use the following command. Make sure that you correctly specify the path of the pcd map (Default path is `data/maps/map.pcd`). We recommend using this for localization instead of the ICP Localization package. 
       ```
-      roslaunch smb_slam localization_open3dslam.launch
+      roslaunch smb_slam localization.launch launch_rviz:=true
       ```
      Initial estimate for the robot in the map will need to be provided. This can be done by using the 2D pose estimate in RVIZ.
 
