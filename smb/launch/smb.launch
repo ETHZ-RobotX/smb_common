@@ -22,7 +22,7 @@
 
   <!-- launch tracking cam -->
   <arg name="launch_tracking_cam"
-       default="true"
+       default="false"
        doc="Launch the tracking camera related nodes."/>
   
   <!-- launch depth cam -->
