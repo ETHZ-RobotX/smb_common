@@ -92,7 +92,7 @@
     <include file="$(find smb_msf_graph)/launch/smb_msf_graph.launch" />
   </group>
 
-  <group ns="odometry" unless="$(arg use_lidar_odometry)">
+  <group ns="odometry" if="$(arg launch_tracking_cam)">
     <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
       <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
       <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
