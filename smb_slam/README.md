@@ -1,15 +1,12 @@
 # SMB_SLAM
 This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping using [open3d_slam](https://github.com/leggedrobotics/open3d_slam).
 
-It is necessary to follow the instructions [here](https://open3d-slam.readthedocs.io/en/latest/installation.html) to install all dependencies before compiling `smb_slam`. Alternatively you can follow these instructions to build ```smb_slam```.
+Follow instructions the instructions below to build ```smb_slam```.
 
 1. Make sure that you have installed the repositories following the instructions [here](https://ethz-robotx.github.io/SuperMegaBot/core-software/installation_core.html) for core SMB software.
 2. Install dependencies for Open3d_slam for which you can follow these steps:
      ```bash
-     sudo apt install libgoogle-glog-dev
-     sudo apt install libglfw3 libglfw3-dev
-     sudo apt install ros-noetic-jsk-rviz-plugins
-     sudo apt install liblua5.2-dev
+     sudo apt install libgoogle-glog-dev libglfw3 libglfw3-dev ros-noetic-jsk-rviz-plugins liblua5.2-dev
      sudo add-apt-repository ppa:roehling/open3d
      sudo apt update
      sudo apt install libopen3d-dev
