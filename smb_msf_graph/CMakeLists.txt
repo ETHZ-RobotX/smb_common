@@ -35,7 +35,6 @@ install(DIRECTORY
 # Python nodes
 catkin_install_python(PROGRAMS
   smb_msf_graph/smb_msf_graph/plotting_node.py
-  smb_msf_graph/smb_msf_graph/pose_noisifier.py
   smb_msf_graph/smb_msf_graph/imu_noisifier.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

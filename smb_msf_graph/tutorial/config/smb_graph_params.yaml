@@ -1,7 +1,7 @@
 # Sensor Params
 sensor_params:
   ## Config
-  useLioOdometry: true
+  useLioOdometry: false
   useWheelOdometry: false
   useVioOdometry: false
   ## Rates

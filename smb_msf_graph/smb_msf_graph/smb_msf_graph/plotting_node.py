@@ -17,25 +17,26 @@ experiment_name = ""
 def plot_2d(x_coords: list, y_coords: list, x_axis_name: str, y_axis_name: str, plot_name: str):
   # Check length
   print("Plot: " + plot_name + ". Length of " + x_axis_name + ": " + str(len(x_coords)) + ". Length of " + y_axis_name + ": " + str(len(y_coords)))
-  assert np.abs(len(x_coords) - len(y_coords)) <= 1
-  if len(x_coords) - len(y_coords) == 1:
-    x_coords.pop() # remove last element
-  elif len(y_coords) - len(x_coords) == 1:
-    y_coords.pop()
-  # Home-dir
-  home_dir = os.path.expanduser('~')
-  # Plot
-  plt.rcParams['lines.markersize'] = 0.5
-  plt.rcParams["figure.figsize"] = (6,6)
-  plt.xticks(fontsize=24)
-  plt.yticks(fontsize=24)
-  fig, ax = plt.subplots(1,1)
-  ax.set(xlabel=x_axis_name, ylabel=y_axis_name, title=plot_name)
-  ax.grid()
-  plt.tight_layout()
-  ax.plot(x_coords, y_coords, c="green", linewidth=0.7, alpha=1.0)
-  fig.savefig(os.path.join(home_dir, "rss_plots", experiment_name + "_" + plot_name + ".png"))
-
+  # Only plot if there are values
+  if len(x_coords) > 0:
+    assert np.abs(len(x_coords) - len(y_coords)) <= 1
+    if len(x_coords) - len(y_coords) == 1:
+      x_coords.pop() # remove last element
+    elif len(y_coords) - len(x_coords) == 1:
+      y_coords.pop()
+    # Home-dir
+    home_dir = os.path.expanduser('~')
+    # Plot
+    plt.rcParams['lines.markersize'] = 0.5
+    plt.rcParams["figure.figsize"] = (6,6)
+    plt.xticks(fontsize=24)
+    plt.yticks(fontsize=24)
+    fig, ax = plt.subplots(1,1)
+    ax.set(xlabel=x_axis_name, ylabel=y_axis_name, title=plot_name)
+    ax.grid()
+    plt.tight_layout()
+    ax.plot(x_coords, y_coords, c="green", linewidth=0.7, alpha=1.0)
+    fig.savefig(os.path.join(home_dir, "rss_plots", experiment_name + "_" + plot_name + ".png"))
 
 class MsfPlotter:
 
@@ -120,12 +121,12 @@ class MsfPlotter:
 
   def odometry_callback(self, state_estimate):
     # Time
-    if not self.initial_time:
-      self.initial_time = state_estimate.header.stamp.to_sec()
+    if not self.initial_state_time:
+      self.initial_state_time = state_estimate.header.stamp.to_sec()
       print("Received state message.")
       return
-    elif state_estimate.header.stamp.to_sec() - self.initial_time > 0.5:
-      self.state_time = self.state_time + [state_estimate.header.stamp.to_sec() - self.initial_time]
+    elif state_estimate.header.stamp.to_sec() - self.initial_state_time > 0.5:
+      self.state_time = self.state_time + [state_estimate.header.stamp.to_sec() - self.initial_state_time]
       # Position
       self.x_pos = self.x_pos + [state_estimate.pose.pose.position.x]
       self.y_pos = self.y_pos + [state_estimate.pose.pose.position.y]
@@ -136,12 +137,12 @@ class MsfPlotter:
 
   def bias_callback(self, bias_estimate):
     # Time
-    if not self.initial_time:
-      self.initial_time = bias_estimate.header.stamp.to_sec()
+    if not self.initial_imu_bias_time:
+      self.initial_imu_bias_time = bias_estimate.header.stamp.to_sec()
       print("Received bias message.")
       return
-    elif bias_estimate.header.stamp.to_sec() - self.initial_time > 0.5:
-      self.imu_bias_time = self.imu_bias_time + [bias_estimate.header.stamp.to_sec() - self.initial_time]
+    elif bias_estimate.header.stamp.to_sec() - self.initial_imu_bias_time > 0.5:
+      self.imu_bias_time = self.imu_bias_time + [bias_estimate.header.stamp.to_sec() - self.initial_imu_bias_time]
       # Acc. Bias
       self.x_acc_bias = self.x_acc_bias + [bias_estimate.vector.x]
       self.y_acc_bias = self.y_acc_bias + [bias_estimate.vector.y]
