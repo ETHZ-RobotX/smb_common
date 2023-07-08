@@ -1,0 +1,45 @@
+<launch>
+  <!-- All settings -->
+  <arg name="robot_name"      default="smb"                               doc="Name of the robot used for selecting config files"/>
+  <arg name="launch_rviz"     default="true"                              doc="Whether to launch Rviz"/>
+  <arg name="launch_prefix"   default=""/>                                <!-- gdb -ex run //args -->
+  <arg name="odometry_topic"  default="/tracking_camera/odom/sample"      doc="Topic name for input odometry"/>
+  <arg name="odometry_frame"  default="tracking_camera_odom"              doc="Odometry frame"/>
+  <arg name="lidar_topic"     default="/rslidar/points"                   doc="Topic name for input pointcloud"/>             
+  <arg name="cmd_vel_topic"   default="/control/pure_pursuit/cmd_vel"     doc="Topic name for output twist commands"/>
+
+  <!-- Config files -->
+  <arg name="gbplanner_config_file"   default="$(find smb_exploration)/config/gbplanner/$(arg robot_name)/gbplanner_config.yaml"/>
+  <arg name="pci_file"                default="$(find smb_exploration)/config/gbplanner/$(arg robot_name)/planner_control_interface_sim_config.yaml"/>
+  <arg name="voxblox_config_file"     default="$(find smb_exploration)/config/gbplanner/$(arg robot_name)/voxblox_sim_config.yaml"/>
+  <arg name="map_config_file"         default="$(arg voxblox_config_file)"/>
+
+  <!-- Static TF -->
+  <node pkg="tf2_ros" type="static_transform_publisher" respawn="true" name="tf_53" args="0 0 0 0 0 0 world navigation" />
+  <node pkg="tf2_ros" type="static_transform_publisher" respawn="true" name="tf_54" args="0 0 0 0 0 0 $(arg odometry_frame) world" />
+
+  <include file="$(find smb_path_tracker)/launch/pure_pursuit_tracker.launch">
+    <arg name="odom_topic" value="$(arg odometry_topic)" />
+    <arg name="cmd_vel_topic" default="$(arg cmd_vel_topic)"/>
+  </include>
+
+  <!-- Graph based planning -->
+  <node pkg="gbplanner" type="gbplanner_node" name="gbplanner_node" output="screen" launch-prefix="$(arg launch_prefix)">
+    <remap from="odometry" to="$(arg odometry_topic)" />
+    <remap from="/pointcloud" to="$(arg lidar_topic)" />
+    <rosparam command="load" file="$(arg gbplanner_config_file)" />
+    <rosparam command="load" file="$(arg map_config_file)" />
+  </node>
+
+  <!-- Planner and Control Interface -->
+  <node pkg="pci_general" type="pci_general_ros_node" name="pci_general_ros_node" output="screen">
+    <remap from="command/trajectory" to="$(arg robot_name)/command/trajectory" />
+    <remap from="planner_server" to="gbplanner" />
+    <remap from="planner_homing_server" to="gbplanner/homing" />
+    <remap from="odometry" to="$(arg odometry_topic)"/>
+    <rosparam command="load" file="$(arg pci_file)" />
+  </node>
+
+  <node pkg="rviz" type="rviz" name="gbplanner_ui" output="screen" args="-d $(find smb_exploration)/config/gbplanner/rviz/smb.rviz" if="$(arg launch_rviz)"/>
+
+</launch>

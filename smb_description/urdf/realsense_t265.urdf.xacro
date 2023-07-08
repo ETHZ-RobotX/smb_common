@@ -79,7 +79,7 @@
     -->
     
     <xacro:if value="${simulation}">
-          <xacro:odometry_plugin sensor_link="tracking_camera_link" topic_name="/tracking_camera/odom/sample" odom_frame="tracking_camera_odom" rate="200" max_linear_speed_before_settle="0.01" max_angular_speed_before_settle="0.05" publish_tf="false"/>
+          <xacro:odometry_plugin sensor_link="tracking_camera_link" topic_name="/tracking_camera/odom/sample" odom_frame="tracking_camera_odom_frame" child_odom_frame="tracking_camera_pose_frame" rate="200" max_linear_speed_before_settle="0.01" max_angular_speed_before_settle="0.05" publish_tf="false"/>
     </xacro:if>
 
 

@@ -22,7 +22,7 @@
 
   <!-- launch tracking cam -->
   <arg name="launch_tracking_cam"
-       default="true"
+       default="false"
        doc="Launch the tracking camera related nodes."/>
   
   <!-- launch depth cam -->
@@ -89,25 +89,18 @@
   </group>
 
   <group ns="odometry" if="$(arg use_lidar_odometry)">
-    <node pkg="odometry_conversion" type="odometry_conversion_node" name="lidar_odometry_conversion">
-      <param name="in_odom_frame" value="rslidar"/>
-      <param name="in_sensor_frame" value="imu"/>
-      <param name="out_odom_frame" value="lidar_odom_base"/>
-      <param name="out_sensor_frame" value="base_link"/>
-      <remap from="/tracking_camera/odom/sample" to="/msf_core/odometry"/>
-    </node>
-    <include file="$(find smb_slam)/launch/compslam/smb_cmpslam.launch">
-      <arg name="launch_rviz" value="false"/>
-      <arg name="stitch_pointclouds"  value="false"/>
-    </include>
+    <include file="$(find smb_msf_graph)/launch/smb_msf_graph.launch" />
   </group>
 
-  <group ns="odometry" unless="$(arg use_lidar_odometry)">
+  <group ns="odometry" if="$(arg launch_tracking_cam)">
     <node pkg="odometry_conversion" type="odometry_conversion_node" name="tracking_camera_odometry_conversion">
       <param name="in_odom_frame" value="tracking_camera_pose_frame"/>
       <param name="in_sensor_frame" value="tracking_camera_pose_frame"/>
       <param name="out_odom_frame" value="tracking_camera_odom"/>
-      <param name="out_sensor_frame" value="base_link"/>
+      <param name="out_base_frame" value="base_link"/>
+      <param name="in_odom_topic" value="/tracking_camera/odom/sample"/>
+      <param name="out_odom_topic" value="/base_odom"/>
+      <param name="is_odom_child" value="true"/>
     </node>
   </group>
 

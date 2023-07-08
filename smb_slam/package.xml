@@ -9,8 +9,6 @@
 
 	<buildtool_depend>catkin</buildtool_depend>
 
-	<depend>roscpp</depend>
-	<depend>open3d_slam_ros</depend>
-	<depend>roslib</depend>
+	<exec_depend>open3d_slam_ros</exec_depend>
 
 </package>
