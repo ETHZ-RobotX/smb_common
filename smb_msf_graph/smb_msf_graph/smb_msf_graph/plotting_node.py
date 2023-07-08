@@ -8,10 +8,11 @@ import os
 import time
 
 # Custom
-from msf_core.msg import DoubleArrayStamped
+from nav_msgs.msg import Odometry
+from geometry_msgs.msg import Vector3Stamped
 
+# Name of the experiment
 experiment_name = ""
-
 
 def plot_2d(x_coords: list, y_coords: list, x_axis_name: str, y_axis_name: str, plot_name: str):
   # Check length
@@ -40,20 +41,23 @@ class MsfPlotter:
 
   def __init__(self):
 
-    self.state_topic_name = "/msf_core/state_out"
+    self.nav_state_topic_name = "/graph_msf/est_odometry_world_imu"
+    self.imu_bias_topic_name = "/graph_msf/accel_bias"
 
     # ROS
-    rospy.init_node('MSF Publisher Node', anonymous=True)
+    rospy.init_node('GMSF Plotter Node', anonymous=True)
 
     # Create dir
-    home_dir = os.path.expanduser('~')
-    if not os.path.exists(os.path.join(home_dir, "rss_plots")):
-      os.makedirs(os.path.join(home_dir, "rss_plots"))
+    HOME_DIR = os.path.expanduser('~')
+    if not os.path.exists(os.path.join(HOME_DIR, "rss_plots")):
+      os.makedirs(os.path.join(HOME_DIR, "rss_plots"))
 
     # Stored messages
     ## Time
-    self.initial_time = []
-    self.time = []
+    self.initial_state_time = []
+    self.state_time = []
+    self.initial_imu_bias_time = []
+    self.imu_bias_time = []
     ## Position
     self.x_pos = []
     self.y_pos = []
@@ -81,65 +85,85 @@ class MsfPlotter:
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "z[m]"
-    plot_2d(x_coords=self.time, y_coords=self.z_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    plot_2d(x_coords=self.state_time, y_coords=self.z_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
     ## x-velocity
     plot_name = "velocity-x"
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "v[m/s]"
-    plot_2d(x_coords=self.time, y_coords=self.x_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    plot_2d(x_coords=self.state_time, y_coords=self.x_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
     ## y-velocity
     plot_name = "velocity-y"
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "v[m/s]"
-    plot_2d(x_coords=self.time, y_coords=self.y_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    plot_2d(x_coords=self.state_time, y_coords=self.y_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
     ## x-Bias
     plot_name = "acc-bias-x"
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "b[m/s^2]"
-    plot_2d(x_coords=self.time, y_coords=self.x_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
-    ## x-Bias
+    plot_2d(x_coords=self.imu_bias_time, y_coords=self.x_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    ## y-Bias
     plot_name = "acc-bias-y"
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "b[m/s^2]"
-    plot_2d(x_coords=self.time, y_coords=self.y_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
-    ## x-Bias
+    plot_2d(x_coords=self.imu_bias_time, y_coords=self.y_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    ## z-Bias
     plot_name = "acc-bias-z"
     print(plot_name)
     x_axis_name = "t[s]"
     y_axis_name = "b[m/s^2]"
-    plot_2d(x_coords=self.time, y_coords=self.z_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
+    plot_2d(x_coords=self.imu_bias_time, y_coords=self.z_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
 
 
-  def subscriber_callback(self, state_estimate):
-    print("Received state message.")
+  def odometry_callback(self, state_estimate):
     # Time
     if not self.initial_time:
       self.initial_time = state_estimate.header.stamp.to_sec()
-    self.time = self.time + [state_estimate.header.stamp.to_sec() - self.initial_time]
-    # Position
-    self.x_pos = self.x_pos + [state_estimate.data[0]]
-    self.y_pos = self.y_pos + [state_estimate.data[1]]
-    self.z_pos = self.z_pos + [state_estimate.data[2]]
-    # Velocity
-    self.x_vel = self.x_vel + [state_estimate.data[3]]
-    self.y_vel = self.y_vel + [state_estimate.data[4]]
-    # Acc. Bias
-    self.x_acc_bias = self.x_acc_bias + [state_estimate.data[13]]
-    self.y_acc_bias = self.y_acc_bias + [state_estimate.data[14]]
-    self.z_acc_bias = self.z_acc_bias + [state_estimate.data[15]]
+      print("Received state message.")
+      return
+    elif state_estimate.header.stamp.to_sec() - self.initial_time > 0.5:
+      self.state_time = self.state_time + [state_estimate.header.stamp.to_sec() - self.initial_time]
+      # Position
+      self.x_pos = self.x_pos + [state_estimate.pose.pose.position.x]
+      self.y_pos = self.y_pos + [state_estimate.pose.pose.position.y]
+      self.z_pos = self.z_pos + [state_estimate.pose.pose.position.z]
+      # Velocity
+      self.x_vel = self.x_vel + [state_estimate.twist.twist.linear.x]
+      self.y_vel = self.y_vel + [state_estimate.twist.twist.linear.y]
+
+  def bias_callback(self, bias_estimate):
+    # Time
+    if not self.initial_time:
+      self.initial_time = bias_estimate.header.stamp.to_sec()
+      print("Received bias message.")
+      return
+    elif bias_estimate.header.stamp.to_sec() - self.initial_time > 0.5:
+      self.imu_bias_time = self.imu_bias_time + [bias_estimate.header.stamp.to_sec() - self.initial_time]
+      # Acc. Bias
+      self.x_acc_bias = self.x_acc_bias + [bias_estimate.vector.x]
+      self.y_acc_bias = self.y_acc_bias + [bias_estimate.vector.y]
+      self.z_acc_bias = self.z_acc_bias + [bias_estimate.vector.z]
 
   def start_plotting(self):
     print("======================")
     print("Starting plotting...")
     print("======================")
-    rospy.Subscriber(self.state_topic_name, DoubleArrayStamped,
-                         self.subscriber_callback)
 
+    # Odometry Subscriber
+    rospy.Subscriber(self.nav_state_topic_name, Odometry,
+                         self.odometry_callback)
+
+    # Bias Subscriber
+    rospy.Subscriber(self.imu_bias_topic_name, Vector3Stamped,
+                         self.bias_callback)
+
+    # Start spinning
     rospy.spin()
+
+    # Plot after shutdown
     self.plot()
 
 if __name__ == "__main__":

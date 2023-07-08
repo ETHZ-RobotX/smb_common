@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <launch>
+    <!-- Flags -->
+    <arg name="run_plotting" default="true"/>
+    <arg name="noisify_imu" default="false" />
 
-    <!-- Parameters -->
-    <arg name="use_sim_time"              value="true" />
+    <!-- Topics -->
+    <arg name="imu_topic_name"            default="/imu" />
 
-    <!-- Parameters -->
-    <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
-    <arg name="launch_o3d_slam" default="true"/>
+    <!-- Config Files -->
+    <arg name="core_graph_param_file" default="$(find smb_msf_graph)/tutorial/config/core_graph_params.yaml"/>
+    <arg name="smb_graph_param_file" default="$(find smb_msf_graph)/tutorial/config/smb_graph_params.yaml"/>
 
-    <!-- Alias to smb_estimator_graph replay script -->
-    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph_replay.launch">
-        <arg name="lidar_odometry_topic_name" value="$(arg lidar_odometry_topic_name)" />
-        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <!-- Alias to smb_msf_graph replay script -->
+    <include file="$(find smb_msf_graph)/launch/smb_msf_graph_o3d_replay.launch">
+        <!-- Topics -->
+        <arg name="imu_topic_name" value="$(arg imu_topic_name)" />
+        <!-- Config Files -->
+        <arg name="core_graph_param_file" value="$(arg core_graph_param_file)" />
+        <arg name="smb_graph_param_file"  value="$(arg smb_graph_param_file)" />
     </include>
 
-    <!-- Load Description -->
-    <include file="$(find smb_description)/launch/load.launch" if="$(arg use_sim_time)"/>
-
-    <!-- Launch Open3D SLAM -->
-    <include file="$(find smb_slam)/launch/online_slam.launch" if="$(arg launch_o3d_slam)">
-        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    <!-- Launch Plotting Node -->
+    <include file="$(find smb_msf_graph)/tutorial/launch/plotting.launch" if="$(arg run_plotting)">
+        <arg name="noisify_imu" value="$(arg noisify_imu)" />
     </include>
 
 </launch>

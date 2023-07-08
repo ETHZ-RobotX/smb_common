@@ -9,7 +9,7 @@ class PoseNoisifier:
 
   def __init__(self):
 
-    self.imu_topic_name = "/versavis/imu"
+    self.imu_topic_name = "/imu"
 
     # ROS
     rospy.init_node("PoseNoisifierNode", anonymous=True)
