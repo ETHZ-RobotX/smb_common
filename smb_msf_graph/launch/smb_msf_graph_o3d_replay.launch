@@ -5,13 +5,23 @@
     <arg name="use_sim_time"              value="true" />
 
     <!-- Parameters -->
+    <arg name="imu_topic_name"            default="/imu" />
     <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
     <arg name="launch_o3d_slam" default="true"/>
 
+    <!-- Config Files -->
+    <arg name="core_graph_param_file" default="$(find smb_estimator_graph)/config/core/core_graph_params.yaml"/>
+    <arg name="smb_graph_param_file" default="$(find smb_estimator_graph)/config/smb_specific/smb_graph_params.yaml"/>
+
     <!-- Alias to smb_estimator_graph replay script -->
     <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph_replay.launch">
-        <arg name="lidar_odometry_topic_name" value="$(arg lidar_odometry_topic_name)" />
         <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <!-- Topics -->
+        <arg name="imu_topic_name" value="$(arg imu_topic_name)" />
+        <arg name="lidar_odometry_topic_name" value="$(arg lidar_odometry_topic_name)" />
+        <!-- Config Files -->
+        <arg name="core_graph_param_file" value="$(arg core_graph_param_file)" />
+        <arg name="smb_graph_param_file"  value="$(arg smb_graph_param_file)" />
     </include>
 
     <!-- Load Description -->
