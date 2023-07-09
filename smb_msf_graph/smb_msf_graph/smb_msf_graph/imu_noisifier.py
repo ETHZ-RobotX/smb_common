@@ -5,26 +5,41 @@ import rospy
 import numpy as np
 from sensor_msgs.msg import Imu
 
-class PoseNoisifier:
+class ImuNoisifier:
 
   def __init__(self):
 
-    self.imu_topic_name = "/versavis/imu"
+    self.imu_topic_name = "/imu"
+
+    # Flags
+    self.is_first_imu = True
 
     # ROS
     rospy.init_node("PoseNoisifierNode", anonymous=True)
 
     # Publisher
-    self.imu_publisher = rospy.Publisher("/versavis/imu_noisified", Imu, queue_size=10)
+    self.imu_publisher = rospy.Publisher("/imu/noisified", Imu, queue_size=10)
+
+    # Bias Amplitude
+    self.x_bias = 0.0
+    self.y_bias = 0.0
+    self.z_bias = 0.1
+
+    # Initial Time
+    self.initial_time = []
+
+    # Period Duration
+    self.period_duration = 20.0
 
   def subscriber_callback(self, imu):
-    print("Received imu message.")
-    x_bias = 0.0
-    y_bias = 0.0
-    z_bias = 0.8
-    imu.linear_acceleration.x += x_bias
-    imu.linear_acceleration.y += y_bias
-    imu.linear_acceleration.z += z_bias
+    if self.is_first_imu:
+      print("Received imu message.")
+      self.is_first_imu = False
+      self.initial_time = imu.header.stamp.to_sec()
+
+    imu.linear_acceleration.x += self.x_bias * np.sin(2 * np.pi / self.period_duration * (imu.header.stamp.to_sec() - self.initial_time))
+    imu.linear_acceleration.y += self.y_bias * np.sin(2 * np.pi / self.period_duration * (imu.header.stamp.to_sec() - self.initial_time))
+    imu.linear_acceleration.z += self.z_bias * np.sin(2 * np.pi / self.period_duration * (imu.header.stamp.to_sec() - self.initial_time))
     self.imu_publisher.publish(imu)
 
   def start_noisifying(self):
@@ -36,5 +51,5 @@ class PoseNoisifier:
 
 if __name__ == "__main__":
   
-  pose_noisifier = PoseNoisifier()
-  pose_noisifier.start_noisifying()
+  imu_noisifier = ImuNoisifier()
+  imu_noisifier.start_noisifying()
