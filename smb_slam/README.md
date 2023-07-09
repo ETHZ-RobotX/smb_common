@@ -9,7 +9,7 @@ Follow instructions the instructions below to build ```smb_slam```.
      sudo apt install libgoogle-glog-dev libglfw3 libglfw3-dev ros-noetic-jsk-rviz-plugins liblua5.2-dev
      sudo add-apt-repository ppa:roehling/open3d
      sudo apt update
-     sudo apt install libopen3d-dev
+     sudo apt install libopen3d-dev cmake
      ```
 3. You can then proceed to build the `smb_slam` package using the following command from the worksapce: `catkin build smb_slam`
 
