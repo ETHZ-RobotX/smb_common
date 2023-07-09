@@ -112,7 +112,7 @@ class MsfPlotter:
     y_axis_name = "v[m/s]"
     plot_2d(x_coords=self.state_time, y_coords=self.y_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name, plot_name=plot_name)
     # Bias plots -----------------------------------------------
-    if experiment_name == "1.3" or experiment_name == "2.1" or experiment_name == "2.2":
+    if experiment_name == "1.3" or experiment_name == "2.1" or experiment_name == "2.2" or experiment_name == "3.1" or experiment_name == "3.2":
       ## x-Bias
       plot_name = "acc-bias-x"
       print(plot_name)
