@@ -5,7 +5,7 @@
 
   <!-- Launch Imu Noisifier -->
   <group if="$(arg noisify_imu)">
-    <node name="imu_noisifier_node" pkg="smb_msf" type="imu_noisifier.py" output="screen" />
+    <node name="imu_noisifier_node" pkg="smb_msf_graph" type="imu_noisifier.py" output="screen" />
   </group>
 
   <!-- Launch Visualizer Node -->
