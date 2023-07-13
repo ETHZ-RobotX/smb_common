@@ -18,7 +18,7 @@ catkin build smb_exploration
 
 The instructions are pretty much the same for running the planner in simulation or on the real-robot. Once you have the simulation (or real robot smb.launch) running, from a separate sourced terminal run the following command to launch the planner (Note: you will have had to build ```smb_navigation``` package before as well). 
 
-#### Option 1: Running with tracking camera odometry (Recommended)
+#### Option 1: Running with tracking camera odometry
 You will require three sourced terminals for this. In each of the new terminals run the following commands.
 ```bash
 catkin build smb_exploration smb_navigation # Building the necessary packages if not done before
@@ -26,7 +26,7 @@ catkin build smb_exploration smb_navigation # Building the necessary packages if
 ```bash
 roslaunch smb smb.launch launch_tracking_cam:=true # Use the Gazebo equivalent if running in simulation with tracking cam flag
 roslaunch smb_exploration smb_rss_frontier.launch map_frame:=gmap_map publish_odom_to_map:=true # Exploration + GMapping
-roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom # Path Planner
+roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom exploration:=true global_frame:=gmap_map # Path Planner
 ```
 You can visualize the 2D Occupancy map on the ```/map``` topic and the frontiers on the ```/explore/frontiers``` in RViz.
 
