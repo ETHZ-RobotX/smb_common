@@ -26,7 +26,7 @@ catkin build smb_exploration smb_navigation # Building the necessary packages if
 ```bash
 roslaunch smb smb.launch launch_tracking_cam:=true # Use the Gazebo equivalent if running in simulation with tracking cam flag
 roslaunch smb_exploration smb_rss_frontier.launch map_frame:=gmap_map publish_odom_to_map:=true # Exploration + GMapping
-roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom exploration:=true global_frame:=gmap_map # Path Planner
+roslaunch smb_navigation navigate2d_ompl.launch exploration:=true global_frame:=gmap_map # Path Planner
 ```
 You can visualize the 2D Occupancy map on the ```/map``` topic and the frontiers on the ```/explore/frontiers``` in RViz.
 
