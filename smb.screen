@@ -1,0 +1,38 @@
+deflogin on
+autodetach on
+
+
+caption always
+
+
+screen 0
+title "ROScore"
+stuff "roscore \015";
+
+
+screen 1
+title "SMB core"
+stuff "sleep 3; roslaunch smb smb.launch \015"
+
+screen 2
+title "SMB localization"
+stuff "roslaunch smb_slam localization.launch"
+
+screen 3
+title "SMB online localization"
+stuff "roslaunch smb_slam online_slam.launch"
+
+screen 4
+title "SMB global navigation"
+stuff "roslaunch smb_navigation navigate2d_ompl.launch global_frame:=world_graph_msf odom_topic:=/graph_msf/est_odometry_odom_imu exploration:=false global_map:=/home/robotx/catkin_workspaces/smb_dev/src/planning/smb_path_planner/smb_navigation/data/map.yaml use_global_map:=true"
+
+screen 5
+title "SMB local navigation (tracking cam)"
+stuff "roslaunch smb_navigation navigate2d_ompl.launch global_frame:=tracking_camera_odom"
+
+screen 5 
+title "SMB local navigation (msf graph slam)"
+stuff "roslaunch smb_navigation navigate2d_ompl.launch global_frame:=map_o3d odom_topic:=/mapping_node/scan2map_odometry"
+
+
+
