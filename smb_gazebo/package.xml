@@ -10,6 +10,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>gazebo_ros</build_depend>
+  <build_depend>gazebo_plugins</build_depend>
   <exec_depend>smb_description</exec_depend>
   <exec_depend>robosense_gazebo_plugins</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
