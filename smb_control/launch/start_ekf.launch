@@ -1,0 +1,10 @@
+
+
+  <launch>
+  <!-- Launch the EKF node -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" output="screen">
+  </node>
+
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher" args="0 0 0 0 0 1 odom tracking_camera_odom_frame 100" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="static_transform_publisher_camera" args="0 0 0 0 0 1 tracking_camera_odom_frame tracking_camera_link 100" /> -->
+</launch>

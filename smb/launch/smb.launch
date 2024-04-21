@@ -37,7 +37,7 @@
   
   <!-- enable ekf -->
   <arg name="enable_ekf" 
-       default="false"
+       default="true"
        doc="Launch ekf node. Used for the wheel odometry."/>
 
   <!-- launch rviz -->
@@ -112,7 +112,7 @@
 
   
   <include file="$(find smb_control)/launch/smb_control.launch">
-    <arg name="enable_ekf" value="$(arg enable_ekf)" />
+    <arg name="enable_ekf" value="true" />
     <arg name="description_name" value="$(arg description_name)"/>
     <arg name="control_namespace" value="$(arg control_namespace)"/>
     <arg name="mpc"               value="$(arg mpc)"/>
