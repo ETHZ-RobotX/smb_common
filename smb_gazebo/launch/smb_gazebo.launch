@@ -2,7 +2,7 @@
 <launch>
 
   <!-- Model path -->
-  <arg name="model_path"                            default="$(find smb_gazebo)/"/>
+  <arg name="model_path"                            default="$(find smb_gazebo)/models/"/>
   <arg name="robot_model_name"                      default="smb"/>
 
   <!-- Name of the world -->
