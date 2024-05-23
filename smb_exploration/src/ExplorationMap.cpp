@@ -139,8 +139,14 @@ void ExplorationMap::updateBounds(const float min_x, const float min_y, const fl
     boost::unique_lock<costmap_2d::Costmap2D::mutex_t> lock(*(obstacle_layer->getMutex()));
 
     // now all layers are reset, only need to copy the old obstacle layer
-    int x_offset = min_x_ - new_min_x;
-    int y_offset = min_y_ - new_min_y;
+    int x_offset = (min_x_ - new_min_x) / resolution_;
+    int y_offset = (min_y_ - new_min_y) / resolution_;
+
+    ROS_INFO_STREAM("====== new min " << new_min_x << "," << new_min_y);
+    ROS_INFO_STREAM("====== old min " << min_x_ << "," << min_y_);
+
+    ROS_INFO_STREAM("====== offset x " << x_offset << ", y " << y_offset);
+
     for (unsigned int i = 0; i < old_size_x; i++) {
         for (unsigned int j = 0; j < old_size_y; j++) {
             int new_i = i + x_offset;
