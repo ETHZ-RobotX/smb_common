@@ -94,9 +94,6 @@ void ExplorationMap::scanCallback(const sensor_msgs::LaserScanConstPtr& scan)
 
 bool ExplorationMap::shouldUpdateBounds(const float min_x, const float min_y, const float max_x, const float max_y)
 {
-    ROS_INFO_STREAM("====== min_x " << min_x << " min_y " << min_y << " / max_x " << max_x << " max_y " << max_y);
-    ROS_INFO_STREAM("====== min_x_ " << min_x_ << " min_y_ " << min_y_ << " / max_x_ " << max_x_ << " max_y_ " << max_y_);
-
     return (min_x < min_x_) || (min_y < min_y_) || (max_x > max_x_) || (max_y > max_y_);
 }
 
@@ -131,7 +128,7 @@ void ExplorationMap::updateBounds(const float min_x, const float min_y, const fl
     int old_size_x = costmap_copy->getSizeInCellsX();
     int old_size_y = costmap_copy->getSizeInCellsY();
 
-    // TODO: resize the map (layeredCostmap &-> plugins)
+    // resize the map (layeredCostmap &-> plugins)
     int new_size_x = (new_max_x - new_min_x) / resolution_;
     int new_size_y = (new_max_y - new_min_y) / resolution_;
     
@@ -148,9 +145,24 @@ void ExplorationMap::updateBounds(const float min_x, const float min_y, const fl
         for (unsigned int j = 0; j < old_size_y; j++) {
             int new_i = i + x_offset;
             int new_j = j + y_offset;
-            // ROS_INFO_STREAM("====== old i, j " << i << " , " << j << " / new i, j " << new_i << " x " << new_j);            
+            // ROS_INFO_STREAM("====== old i, j " << i << " , " << j << " / new i, j " << new_i << " , " << new_j << " value : " << int(costmap_copy->getCost(i,j)));            
             // set to the obstacle layer
             obstacle_layer->setCost(new_i, new_j, costmap_copy->getCost(i,j));
+        }
+    }
+
+    // need to manually propagate the update to the master map, 
+    // since the update bound might not fully enclose the transcription and 
+    // the full transcription thus will not reflected in the next update in the main loop
+    costmap_2d::Costmap2D* new_costmap = costmap2d_ros_->getCostmap();
+    ROS_INFO_STREAM("====== old size " << old_size_x << " x " << old_size_y << " / new size " << new_size_x << " x " << new_size_y);
+    for (unsigned int i = 0; i < old_size_x; i++) {
+        for (unsigned int j = 0; j < old_size_y; j++) {
+            int new_i = i + x_offset;
+            int new_j = j + y_offset;
+            // ROS_INFO_STREAM("====== old i, j " << i << " , " << j << " / new i, j " << new_i << " , " << new_j << " value : " << int(costmap_copy->getCost(i,j)));            
+            // set to the master map
+            new_costmap->setCost(new_i, new_j, costmap_copy->getCost(i,j));
         }
     }
 
