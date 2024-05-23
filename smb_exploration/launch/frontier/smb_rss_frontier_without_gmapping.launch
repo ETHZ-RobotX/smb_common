@@ -8,7 +8,7 @@
 <!-- Exploration Mapping node -->
 <node name="exploration_map" pkg="smb_exploration" type="exploration_map_node" output="screen">
   <rosparam file="$(find smb_navigation)/config/move_base_costmaps/costmap_common_params.yaml" command="load" ns="global_costmap" />
-  <rosparam file="$(find smb_navigation)/config/move_base_costmaps/global_costmap_params_exploration.yaml" command="load"/>
+  <rosparam file="$(find smb_exploration)/config/global_costmap_exploration.yaml" command="load"/>
   <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
   <param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
 </node>
@@ -18,7 +18,7 @@
 <!-- Please refer to the following http://wiki.ros.org/explore_lite for details on the parameters-->
 <node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
   <param name="robot_base_frame" value="$(arg base_frame)"/>
-  <param name="costmap_topic" value="/move_base/global_costmap/costmap"/>
+  <param name="costmap_topic" value="/exploration_map/global_costmap/costmap"/>
   <param name="costmap_updates_topic" value="map_updates"/>
   <param name="visualize" value="true"/>
   <param name="planner_frequency" value="0.2"/>
