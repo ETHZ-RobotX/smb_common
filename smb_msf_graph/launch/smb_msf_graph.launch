@@ -16,7 +16,9 @@
     <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map"/>
 
     <!-- Alias to smb_estimator_graph replay script -->
-    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph.launch"/>
+    <include file="$(find smb_estimator_graph)/launch/smb_estimator_graph.launch">
+        <arg name="use_sim_time" value="$(arg use_sim_time)" />
+    </include>
 
     <group if="$(arg launch_o3d_slam)">
         <!-- Launch online_slam -->
