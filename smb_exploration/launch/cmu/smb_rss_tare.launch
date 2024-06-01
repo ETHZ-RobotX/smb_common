@@ -1,0 +1,7 @@
+<launch>
+
+    <!-- the params are configured in rss.yaml under tare_planner -->
+    <include file="$(find tare_planner)/launch/explore_rss.launch">
+    </include>
+
+</launch>
