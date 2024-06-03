@@ -2,6 +2,7 @@
 
     <!-- the params are configured in rss.yaml under tare_planner -->
     <include file="$(find tare_planner)/launch/explore_rss.launch">
+        <arg name="rviz" value="false"/>
     </include>
 
 </launch>
