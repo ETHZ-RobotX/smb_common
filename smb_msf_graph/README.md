@@ -17,7 +17,7 @@ To build `smb_msf_graph` run
 ```bash
 catkin build smb_msf_graph
 ```
-This will compile all dependencies present in the workspace, including [open3d_slam](https://github.com/leggedrobotics/open3d_slam/tree/robotics_summer_school_2023).
+This will compile all dependencies present in the workspace, including [open3d_slam](https://github.com/ETHZ-RobotX/open3d_slam_advanced_rss_2024).
 
 # Run smb_msf_graph
 ## Run msf_graph with online SLAM
