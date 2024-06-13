@@ -34,11 +34,6 @@
   <arg name="use_lidar_odometry"
        default="false"
        doc="Use lidar odometry instead of the tracking camera odometry if set to true."/>
-  
-  <!-- enable ekf -->
-  <arg name="enable_ekf" 
-       default="true"
-       doc="Launch ekf node. Used for the wheel odometry."/>
 
   <!-- launch rviz -->
   <arg name="launch_rviz"
@@ -112,7 +107,6 @@
 
   
   <include file="$(find smb_control)/launch/smb_control.launch">
-    <arg name="enable_ekf" value="true" />
     <arg name="description_name" value="$(arg description_name)"/>
     <arg name="control_namespace" value="$(arg control_namespace)"/>
     <arg name="mpc"               value="$(arg mpc)"/>

@@ -4,7 +4,6 @@
   <!-- ROBOT ARGUMENTS -->
   <!-- Name of the robot description parameter -->
   <arg name="description_name"            default="smb_description"/>
-  <arg name="enable_ekf"                  default="false"/>
   <arg name="robot_namespace"             default=""/>
   <arg name="control_namespace"           default="control"/>
   <arg name="launch_rviz"                 default="true"/>
@@ -20,7 +19,6 @@
     <arg name="control_namespace"       value="$(arg control_namespace)"/>
     <arg name="robot_namespace"         value="$(arg robot_namespace)"/>
     <arg name="description_name"        value="$(arg description_name)"/>
-    <arg name="enable_ekf"              value="$(arg enable_ekf)" />
     <arg name="simulation"              value="true"/>
     <arg name="mpc"                     value="$(arg mpc)"/>
     <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
