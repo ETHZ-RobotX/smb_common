@@ -456,7 +456,7 @@ Visualization Manager:
           Size (Pixels): 2
           Size (m): 0.05000000074505806
           Style: Points
-          Topic: /open3d_slam/assembled_map
+          Topic: /mapping/assembled_map
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
