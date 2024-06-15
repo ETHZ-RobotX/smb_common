@@ -24,9 +24,6 @@
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
     <arg name="use_sim_time"          value="$(arg use_sim_time)"/>
     <arg name="odometry_topic"         value="/graph_msf/est_odometry_odom_imu"/>
-    <!-- <arg name="pose_stamped_topic"     value=""/>
-    <arg name="pose_stamped_with_covariance_topic" value=""/> -->
-    <!-- <arg name="loop_closure"          value="$(arg loop_closure)"/> -->
   </include>
 
 </launch>
