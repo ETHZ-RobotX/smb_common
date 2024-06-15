@@ -74,6 +74,11 @@
         default="false"
         doc="Launch node to send control commands (twist msgs) using the keyboard."/>
 
+  <!-- joystick_teleop -->
+  <arg name="joystick"
+        default="false"
+        doc="Launch node to send control commands (twist msgs) using the joystick."/>
+
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
 
@@ -118,6 +123,7 @@
     <arg name="mpc"               value="$(arg mpc)"/>
     <arg name="mpc_track_local_plan" value="$(arg mpc_track_local_plan)"/>
     <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
+    <arg name="joystick"         value="$(arg joystick)"/>
     <arg name="tracking_camera"    value="$(arg launch_tracking_cam)"/>
   </include>
 
