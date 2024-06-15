@@ -433,17 +433,17 @@ Visualization Manager:
       Name: PathPlanner
     - Class: rviz/Group
       Displays:
-        - Alpha: 1
+        - Alpha: 0.800000011920929
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 10
-            Min Value: -10
+            Max Value: 2.593851327896118
+            Min Value: -0.25778359174728394
             Value: true
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: Intensity
+          Color Transformer: AxisColor
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
@@ -453,10 +453,10 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
-          Size (Pixels): 3
+          Size (Pixels): 2
           Size (m): 0.05000000074505806
-          Style: Flat Squares
-          Topic: /mapping_node/assembled_map
+          Style: Points
+          Topic: /open3d_slam/assembled_map
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
