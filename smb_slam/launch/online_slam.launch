@@ -23,7 +23,7 @@
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
     <arg name="use_sim_time"          value="$(arg use_sim_time)"/>
     <arg name="odometry_topic"         value="/graph_msf/est_odometry_odom_imu"/>
-    <arg name="assumed_external_odometry_tracked_frame" default="/imu"/>
+    <arg name="assumed_external_odometry_tracked_frame" default="imu"/>
   </include>
 
 </launch>

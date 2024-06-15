@@ -8,7 +8,6 @@
   <arg name="parameter_folder_path" default="$(find open3d_slam_ros)/param/" doc="directory for the parameter files"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
   <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
-  <arg name="pcd_file_path"         default="$(find smb_slam)/data/maps/map.pcd" doc="absolute path for loading the map used for localization"/>
   <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map (Won't get updated in this case)"/>
 
   <!-- Potentially launch sensors -->
@@ -20,11 +19,10 @@
     <arg name="parameter_folder_path" value="$(arg parameter_folder_path)"/>
     <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
     <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
-    <arg name="pcd_file_path"         value="$(arg pcd_file_path)"/>
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
     <arg name="use_sim_time"          value="$(arg use_sim_time)" />
     <arg name="odometry_topic"         value="/graph_msf/est_odometry_odom_imu"/>
-    <arg name="assumed_external_odometry_tracked_frame" default="/imu"/>
+    <arg name="assumed_external_odometry_tracked_frame" default="imu"/>
   </include>
 
   
