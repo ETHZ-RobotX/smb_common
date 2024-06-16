@@ -1,8 +1,10 @@
 <launch>
-
+    <arg name="rviz" default="true" doc="use false if running on smb"/>
+    <arg name="world_frame" default="map_o3d"/>
     <!-- the params are configured in rss.yaml under tare_planner -->
     <include file="$(find tare_planner)/launch/explore_rss.launch">
-        <arg name="rviz" value="false"/>
+        <arg name="rviz" value="$(arg rviz)"/>
+        <arg name="world_frame" value="$(arg world_frame)" />
     </include>
 
 </launch>

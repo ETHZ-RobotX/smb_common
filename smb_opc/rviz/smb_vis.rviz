@@ -4,15 +4,16 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
+        - /Global Options1
         - /Robot1
         - /Robot1/Sensors1/Lidar Raw1
-        - /SLAM1
         - /SLAM1/Map1
         - /SLAM1/Map1/Autocompute Value Bounds1
         - /LocalPlanner1
         - /LocalPlanner1/TerrainMap1
         - /FarPlanner1
         - /FarPlanner1/GoalPoint1/Namespaces1
+        - /FarPlanner1/GlobalGraph1
         - /TarePlanner1
       Splitter Ratio: 0.5111420750617981
     Tree Height: 770
@@ -84,8 +85,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 25.271516799926758
-                Min Value: -1.7804477214813232
+                Max Value: 1.5905910730361938
+                Min Value: -1.1293858289718628
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -140,11 +141,17 @@ Visualization Manager:
                   Value: true
                 lidar_mount_link:
                   Value: true
-                map:
-                  Value: true
                 map_o3d:
                   Value: true
+                map_o3d_graph_msf_aligned:
+                  Value: true
+                map_o3d_viz:
+                  Value: true
+                odom_graph_msf:
+                  Value: true
                 odom_o3d:
+                  Value: true
+                raw_rs_o3d:
                   Value: true
                 rgb_camera_link:
                   Value: true
@@ -152,17 +159,17 @@ Visualization Manager:
                   Value: true
                 rslidar:
                   Value: true
+                rslidar_base_link:
+                  Value: true
                 sensor:
                   Value: true
                 sensor_at_scan:
                   Value: true
                 top:
                   Value: true
-                tracking_camera_link:
-                  Value: true
-                tracking_camera_pose_frame:
-                  Value: true
                 vehicle:
+                  Value: true
+                world_graph_msf:
                   Value: true
               Marker Alpha: 1
               Marker Scale: 1
@@ -186,25 +193,31 @@ Visualization Manager:
                     imu:
                       {}
                   lidar_mount_link:
-                    rslidar:
-                      odom_o3d:
+                    rslidar_base_link:
+                      rslidar:
                         map_o3d:
-                          map:
-                            sensor_at_scan:
-                              {}
-                      sensor:
-                        camera:
+                          map_o3d_viz:
+                            {}
+                          raw_rs_o3d:
+                            {}
+                        odom_o3d:
                           {}
-                        vehicle:
-                          {}
+                        sensor:
+                          camera:
+                            {}
+                          vehicle:
+                            {}
+                  odom_graph_msf:
+                    world_graph_msf:
+                      map_o3d_graph_msf_aligned:
+                        {}
+                      sensor_at_scan:
+                        {}
                   rgb_camera_link:
                     rgb_camera_optical_link:
                       {}
                   top:
                     {}
-                  tracking_camera_link:
-                    tracking_camera_pose_frame:
-                      {}
               Update Interval: 0
               Value: true
             - Alpha: 1
@@ -480,14 +493,14 @@ Visualization Manager:
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.4000000059604645
+          Size (m): 0.10000000149011612
           Style: Spheres
-          Topic: /mapping_node/assembled_map
+          Topic: /mapping/assembled_map
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
           Value: true
-      Enabled: false
+      Enabled: true
       Name: SLAM
     - Class: rviz/Group
       Displays:
@@ -805,10 +818,7 @@ Visualization Manager:
           Marker Topic: /viz_node_topic
           Name: GoalPoint
           Namespaces:
-            clear_nodes: true
-            free_odom_position: true
-            last_nav_node: true
-            out_contour: true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/MarkerArray
@@ -816,21 +826,7 @@ Visualization Manager:
           Marker Topic: /viz_graph_topic
           Name: GlobalGraph
           Namespaces:
-            angle_direct: false
-            freespace_vertex: false
-            freespace_vgraph: true
-            frontier_vertex: false
-            global_vertex: false
-            global_vgraph: false
-            localrange_vertex: false
-            odom_edge: false
-            polygon_edge: true
-            trajectory_edge: true
-            trajectory_vertex: false
-            updating_vertex: false
-            vertex_angle: false
-            vertices_matches: false
-            visibility_edge: false
+            {}
           Queue Size: 100
           Value: true
         - Alpha: 1
@@ -930,7 +926,7 @@ Visualization Manager:
           Marker Topic: /sensor_coverage_planner/tare_visualizer/local_planning_horizon
           Name: LocalPlanningHorizon
           Namespaces:
-            {}
+            "": true
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -938,7 +934,7 @@ Visualization Manager:
           Marker Topic: /sensor_coverage_planner/tare_visualizer/exploring_subspaces
           Name: ExplorationSubspaces
           Namespaces:
-            {}
+            "": true
           Queue Size: 100
           Value: true
         - Alpha: 1
@@ -1027,7 +1023,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: map_o3d
+    Fixed Frame: world_graph_msf
     Frame Rate: 30
   Name: root
   Tools:
@@ -1055,7 +1051,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 37.41329574584961
+      Distance: 46.70221710205078
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -1063,17 +1059,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.7940585613250732
-        Y: -2.382819890975952
-        Z: -1.6328935623168945
+        X: 1.7170408964157104
+        Y: -3.2570488452911377
+        Z: 8.846016883850098
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.0697970390319824
+      Pitch: 0.7397965788841248
       Target Frame: <Fixed Frame>
-      Yaw: 2.27236270904541
+      Yaw: 3.385552406311035
     Saved: ~
 Window Geometry:
   ControlPanel:
