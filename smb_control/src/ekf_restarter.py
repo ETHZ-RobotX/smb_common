@@ -15,7 +15,7 @@ class EKFParameterMonitor:
             "two_d_mode", "frequency", "publish_tf", "print_diagnostics",
             "odom0", "odom0_config", "odom0_queue_size", "odom0_differential", "odom0_relative",
             "imu0", "imu0_config", "imu0_differential", "imu0_queue_size", "imu0_remove_gravitational_acceleration",
-            "twist0", "twist0_config", "twist0_queue_size", "twist0_differential", "twist0_relative",
+            "odom1", "odom1_config", "odom1_queue_size", "odom1_differential", "odom1_relative",
             "diagnostic_updater/frequency", "diagnostic_updater/min_frequency", "diagnostic_updater/max_frequency"
         ]
 
@@ -50,7 +50,7 @@ class EKFParameterMonitor:
         # Relaunch the EKF node
         subprocess.Popen(["roslaunch", "smb_control", "start_ekf_reconfigure.launch"])
 
-        # Optionally wait for the node to initialize
+        # Wait for the node to initialize
         time.sleep(2)
 
 if __name__ == "__main__":
