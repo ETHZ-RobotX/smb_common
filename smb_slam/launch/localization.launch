@@ -4,7 +4,8 @@
   <!-- Arguments -->
   <arg name="use_sim_time"          default="false" />
   <arg name="cloud_topic"           default="/rslidar/points"  doc="input topic for the lidar pointcloud"/>
-  <arg name="parameter_filename"    default="param_rs16_localization.lua" doc="param file name"/>
+  <!-- this will automatically fetch the map saved in smb_slam/data/maps/map.pcd which can be configured in param_rs16_localization.lua -->
+  <arg name="parameter_filename"    default="param_rs16_localization.lua" doc="param file name"/> 
   <arg name="parameter_folder_path" default="$(find open3d_slam_ros)/param/" doc="directory for the parameter files"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
   <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
