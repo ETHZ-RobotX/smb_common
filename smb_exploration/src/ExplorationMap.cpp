@@ -15,13 +15,13 @@ ExplorationMap::ExplorationMap(ros::NodeHandle nh)
     ROS_INFO_STREAM("Creating exploration map ... ...");
     std::string scan_topic;
     if(!nh_.getParam("global_costmap/scan_topic", scan_topic)){
-      ROS_ERROR("Could not parse the parameter scan_topic");
+      ROS_ERROR("Could not parse the parameter global_costmap/scan_topic");
       return;
     }
 
     std::string occ_topic;
     if(!nh_.getParam("global_costmap/occ_topic", occ_topic)){
-      ROS_ERROR("Could not parse the parameter occ_topic");
+      ROS_ERROR("Could not parse the parameter global_costmap/occ_topic");
       return;
     }
     

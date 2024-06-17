@@ -10,7 +10,6 @@
   <rosparam file="$(find smb_navigation)/config/move_base_costmaps/costmap_common_params.yaml" command="load" ns="global_costmap" />
   <rosparam file="$(find smb_exploration)/config/global_costmap_exploration.yaml" command="load"/>
   <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
-  <param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
   <param name="global_costmap/scan_topic" value="$(arg scan_topic)"/>
   <param name="global_costmap/occ_topic" value="/map"/>
 </node>
