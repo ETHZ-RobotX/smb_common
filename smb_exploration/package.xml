@@ -14,7 +14,6 @@
 	<depend>gbplanner_ui</depend> -->
 	<depend>pci_general</depend>
 	<depend>explore_lite</depend>
-	<depend>gmapping</depend>
 	<depend>smb_path_tracker</depend>
 	<depend>tf2_ros</depend>
 	<depend>costmap_2d</depend>
