@@ -28,7 +28,7 @@ topics:
   timeout : 1.0
   priority: 4
 - name    : path_follower_twist
-  topic   : /cmd_vel_twist
+  topic   : /nav/cmd_vel_twist
   timeout : 1.0
   priority: 6
 locks:
