@@ -27,6 +27,10 @@ topics:
   topic   : pure_pursuit/cmd_vel
   timeout : 1.0
   priority: 4
+- name    : path_follower_twist
+  topic   : /nav/cmd_vel_twist
+  timeout : 1.0
+  priority: 6
 locks:
 - name    : e_stop
   topic   : joy_teleop/e_stop

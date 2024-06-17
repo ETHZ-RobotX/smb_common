@@ -1,15 +1,22 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 138
+    Help Height: 70
     Name: Displays
     Property Tree Widget:
       Expanded:
         - /Global Options1
+        - /Robot1
         - /Robot1/Sensors1/Lidar Raw1
         - /SLAM1/Map1
-        - /Object Detection1
-      Splitter Ratio: 0.5
-    Tree Height: 372
+        - /SLAM1/Map1/Autocompute Value Bounds1
+        - /LocalPlanner1
+        - /LocalPlanner1/TerrainMap1
+        - /FarPlanner1
+        - /FarPlanner1/GoalPoint1/Namespaces1
+        - /FarPlanner1/GlobalGraph1
+        - /TarePlanner1
+      Splitter Ratio: 0.5111420750617981
+    Tree Height: 770
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -17,6 +24,8 @@ Panels:
       - /2D Pose Estimate1
       - /2D Nav Goal1
       - /Publish Point1
+      - /Waypoint1
+      - /Goalpoint1
     Name: Tool Properties
     Splitter Ratio: 0.5886790156364441
   - Class: rviz/Views
@@ -28,6 +37,8 @@ Panels:
     Name: Time
     SyncMode: 0
     SyncSource: Lidar Raw
+  - Class: rviz/ControlPanel
+    Name: ControlPanel
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -74,8 +85,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 4.302511692047119
-                Min Value: -0.29804784059524536
+                Max Value: 1.5905910730361938
+                Min Value: -1.1293858289718628
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -105,6 +116,8 @@ Visualization Manager:
           Displays:
             - Class: rviz/TF
               Enabled: true
+              Filter (blacklist): ""
+              Filter (whitelist): ""
               Frame Timeout: 15
               Frames:
                 All Enabled: true
@@ -120,11 +133,25 @@ Visualization Manager:
                   Value: true
                 base_link:
                   Value: true
+                camera:
+                  Value: true
                 imu:
                   Value: true
                 imu_link:
                   Value: true
                 lidar_mount_link:
+                  Value: true
+                map_o3d:
+                  Value: true
+                map_o3d_graph_msf_aligned:
+                  Value: true
+                map_o3d_viz:
+                  Value: true
+                odom_graph_msf:
+                  Value: true
+                odom_o3d:
+                  Value: true
+                raw_rs_o3d:
                   Value: true
                 rgb_camera_link:
                   Value: true
@@ -132,13 +159,17 @@ Visualization Manager:
                   Value: true
                 rslidar:
                   Value: true
+                rslidar_base_link:
+                  Value: true
+                sensor:
+                  Value: true
+                sensor_at_scan:
+                  Value: true
                 top:
                   Value: true
-                tracking_camera_link:
+                vehicle:
                   Value: true
-                tracking_camera_odom:
-                  Value: true
-                tracking_camera_pose_frame:
+                world_graph_msf:
                   Value: true
               Marker Alpha: 1
               Marker Scale: 1
@@ -162,17 +193,30 @@ Visualization Manager:
                     imu:
                       {}
                   lidar_mount_link:
-                    rslidar:
-                      {}
+                    rslidar_base_link:
+                      rslidar:
+                        map_o3d:
+                          map_o3d_viz:
+                            {}
+                          raw_rs_o3d:
+                            {}
+                        odom_o3d:
+                          {}
+                        sensor:
+                          camera:
+                            {}
+                          vehicle:
+                            {}
+                  odom_graph_msf:
+                    world_graph_msf:
+                      map_o3d_graph_msf_aligned:
+                        {}
+                      sensor_at_scan:
+                        {}
                   rgb_camera_link:
                     rgb_camera_optical_link:
                       {}
                   top:
-                    {}
-                  tracking_camera_link:
-                    tracking_camera_pose_frame:
-                      {}
-                  tracking_camera_odom:
                     {}
               Update Interval: 0
               Value: true
@@ -242,21 +286,16 @@ Visualization Manager:
                   Alpha: 1
                   Show Axes: false
                   Show Trail: false
+                rslidar_base_link:
+                  Alpha: 1
+                  Show Axes: false
+                  Show Trail: false
                   Value: true
                 top:
                   Alpha: 1
                   Show Axes: false
                   Show Trail: false
                   Value: true
-                tracking_camera_link:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
-                  Value: true
-                tracking_camera_pose_frame:
-                  Alpha: 1
-                  Show Axes: false
-                  Show Trail: false
               Name: RobotModel
               Robot Description: smb_description
               TF Prefix: ""
@@ -436,14 +475,14 @@ Visualization Manager:
         - Alpha: 1
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
-            Max Value: 10
-            Min Value: -10
-            Value: true
+            Max Value: 0.6000000238418579
+            Min Value: -4
+            Value: false
           Axis: Z
           Channel Name: intensity
           Class: rviz/PointCloud2
           Color: 255; 255; 255
-          Color Transformer: Intensity
+          Color Transformer: AxisColor
           Decay Time: 0
           Enabled: true
           Invert Rainbow: false
@@ -454,9 +493,9 @@ Visualization Manager:
           Queue Size: 10
           Selectable: true
           Size (Pixels): 3
-          Size (m): 0.05000000074505806
-          Style: Flat Squares
-          Topic: /mapping_node/assembled_map
+          Size (m): 0.10000000149011612
+          Style: Spheres
+          Topic: /mapping/assembled_map
           Unreliable: false
           Use Fixed Frame: true
           Use rainbow: true
@@ -547,6 +586,16 @@ Visualization Manager:
             {}
           Queue Size: 100
           Value: true
+        - Alpha: 0.699999988079071
+          Class: rviz/Map
+          Color Scheme: map
+          Draw Behind: false
+          Enabled: true
+          Name: Map
+          Topic: /exploration_map/global_costmap/costmap
+          Unreliable: false
+          Use Timestamp: false
+          Value: true
       Enabled: true
       Name: Exploration
     - Class: rviz/Group
@@ -594,11 +643,387 @@ Visualization Manager:
           Value: false
       Enabled: true
       Name: Object Detection
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: Trajectory
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.009999999776482582
+          Style: Flat Squares
+          Topic: /trajectory
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: false
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 6
+          Min Color: 0; 0; 0
+          Min Intensity: 0
+          Name: LocalFreePaths
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 2
+          Size (m): 0.009999999776482582
+          Style: Points
+          Topic: /free_paths
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Class: rviz/PointStamped
+          Color: 204; 41; 204
+          Enabled: true
+          History Length: 1
+          Name: WayPoint
+          Queue Size: 10
+          Radius: 1
+          Topic: /way_point
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: false
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: true
+          Max Color: 255; 255; 255
+          Max Intensity: 0.10000000149011612
+          Min Color: 0; 0; 0
+          Min Intensity: -0.10000000149011612
+          Name: TerrainMap
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 4
+          Size (m): 0.10000000149011612
+          Style: Spheres
+          Topic: /terrain_map
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: false
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: true
+          Max Color: 255; 255; 255
+          Max Intensity: 0.20000000298023224
+          Min Color: 0; 0; 0
+          Min Intensity: -0.20000000298023224
+          Name: TerrainMapExt
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 4
+          Size (m): 0.05000000074505806
+          Style: Points
+          Topic: /terrain_map_ext
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 25; 255; 0
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.10000000149011612
+          Name: LocalPlannerPath
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic: /path
+          Unreliable: false
+          Value: true
+      Enabled: true
+      Name: LocalPlanner
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Class: rviz/PointStamped
+          Color: 204; 41; 204
+          Enabled: true
+          History Length: 1
+          Name: GoalPointIn
+          Queue Size: 10
+          Radius: 0.20000000298023224
+          Topic: /goal_point
+          Unreliable: false
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /viz_node_topic
+          Name: GoalPoint
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Class: rviz/MarkerArray
+          Enabled: true
+          Marker Topic: /viz_graph_topic
+          Name: GlobalGraph
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 245; 121; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: ObsPoints
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.4000000059604645
+          Style: Spheres
+          Topic: /FAR_obs_debug
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 255; 255; 255
+          Color Transformer: Intensity
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: DynamicObs
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.009999999776482582
+          Style: Flat Squares
+          Topic: /FAR_dynamic_obs_debug
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /viz_path_topic
+          Name: GlobalPath
+          Namespaces:
+            {}
+          Queue Size: 100
+          Value: true
+      Enabled: true
+      Name: FarPlanner
+    - Class: rviz/Group
+      Displays:
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 25; 255; 0
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.30000001192092896
+          Name: TareLocalPath
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic: /sensor_coverage_planner/local_path
+          Unreliable: false
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /sensor_coverage_planner/tare_visualizer/local_planning_horizon
+          Name: LocalPlanningHorizon
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Class: rviz/Marker
+          Enabled: true
+          Marker Topic: /sensor_coverage_planner/tare_visualizer/exploring_subspaces
+          Name: ExplorationSubspaces
+          Namespaces:
+            "": true
+          Queue Size: 100
+          Value: true
+        - Alpha: 1
+          Buffer Length: 1
+          Class: rviz/Path
+          Color: 98; 240; 231
+          Enabled: true
+          Head Diameter: 0.30000001192092896
+          Head Length: 0.20000000298023224
+          Length: 0.30000001192092896
+          Line Style: Billboards
+          Line Width: 0.20000000298023224
+          Name: TareGlobalPath
+          Offset:
+            X: 0
+            Y: 0
+            Z: 0
+          Pose Color: 255; 85; 255
+          Pose Style: None
+          Queue Size: 10
+          Radius: 0.029999999329447746
+          Shaft Diameter: 0.10000000149011612
+          Shaft Length: 0.10000000149011612
+          Topic: /sensor_coverage_planner/global_path
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 237; 212; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: false
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: ViewPointCandidates
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 1
+          Style: Spheres
+          Topic: /sensor_coverage_planner/viewpoint_vis_cloud
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: false
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/PointCloud2
+          Color: 245; 121; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Min Color: 0; 0; 0
+          Name: SelectedViewPoints
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 1
+          Style: Spheres
+          Topic: /sensor_coverage_planner/selected_viewpoint_vis_cloud
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+      Enabled: true
+      Name: TarePlanner
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_link
+    Fixed Frame: world_graph_msf
     Frame Rate: 30
   Name: root
   Tools:
@@ -618,11 +1043,15 @@ Visualization Manager:
     - Class: rviz/PublishPoint
       Single click: true
       Topic: /clicked_point
+    - Class: rviz/WaypointTool
+      Topic: waypoint
+    - Class: rviz/GoalPointTool
+      Topic: goalpoint
   Value: true
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 11.82022476196289
+      Distance: 46.70221710205078
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -630,27 +1059,29 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.9618407487869263
-        Y: -0.555341899394989
-        Z: 0.934703528881073
+        X: 1.7170408964157104
+        Y: -3.2570488452911377
+        Z: 8.846016883850098
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.8647964596748352
+      Pitch: 0.7397965788841248
       Target Frame: <Fixed Frame>
-      Yaw: 2.480391502380371
+      Yaw: 3.385552406311035
     Saved: ~
 Window Geometry:
+  ControlPanel:
+    collapsed: false
   Displays:
     collapsed: false
-  Height: 1492
+  Height: 1536
   Hide Left Dock: false
-  Hide Right Dock: false
+  Hide Right Dock: true
   Image bounding Boxes:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd000000040000000000000396000004cefc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b000fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000006e0000026c0000018200fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000002e600000134000000e000fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f00610064010000042600000116000000e000ffffff00000001000001c3000004cefc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000006e000004ce0000013200fffffffb0000001200520061007700200049006d00610067006500000003a20000019a0000002600fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073000000032b000002110000002600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000ab00000005efc0100000002fb0000000800540069006d0065010000000000000ab0000006dc00fffffffb0000000800540069006d006501000000000000045000000000000000000000053f000004ce00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000002d000000542fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d000003a2000000fb0100001cfa000000010100000002fb000000180043006f006e00740072006f006c00500061006e0065006c0100000000ffffffff000000d200fffffffb000000100044006900730070006c0061007900730100000000000001ea0000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000003e5000000b70000007300fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f0061006401000004a2000000dd0000007300ffffff00000001000001c3000003b9fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d000003b9000000a400fffffffb0000001200520061007700200049006d00610067006500000003a20000019a0000001600fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073000000032b000002110000001600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000070f0000005efc0100000002fb0000000800540069006d006501000000000000070f000003bc00fffffffb0000000800540069006d00650100000000000004500000000000000000000004390000054200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Raw Image:
     collapsed: false
   SMBPowerMotor:
@@ -664,7 +1095,7 @@ Window Geometry:
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: false
-  Width: 2736
-  X: 144
-  Y: 54
+    collapsed: true
+  Width: 1807
+  X: 0
+  Y: 27
