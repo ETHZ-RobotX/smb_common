@@ -7,8 +7,10 @@ PIDControllerNode::PIDControllerNode()
   last_odom_time_(ros::Time(0)), 
   angular_velocity_pid_(3.0, 0.0, 0.0), 
   linear_velocity_pid_(1.5, 1.0, 0.0),
+
   config_server_(std::make_shared<dynamic_reconfigure::Server<smb_control::PIDConfig>>(nh_)),
-  odom_timeout_(3.0) // Timeout of 0.1 seconds
+  odom_timeout_(0.1), // Timeout of 0.1 seconds
+  twist_timeout_(0.1) // Timeout of 0.1 seconds
 {
     // Initialize the publisher
     cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/control/smb_diff_drive/cmd_vel", 1);
@@ -32,7 +34,7 @@ void PIDControllerNode::run()
     while (ros::ok())
     {
         ros::spinOnce();
-        checkOdomTimeout();
+        checkTimeout();
         loop_rate.sleep();
     }
 }
@@ -55,11 +57,12 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
     ros::param::set(ns + "/publish_tf", true);
     ros::param::set(ns + "/print_diagnostics", true);
 
-    bool use_diff_drive_estimation = config.use_differential_drive_estimation;
-    bool use_vio = config.use_vio;
+    use_diff_drive_estimation_ = config.use_differential_drive_estimation;
+    use_vio_ = config.use_vio;
+    use_imu_ = config.use_imu;
 
     // Handle odom0 and odom1 logic
-    if (use_diff_drive_estimation)
+    if (use_diff_drive_estimation_)
     {
         ros::param::set(ns + "/odom0", "/control/smb_diff_drive/odom");
         ros::param::set(ns + "/odom0_config", std::vector<bool>{false, false, false, false, false, false, true, true, true, false, false, true, false, false, false});
@@ -67,7 +70,7 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
         ros::param::set(ns + "/odom0_differential", false);
         ros::param::set(ns + "/odom0_relative", false);
 
-        if (use_vio)
+        if (use_vio_)
         {
             ros::param::set(ns + "/odom1", "/tracking_camera/odom/sample");
             ros::param::set(ns + "/odom1_config", std::vector<bool>{false, false, false, false, false, false, true, true, true, true, true, true, false, false, false});
@@ -84,7 +87,7 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
             ros::param::del(ns + "/odom1_relative");
         }
     }
-    else if (use_vio)
+    else if (use_vio_)
     {
         // If only VIO is used, configure it as odom0
         ros::param::set(ns + "/odom0", "/tracking_camera/odom/sample");
@@ -114,7 +117,7 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
         ros::param::del(ns + "/odom1_differential");
         ros::param::del(ns + "/odom1_relative");
 
-        if(!config.use_imu)
+        if(!use_imu_)
         {
             // If no sensors are used, delete the EKF node
             pure_feed_forward_ = true;
@@ -122,7 +125,7 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
     }
 
     // IMU0 parameters
-    if (config.use_imu)
+    if (use_imu_)
     {
         ros::param::set(ns + "/imu0", "/imu");
         ros::param::set(ns + "/imu0_config", std::vector<bool>{false, false, false, true, true, true, false, false, false, true, true, true, false, false, false});
@@ -148,6 +151,7 @@ void PIDControllerNode::configCallback(smb_control::PIDConfig &config, uint32_t 
 void PIDControllerNode::twistCallback(const geometry_msgs::Twist::ConstPtr& msg) {
     // Get the current angular velocity from the Odom
     cmd_vel_requested_ = *msg;
+    last_twist_time_ = ros::Time::now();
 }
 
 void PIDControllerNode::odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
@@ -187,8 +191,14 @@ void PIDControllerNode::odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     cmd_vel_pub_.publish(cmd_vel_);
 }
 
-void PIDControllerNode::checkOdomTimeout()
+void PIDControllerNode::checkTimeout()
 {
+
+    if (ros::Time::now() - last_twist_time_ > ros::Duration(odom_timeout_)) {
+        // No new message within 0.2 seconds, setting cmd_vel_requested_ to zero
+        cmd_vel_requested_ = geometry_msgs::Twist();
+    }
+
     if (ros::Time::now() - last_odom_time_ > ros::Duration(odom_timeout_))
     {
         if (!pure_feed_forward_)

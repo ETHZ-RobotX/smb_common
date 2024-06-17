@@ -92,17 +92,23 @@ private:
     // PID
     PIDController angular_velocity_pid_;
     PIDController linear_velocity_pid_;
+    bool use_diff_drive_estimation_{false};
+    bool use_vio_{false};
+    bool use_imu_{false};
 
     std::shared_ptr<dynamic_reconfigure::Server<smb_control::PIDConfig>> config_server_;
 
     geometry_msgs::Twist cmd_vel_requested_;
     geometry_msgs::Twist cmd_vel_;
 
+    ros::Timer timer_;
+    ros::Time last_twist_time_;
     ros::Time last_odom_time_;
     double dt_{0.01};
-    double odom_timeout_;
+    double odom_timeout_{0.5};
+    double twist_timeout_{0.5};
 
-    void checkOdomTimeout();
+    void checkTimeout();
     void executeFeedforwardControl();
 };
 
