@@ -30,7 +30,7 @@ PIDControllerNode::~PIDControllerNode()
 
 void PIDControllerNode::run()
 {
-    ros::Rate loop_rate(100);  // 10 Hz
+    ros::Rate loop_rate(100);  // 100 Hz
     while (ros::ok())
     {
         ros::spinOnce();
@@ -195,7 +195,6 @@ void PIDControllerNode::checkTimeout()
 {
 
     if (ros::Time::now() - last_twist_time_ > ros::Duration(odom_timeout_)) {
-        // No new message within 0.2 seconds, setting cmd_vel_requested_ to zero
         cmd_vel_requested_ = geometry_msgs::Twist();
     }
 
