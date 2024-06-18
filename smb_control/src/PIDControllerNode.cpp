@@ -9,8 +9,8 @@ PIDControllerNode::PIDControllerNode()
   linear_velocity_pid_(1.5, 1.0, 0.0),
 
   config_server_(std::make_shared<dynamic_reconfigure::Server<smb_control::PIDConfig>>(nh_)),
-  odom_timeout_(0.1), // Timeout of 0.1 seconds
-  twist_timeout_(0.1) // Timeout of 0.1 seconds
+  odom_timeout_(0.2), 
+  twist_timeout_(0.1) 
 {
     // Initialize the publisher
     cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/control/smb_diff_drive/cmd_vel", 1);
@@ -194,7 +194,7 @@ void PIDControllerNode::odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 void PIDControllerNode::checkTimeout()
 {
 
-    if (ros::Time::now() - last_twist_time_ > ros::Duration(odom_timeout_)) {
+    if (ros::Time::now() - last_twist_time_ > ros::Duration(twist_timeout_)) {
         cmd_vel_requested_ = geometry_msgs::Twist();
     }
 

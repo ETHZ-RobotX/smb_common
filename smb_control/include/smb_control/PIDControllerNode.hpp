@@ -104,8 +104,8 @@ private:
     ros::Time last_twist_time_;
     ros::Time last_odom_time_;
     double dt_{0.01};
-    double odom_timeout_{0.5};
-    double twist_timeout_{0.5};
+    double odom_timeout_{0.0};
+    double twist_timeout_{0.0};
 
     void checkTimeout();
     void executeFeedforwardControl();
