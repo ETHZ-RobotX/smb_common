@@ -1,0 +1,7 @@
+
+
+  <launch>
+  <!-- Launch the EKF node -->
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" output="screen"/>
+
+</launch>
