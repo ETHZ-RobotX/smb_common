@@ -472,7 +472,7 @@ Visualization Manager:
       Name: PathPlanner
     - Class: rviz/Group
       Displays:
-        - Alpha: 1
+        - Alpha: 0.800000011920929
           Autocompute Intensity Bounds: true
           Autocompute Value Bounds:
             Max Value: 0.6000000238418579
@@ -492,9 +492,9 @@ Visualization Manager:
           Position Transformer: XYZ
           Queue Size: 10
           Selectable: true
-          Size (Pixels): 3
-          Size (m): 0.10000000149011612
-          Style: Spheres
+          Size (Pixels): 2
+          Size (m): 0.05000000074505806
+          Style: Points
           Topic: /mapping/assembled_map
           Unreliable: false
           Use Fixed Frame: true
