@@ -6,13 +6,25 @@ add_definitions("-std=c++17")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  message_generation
   cmake_modules)
 
 find_package(Boost REQUIRED)
 
+add_message_files(
+  FILES
+  RoboteqMotorStatus.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
 catkin_package(
   INCLUDE_DIRS include ${BOOST_INCLUDE_DIRS}
   LIBRARIES serialMB
+  CATKIN_DEPENDS message_runtime
 )
 
 #find_package(Eigen REQUIRED)

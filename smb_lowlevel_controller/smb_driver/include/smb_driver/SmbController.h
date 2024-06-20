@@ -18,6 +18,7 @@
 #include <math.h> //For M_PI
 #include <boost/circular_buffer.hpp>
 #include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Bool.h>
 #include <geometry_msgs/Twist.h>
 
 #include <smb_driver/auxiliaries/interProcessCommunication.h>
@@ -25,6 +26,7 @@
 #include <smb_driver/RoboteqDevice.h>
 #include <smb_driver/ErrorCodes.h>
 #include <smb_driver/Constants.h>
+#include <smb_driver/RoboteqMotorStatus.h>
 
 //#include <smb_common/SmbModes.h>
 
@@ -96,6 +98,7 @@ private:
     static void receiveData(void *context);
 
     bool readWheelSpeeds();
+    bool readMotorStatusFlags();
     bool readBatteryVoltage();
     bool readRCInputs();
 
@@ -119,6 +122,8 @@ private:
     double rightMotorSpeed_ = 0; //[rad/sec]
     double batteryVoltage_ = 0; //[volts]
 
+    bool safetyStopFlag_ = false; 
+
     // Joystick axes
     float x_rc_ = 0.0;
     float y_rc_ = 0.0;
@@ -141,8 +146,11 @@ private:
     double min_cycle_time_Us_ = 1e4; //[microsec] Sets the max desired io rate
     double cycleCountPeriod_Us_ = 5000000.0; //[microsec] Count the number of cycles over this duration for timing diagnostics
     double batteryVoltageUpdateInterval_ns_ = 500000000.0; //[nano_sec] Update the battery voltage at this rate
+    const double motorStatusUpdateInterval_ns_ = 100000000.0; //[nano_sec] Update the battery voltage at this rate
+
     double communicationDropoutTime_Us_ = 1000000.0; //[microsec] Try reconnecting to the motor controller if this amount of time has passed since the last successful read/write cycle
     std::chrono::time_point<std::chrono::high_resolution_clock> t_lastVoltageUpdate_;
+    std::chrono::time_point<std::chrono::high_resolution_clock> t_lastStatusUpdate_;
     std::chrono::time_point<std::chrono::high_resolution_clock> t_lastSuccessfulCycle_;
     double lowBatteryVoltageWarningLevel_ = 36.0; //[V] todo Need to set this to a good value
 
@@ -172,6 +180,9 @@ private:
     ros::Publisher wheelSpeedPub_;
     ros::Publisher rcTwistPub_;
     std_msgs::Float64MultiArray wheelSpeedMsg_;
+    ros::Publisher safetyStopPub_;
+    ros::Publisher motorStatusFlagsPub1_;
+    ros::Publisher motorStatusFlagsPub2_;
 
     //Convert RPM to rad/sec
     double rpmToRps_;

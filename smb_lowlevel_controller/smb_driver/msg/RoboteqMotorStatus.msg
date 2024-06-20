@@ -1,0 +1,9 @@
+Header header
+bool amp_lim
+bool stall
+bool loop_error
+bool safe_stop
+bool fwd_limit
+bool rev_limit
+bool amp_trig
+bool fets_off

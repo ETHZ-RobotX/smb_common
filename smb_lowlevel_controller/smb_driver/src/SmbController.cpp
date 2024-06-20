@@ -29,7 +29,9 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
 //  this->startAcquisition();
 
   wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("wheelSpeeds", 1);
-
+  safetyStopPub_ = nh_.advertise<std_msgs::Bool>("safetyStop", 1);
+  motorStatusFlagsPub1_ = nh_.advertise<smb_driver::RoboteqMotorStatus>("motorStatusFlags/channel1", 1);
+  motorStatusFlagsPub2_ = nh_.advertise<smb_driver::RoboteqMotorStatus>("motorStatusFlags/channel2", 1);
   rcTwistPub_ = nh_.advertise<geometry_msgs::Twist>("rc_twist", 1);
 
   //interchange wheel labels
@@ -133,6 +135,39 @@ bool SmbController::readBatteryVoltage() {
 
     return res;
 }
+
+bool SmbController::readMotorStatusFlags() {
+    bool res = true;
+
+    int runtimeStatusFlag[2] = {0};
+    if(serialDevice->GetValue(_FM, 1, runtimeStatusFlag[0]) != RQ_SUCCESS) {
+      res = false;
+      printf("Failed to read runtime status flags of channel 1.");
+    }
+    if(serialDevice->GetValue(_FM, 2, runtimeStatusFlag[1]) != RQ_SUCCESS) {
+      res = false;
+      printf("Failed to read runtime status flags of channel 2.");
+    }
+
+    if (res) {}
+      smb_driver::RoboteqMotorStatus motorStatusMsg[2];
+      for (auto i = 0; i < 2; ++i) {
+        motorStatusMsg[i].header.stamp = ros::Time::now();
+        motorStatusMsg[i].amp_lim = ((runtimeStatusFlag[i] & 1<<0) == 1<<0);
+        motorStatusMsg[i].stall = ((runtimeStatusFlag[i] & 1<<1) == 1<<1);
+        motorStatusMsg[i].loop_error = ((runtimeStatusFlag[i] & 1<<2) == 1<<2);
+        motorStatusMsg[i].safe_stop = ((runtimeStatusFlag[i] & 1<<3) == 1<<3);
+        motorStatusMsg[i].fwd_limit = ((runtimeStatusFlag[i] & 1<<4) == 1<<4);
+        motorStatusMsg[i].rev_limit = ((runtimeStatusFlag[i] & 1<<5) == 1<<5);
+        motorStatusMsg[i].amp_trig = ((runtimeStatusFlag[i] & 1<<6) == 1<<6);
+        motorStatusMsg[i].fets_off = ((runtimeStatusFlag[i] & 1<<7) == 1<<7);
+      }
+      motorStatusFlagsPub1_.publish(motorStatusMsg[0]);
+      motorStatusFlagsPub2_.publish(motorStatusMsg[1]);
+
+    return res;
+}
+
 
 bool SmbController::readRCInputs() {
     bool res = true;
@@ -298,7 +333,12 @@ void SmbController::receiveData(void *context) {
     if(!instance->readRCInputs()){
       std::cout << "readRCInputs failed" << std::endl;
     };
-
+    if ((std::chrono::high_resolution_clock::now() - instance->t_lastStatusUpdate_).count() > instance->motorStatusUpdateInterval_ns_) {
+      if (!instance->readMotorStatusFlags()){
+        std::cout << "readMotorStatusFlags failed" << std::endl;
+        res = false;
+      }
+    }
     if ((std::chrono::high_resolution_clock::now() - instance->t_lastVoltageUpdate_).count() > instance->batteryVoltageUpdateInterval_ns_) {
       if (!instance->readBatteryVoltage()){
         std::cout << "readBatteryVoltage failed" << std::endl;

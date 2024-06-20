@@ -3,14 +3,16 @@
   <name>smb_driver</name>
   <version>0.0.1</version>
   <description>Super mega bot driver</description>
-
-  <maintainer email="pankertj@ethz.ch">Tim Sandy</maintainer>
+  <author>Tim Sandy</author>
+  <maintainer email="mantelt@ethz.ch">Thomas Mantel</maintainer>
   <license>BSD</license>
   
   <buildtool_depend>catkin</buildtool_depend>
   <buildtool_depend>roscpp</buildtool_depend>
 
   <build_depend>std_msgs</build_depend>
+  <build_depend>message_generation</build_depend>
+  <run_depend>message_runtime</run_depend>
 
   <export>
   </export>
