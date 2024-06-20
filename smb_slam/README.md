@@ -1,5 +1,5 @@
 # SMB_SLAM
-This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping using [open3d_slam](https://github.com/leggedrobotics/open3d_slam).
+This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping using [open3d_slam](https://github.com/ETHZ-RobotX/open3d_slam_advanced_rss_2024).
 
 Follow instructions the instructions below to build ```smb_slam```.
 

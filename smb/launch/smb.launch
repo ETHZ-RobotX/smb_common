@@ -34,11 +34,6 @@
   <arg name="use_lidar_odometry"
        default="false"
        doc="Use lidar odometry instead of the tracking camera odometry if set to true."/>
-  
-  <!-- enable ekf -->
-  <arg name="enable_ekf" 
-       default="false"
-       doc="Launch ekf node. Used for the wheel odometry."/>
 
   <!-- launch rviz -->
   <arg name="launch_rviz"
@@ -73,6 +68,11 @@
   <arg name="keyboard_teleop"
         default="false"
         doc="Launch node to send control commands (twist msgs) using the keyboard."/>
+
+  <!-- joystick_teleop -->
+  <arg name="joystick"
+        default="false"
+        doc="Launch node to send control commands (twist msgs) using the joystick."/>
 
   <!-- Set global simulation parameter -->
   <param name="/simulation" value="false"/>
@@ -112,12 +112,12 @@
 
   
   <include file="$(find smb_control)/launch/smb_control.launch">
-    <arg name="enable_ekf" value="$(arg enable_ekf)" />
     <arg name="description_name" value="$(arg description_name)"/>
     <arg name="control_namespace" value="$(arg control_namespace)"/>
     <arg name="mpc"               value="$(arg mpc)"/>
     <arg name="mpc_track_local_plan" value="$(arg mpc_track_local_plan)"/>
     <arg name="keyboard_teleop"         value="$(arg keyboard_teleop)"/>
+    <arg name="joystick"         value="$(arg joystick)"/>
     <arg name="tracking_camera"    value="$(arg launch_tracking_cam)"/>
   </include>
 
