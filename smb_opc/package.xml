@@ -9,4 +9,9 @@
   <buildtool_depend>catkin</buildtool_depend>
   <exec_depend>smb_description</exec_depend>
   <exec_depend>smb_rviz_plugins</exec_depend>
+  <!-- local planner -->
+  <exec_depend>waypoint_rviz_plugin</exec_depend>
+  <!-- far planner -->
+  <exec_depend>goalpoint_rviz_plugin</exec_depend>
+  <exec_depend>teleop_rviz_plugin</exec_depend>
 </package>
