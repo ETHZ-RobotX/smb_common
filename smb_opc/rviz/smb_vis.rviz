@@ -1023,7 +1023,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: world_graph_msf
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
