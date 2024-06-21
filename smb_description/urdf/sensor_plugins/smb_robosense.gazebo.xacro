@@ -12,7 +12,7 @@
     <xacro:if value="${simulation}">
       <xacro:include filename="$(find robosense_description)/urdf/RS-16.urdf.xacro"/>
 
-      <xacro:RS-16 parent="${parent_link}" name="rslidar" topic="$(arg pointcloud_topic)" hz="10" samples="440" gpu="${gpu}" max_range="35.0">
+      <xacro:RS-16 parent="${parent_link}" name="rslidar" topic="$(arg pointcloud_topic)" hz="10" samples="440" gpu="${gpu}" max_range="70.0">
         <origin xyz="0.0 0.0 ${lidarBoxHeight}" rpy="0 0 0" />
       </xacro:RS-16>
 
