@@ -5,7 +5,7 @@
 PIDControllerNode::PIDControllerNode() 
 : nh_("~"), 
   last_odom_time_(ros::Time(0)), 
-  angular_velocity_pid_(1.5, 0.2, 0.0), 
+  angular_velocity_pid_(1.0, 0.1, 0.0), 
   linear_velocity_pid_(1.0, 0.0, 0.0),
 
   config_server_(std::make_shared<dynamic_reconfigure::Server<smb_control::PIDConfig>>(nh_)),
