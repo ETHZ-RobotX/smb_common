@@ -180,7 +180,7 @@ private:
     ros::Publisher wheelSpeedPub_;
     ros::Publisher rcTwistPub_;
     std_msgs::Float64MultiArray wheelSpeedMsg_;
-    ros::Publisher safetyStopPub_;
+    ros::Publisher safeStopPub_;
     ros::Publisher motorStatusFlagsPub1_;
     ros::Publisher motorStatusFlagsPub2_;
 

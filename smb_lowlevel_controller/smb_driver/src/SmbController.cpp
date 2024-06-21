@@ -29,7 +29,7 @@ SmbController::SmbController(std::string port, ros::NodeHandle &nh, size_t vecSi
 //  this->startAcquisition();
 
   wheelSpeedPub_ = nh_.advertise<std_msgs::Float64MultiArray>("wheelSpeeds", 1);
-  safetyStopPub_ = nh_.advertise<std_msgs::Bool>("safetyStop", 1);
+  safeStopPub_ = nh_.advertise<std_msgs::Bool>("safeStop", 1);
   motorStatusFlagsPub1_ = nh_.advertise<smb_driver::RoboteqMotorStatus>("motorStatusFlags/channel1", 1);
   motorStatusFlagsPub2_ = nh_.advertise<smb_driver::RoboteqMotorStatus>("motorStatusFlags/channel2", 1);
   rcTwistPub_ = nh_.advertise<geometry_msgs::Twist>("rc_twist", 1);
@@ -151,6 +151,8 @@ bool SmbController::readMotorStatusFlags() {
 
     if (res) {}
       smb_driver::RoboteqMotorStatus motorStatusMsg[2];
+      std_msgs::Bool safeStopMsg;
+      safeStopMsg.data = false;
       for (auto i = 0; i < 2; ++i) {
         motorStatusMsg[i].header.stamp = ros::Time::now();
         motorStatusMsg[i].amp_lim = ((runtimeStatusFlag[i] & 1<<0) == 1<<0);
@@ -161,9 +163,14 @@ bool SmbController::readMotorStatusFlags() {
         motorStatusMsg[i].rev_limit = ((runtimeStatusFlag[i] & 1<<5) == 1<<5);
         motorStatusMsg[i].amp_trig = ((runtimeStatusFlag[i] & 1<<6) == 1<<6);
         motorStatusMsg[i].fets_off = ((runtimeStatusFlag[i] & 1<<7) == 1<<7);
+
+        safeStopMsg.data |= motorStatusMsg[i].safe_stop;
       }
       motorStatusFlagsPub1_.publish(motorStatusMsg[0]);
       motorStatusFlagsPub2_.publish(motorStatusMsg[1]);
+      safeStopPub_.publish(safeStopMsg);
+
+
 
     return res;
 }
