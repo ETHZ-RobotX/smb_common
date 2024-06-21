@@ -5,12 +5,12 @@
 PIDControllerNode::PIDControllerNode() 
 : nh_("~"), 
   last_odom_time_(ros::Time(0)), 
-  angular_velocity_pid_(3.0, 0.0, 0.0), 
-  linear_velocity_pid_(1.5, 1.0, 0.0),
+  angular_velocity_pid_(1.5, 0.2, 0.0), 
+  linear_velocity_pid_(1.0, 0.0, 0.0),
 
   config_server_(std::make_shared<dynamic_reconfigure::Server<smb_control::PIDConfig>>(nh_)),
-  odom_timeout_(0.2), 
-  twist_timeout_(0.1) 
+  odom_timeout_(0.5), 
+  twist_timeout_(0.2) 
 {
     // Initialize the publisher
     cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/control/smb_diff_drive/cmd_vel", 1);
@@ -193,19 +193,23 @@ void PIDControllerNode::odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 
 void PIDControllerNode::checkTimeout()
 {
+    ros::Time current_time = ros::Time::now();
 
-    if (ros::Time::now() - last_twist_time_ > ros::Duration(twist_timeout_)) {
+    if ((current_time - last_twist_time_).toSec() > twist_timeout_) {
         cmd_vel_requested_ = geometry_msgs::Twist();
     }
 
-    if (ros::Time::now() - last_odom_time_ > ros::Duration(odom_timeout_))
-    {
-        if (!pure_feed_forward_)
-        {
+    if ((current_time - last_odom_time_).toSec() > odom_timeout_) {
+        if (!pure_feed_forward_) {
             pure_feed_forward_ = true;
             ROS_WARN("Odometry data timeout, switching to feedforward control.");
         }
         executeFeedforwardControl();
+    } else {
+        if (pure_feed_forward_) {
+            pure_feed_forward_ = false;
+            ROS_INFO("Odometry data regained, switching to PID control.");
+        }
     }
 }
 
@@ -217,6 +221,8 @@ void PIDControllerNode::executeFeedforwardControl()
     // Publish the control output
     cmd_vel_pub_.publish(cmd_vel_);
 }
+
+
 
 int main(int argc, char **argv)
 {
