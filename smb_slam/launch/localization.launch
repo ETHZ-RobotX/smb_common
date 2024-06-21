@@ -5,7 +5,6 @@
   <arg name="use_sim_time"          default="false" />
   <arg name="cloud_topic"           default="/rslidar/points"  doc="input topic for the lidar pointcloud"/>
   <arg name="parameter_filename"    default="param_rs16_localization.lua" doc="param file name, pcd file path is set in the parameter file"/> 
-  <arg name="parameter_folder_path" default="$(find open3d_slam_ros)/param/" doc="directory for the parameter files"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
   <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
   <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map (Won't get updated in this case)"/>
@@ -16,7 +15,6 @@
   <!-- Launch Map Builder (open3d_slam) -->
   <include file="$(find open3d_slam_ros)/launch/mapping_live.launch">
     <arg name="cloud_topic"           value="$(arg cloud_topic)" />
-    <arg name="parameter_folder_path" value="$(arg parameter_folder_path)"/>
     <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
     <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
     <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
