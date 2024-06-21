@@ -345,6 +345,7 @@ void SmbController::receiveData(void *context) {
         std::cout << "readMotorStatusFlags failed" << std::endl;
         res = false;
       }
+      instance->t_lastStatusUpdate_ = std::chrono::high_resolution_clock::now();
     }
     if ((std::chrono::high_resolution_clock::now() - instance->t_lastVoltageUpdate_).count() > instance->batteryVoltageUpdateInterval_ns_) {
       if (!instance->readBatteryVoltage()){
