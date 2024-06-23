@@ -248,8 +248,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
 
     ROS_INFO("[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
 
-    iCmd_[0] = iCmd_[0] / 10000;
-    iCmd_[1] = iCmd_[1] / 10000;
+
 
     // Write the actual values
     // ROS_DEBUG("[SmbHWInterface] %f %f %f %f %f %f.", velCmd_[0], iCmd_[0], torqCmd_[0], velCmd_[1], iCmd_[1], torqCmd_[1]);
@@ -269,6 +268,9 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           // ROS_DEBUG("[SmbHWInterface] %f ", iCmd_[i]);
           currentPIDs_[i].update(time, elapsedTime);
           //! Note that we explicitly switch the order here to make the turning directions correct
+          iCmd_[0] = iCmd_[0] / 1000;
+          iCmd_[1] = iCmd_[1] / 1000;
+
           smb_->setVelocity(iCmd_[i], 2-i);
           // printf(" velocity mode iCmd_[%d]: %f\n", i, iCmd_[i]);
           ROS_INFO("[SmbHWInterface] Velocity mode: %f %f", iCmd_[0], iCmd_[1]);
