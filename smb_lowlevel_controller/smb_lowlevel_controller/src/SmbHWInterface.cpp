@@ -248,8 +248,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
 
     ROS_INFO("[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
 
-    iCmd_[0] = velCmd_[0] / 10000;
-    iCmd_[1] = velCmd_[1] / 10000;
+    iCmd_[0] = iCmd_[0] / 10000;
+    iCmd_[1] = iCmd_[1] / 10000;
 
     // Write the actual values
     // ROS_DEBUG("[SmbHWInterface] %f %f %f %f %f %f.", velCmd_[0], iCmd_[0], torqCmd_[0], velCmd_[1], iCmd_[1], torqCmd_[1]);
