@@ -271,7 +271,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           // iCmd_[0] = iCmd_[0] / 100;
           // iCmd_[1] = iCmd_[1] / 100;
 
-          smb_->setVelocity(iCmd_[i], 2-i);
+          smb_->setVelocity(iCmd_[i] / 100, 2-i);
           // printf(" velocity mode iCmd_[%d]: %f\n", i, iCmd_[i]);
           ROS_INFO("[SmbHWInterface] Velocity mode: %f %f", iCmd_[0], iCmd_[1]);
         default:
