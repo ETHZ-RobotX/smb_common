@@ -109,8 +109,8 @@ private:
     // Joint limits interfaces - Soft limits
     // joint_limits_interface::EffortJointSoftLimitsInterface current_jnt_soft_limits_;
     joint_limits_interface::VelocityJointSoftLimitsInterface velocitySoftLimitsInterface_;
-    const double DEFAULT_MAX_VEL_ = 1;
-    const double DEFAULT_MIN_VEL_ = -1;
+    const double DEFAULT_MAX_VEL_ = 10;
+    const double DEFAULT_MIN_VEL_ = -10;
     const double DEFAULT_MAX_EFF_ = 1000;
 
     // Transmissions
