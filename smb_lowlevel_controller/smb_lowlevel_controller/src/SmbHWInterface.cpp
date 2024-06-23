@@ -246,6 +246,11 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     // Only change mode if necessary
     if (desiredControlMode_ != controlMode_) { setDriverMode(desiredControlMode_); }
 
+    ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
+
+    iCmd_[0] = velCmd_[0];
+    iCmd_[1] = velCmd_[1];
+
     // Write the actual values
     // ROS_DEBUG("[SmbHWInterface] %f %f %f %f %f %f.", velCmd_[0], iCmd_[0], torqCmd_[0], velCmd_[1], iCmd_[1], torqCmd_[1]);
     for (auto i=0; i < nActuators; ++i) {
