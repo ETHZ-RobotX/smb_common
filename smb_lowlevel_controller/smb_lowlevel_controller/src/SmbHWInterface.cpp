@@ -211,6 +211,9 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     } else {
       wheels_[0].pos += wheels_[0].vel * elapsedTime.toSec();
       wheels_[1].pos += wheels_[1].vel * elapsedTime.toSec();
+
+      ROS_INFO("[SmbHWInterface] Read speeds: %f %f", wheels_[0].vel, wheels_[1].vel);
+      ROS_INFO("[SmbHWInterface] Read positions: %f %f", wheels_[0].pos, wheels_[1].pos);
       // currentPIDs_[0].update(time, elapsedTime);
       // currentPIDs_[1].update(time, elapsedTime);
     }
