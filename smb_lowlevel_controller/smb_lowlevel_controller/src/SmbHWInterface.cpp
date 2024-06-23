@@ -90,8 +90,8 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
       registerControlInterfaces();
 
       // TODO(oharley): expose a method to set the desiredControlMode_
-      controlMode_ = SmbMode::MODE_DC_CMD;
-      desiredControlMode_ = SmbMode::MODE_DC_CMD;
+      controlMode_ = SmbMode::MODE_VELOCITY;
+      desiredControlMode_ = SmbMode::MODE_VELOCITY;
       try {
           // Initializes communication to the smb
           smb_->startAcquisition();
@@ -254,6 +254,12 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           //! Note that we explicitly switch the order here to make the turning directions correct
           smb_->setMotorPower(iCmd_[i], 2-i);
           break;
+        case SmbMode::MODE_VELOCITY:
+          velocitySoftLimitsInterface_.enforceLimits(elapsedTime);
+          // ROS_DEBUG("[SmbHWInterface] %f ", iCmd_[i]);
+          currentPIDs_[i].update(time, elapsedTime);
+          //! Note that we explicitly switch the order here to make the turning directions correct
+          smb_->setVelocity(iCmd_[i], 2-i);
         default:
           ROS_WARN("[SmbHWInterface] Specified SmbMode's values cannot be written to the driver. mode=%d", controlMode_);
           break;
