@@ -246,7 +246,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     // Only change mode if necessary
     if (desiredControlMode_ != controlMode_) { setDriverMode(desiredControlMode_); }
 
-    ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
+    ROS_INFO("[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
 
     iCmd_[0] = velCmd_[0];
     iCmd_[1] = velCmd_[1];
