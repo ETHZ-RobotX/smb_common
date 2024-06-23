@@ -271,7 +271,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           //! Note that we explicitly switch the order here to make the turning directions correct
           smb_->setVelocity(iCmd_[i], 2-i);
           // printf(" velocity mode iCmd_[%d]: %f\n", i, iCmd_[i]);
-          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Velocity mode: %f %f", iCmd_[0], iCmd_[1]);
+          INFO_THROTTLE("[SmbHWInterface] Velocity mode: %f %f", iCmd_[0], iCmd_[1]);
         default:
           ROS_WARN("[SmbHWInterface] Specified SmbMode's values cannot be written to the driver. mode=%d", controlMode_);
           break;
