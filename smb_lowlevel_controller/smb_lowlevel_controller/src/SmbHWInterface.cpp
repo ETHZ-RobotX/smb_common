@@ -314,6 +314,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
     {
       double error = *setPoint_ - *processValue_;
 
+      ROS_INFO(" setpoint: %f, processValue: %f, error: %f", *setPoint_, *processValue_, error);
+
       // Set the PID error and compute the PID command with nonuniform time
       // step size. The derivative error is computed from the change in the error
       // and the timestep dt.
