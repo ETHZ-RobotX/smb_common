@@ -224,6 +224,9 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
   void SmbHWInterface::write(const ros::Time &time, const ros::Duration& elapsedTime) {
     std::scoped_lock lock{smbDriverMutex_};
     //! At the moment there is no means to change the underlying driver controll method
+
+    ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Desired mode: %d, Current mode: %d", desiredControlMode_, controlMode_);
+
     bool noWrite = false;
     if (desiredControlMode_ == SmbMode::FREEZE){
       controlMode_ = SmbMode::FREEZE;
@@ -253,7 +256,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           currentPIDs_[i].update(time, elapsedTime);
           //! Note that we explicitly switch the order here to make the turning directions correct
           smb_->setMotorPower(iCmd_[i], 2-i);
-          printf(" dc mode iCmd_[%d]: %f\n", i, iCmd_[i]);
+          // printf(" dc mode iCmd_[%d]: %f\n", i, iCmd_[i]);
+          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] DC mode: %f %f", iCmd_[0], iCmd_[1]);
           break;
         case SmbMode::MODE_VELOCITY:
           velocitySoftLimitsInterface_.enforceLimits(elapsedTime);
@@ -261,7 +265,8 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
           currentPIDs_[i].update(time, elapsedTime);
           //! Note that we explicitly switch the order here to make the turning directions correct
           smb_->setVelocity(iCmd_[i], 2-i);
-          printf(" velocity mode iCmd_[%d]: %f\n", i, iCmd_[i]);
+          // printf(" velocity mode iCmd_[%d]: %f\n", i, iCmd_[i]);
+          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Velocity mode: %f %f", iCmd_[0], iCmd_[1]);
         default:
           ROS_WARN("[SmbHWInterface] Specified SmbMode's values cannot be written to the driver. mode=%d", controlMode_);
           break;
