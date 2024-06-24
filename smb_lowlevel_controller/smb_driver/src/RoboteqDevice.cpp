@@ -215,8 +215,8 @@ int RoboteqDevice::IssueCommand(std::string commandType, std::string command, st
 				if(errno != EAGAIN) //This means read was interrupted by a signal before any bites were read
 					return RQ_ERR_SERIAL_RECEIVE;
 			}
-			time += 1000;
-			usleep(1000);
+			time += 2000;
+			usleep(2000);
 			continue;
 		}
 
