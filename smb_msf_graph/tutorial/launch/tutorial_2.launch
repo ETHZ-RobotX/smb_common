@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <launch>
     <!-- Flags -->
     <arg name="run_plotting" default="true"/>
-    <arg name="noisify_imu" default="true" />
+    <arg name="noisify_imu" default="true"/>
 
     <!-- Topics -->
-    <arg name="imu_topic_name" default="/imu/noisified" />
+    <arg name="imu_topic_name" default="/imu/noisified"/>
 
     <!-- Config Files -->
-    <arg name="core_graph_param_file" default="$(find smb_msf_graph)/tutorial/config/2/core_graph_params.yaml"/>
-    <arg name="smb_graph_param_file" default="$(find smb_msf_graph)/tutorial/config/2/smb_graph_params.yaml"/>
+    <arg name="core_graph_param_file" default="$(find smb_estimator_graph)/config/core/core_graph_params.yaml"/>
+    <arg name="smb_graph_param_file" default="$(find smb_msf_graph)/tutorial/config/2_smb_graph_params.yaml"/>
 
     <!-- Alias to smb_msf_graph replay script -->
     <include file="$(find smb_msf_graph)/launch/smb_msf_graph_o3d_replay.launch">
         <!-- Topics -->
-        <arg name="imu_topic_name" value="$(arg imu_topic_name)" />
+        <arg name="imu_topic_name" value="$(arg imu_topic_name)"/>
         <!-- Config Files -->
-        <arg name="core_graph_param_file" value="$(arg core_graph_param_file)" />
-        <arg name="smb_graph_param_file"  value="$(arg smb_graph_param_file)" />
+        <arg name="core_graph_param_file" value="$(arg core_graph_param_file)"/>
+        <arg name="smb_graph_param_file" value="$(arg smb_graph_param_file)"/>
     </include>
 
     <!-- Launch Plotting Node -->
     <include file="$(find smb_msf_graph)/tutorial/launch/plotting.launch" if="$(arg run_plotting)">
-        <arg name="noisify_imu" value="$(arg noisify_imu)" />
+        <arg name="noisify_imu" value="$(arg noisify_imu)"/>
     </include>
 
     <!-- Static TF Publisher between world_graph_msf and odom -->
-    <node pkg="tf" type="static_transform_publisher" name="world_graph_msf_to_odom" args="0 0 0 0 0 0 world_graph_msf odom 100" />
+    <!--    <node pkg="tf" type="static_transform_publisher" name="world_graph_msf_to_odom" args="0 0 0 0 0 0 world_graph_msf odom 100" />-->
 
 </launch>
