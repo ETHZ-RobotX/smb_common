@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <memory>
-#include <smb_driver/RoboteqBase.h>
 #include <smb_driver/SmbController.h>
 #include "smb_driver/RoboteqDevice.h"
 #include "smb_driver/ErrorCodes.h"
