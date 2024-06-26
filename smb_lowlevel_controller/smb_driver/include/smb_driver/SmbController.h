@@ -68,9 +68,7 @@ public:
 
     bool getWheelSpeeds(double &leftSpeed, double &rightSpeed, int timeoutUs);
 
-    bool getBatteryVoltage(double &batteryVoltage, int timeoutUs);
-
-    double getVelocity(int motor);        // returns the motor velocity in RPM
+ double getVelocity(int motor);        // returns the motor velocity in RPM
     void setVelocity(double vel);        // sets the velocity for closed loop speed mode for both motors
     void setVelocity(double vel, int motor);  // sets the velocity for closed loop speed mode for the motor
     void setTorque(double tau);          // sets the velocity for closed loop torque mode for both motors
@@ -96,7 +94,6 @@ private:
     static void receiveData(void *context);
 
     bool readWheelSpeeds();
-    bool readBatteryVoltage();
     bool readRCInputs();
 
     const bool sendCommands_;
@@ -117,7 +114,6 @@ private:
 
     double leftMotorSpeed_ = 0; //[rad/sec]
     double rightMotorSpeed_ = 0; //[rad/sec]
-    double batteryVoltage_ = 0; //[volts]
 
     // Joystick axes
     float x_rc_ = 0.0;
@@ -140,11 +136,8 @@ private:
 //	RTIME minPeriod_ = 20000000; //[nanosecs]
     double min_cycle_time_Us_ = 1e4; //[microsec] Sets the max desired io rate
     double cycleCountPeriod_Us_ = 5000000.0; //[microsec] Count the number of cycles over this duration for timing diagnostics
-    double batteryVoltageUpdateInterval_ns_ = 500000000.0; //[nano_sec] Update the battery voltage at this rate
     double communicationDropoutTime_Us_ = 1000000.0; //[microsec] Try reconnecting to the motor controller if this amount of time has passed since the last successful read/write cycle
-    std::chrono::time_point<std::chrono::high_resolution_clock> t_lastVoltageUpdate_;
     std::chrono::time_point<std::chrono::high_resolution_clock> t_lastSuccessfulCycle_;
-    double lowBatteryVoltageWarningLevel_ = 36.0; //[V] todo Need to set this to a good value
 
     int sendGoCommand(double value, int motor);
 

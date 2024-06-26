@@ -90,11 +90,6 @@ private:
 
     // ROS
     ros::NodeHandle nh_, private_nh_;
-
-    ros::Publisher batteryStatePublisher_;
-    ros::Timer batteryStatePublishingTimer_;
-    std::mutex batteryVoltageMutex_;
-    double batteryVoltage_ = -1;
     
     // Hardware interfaces
     // hardware_interface::EffortJointInterface current_joint_interface_;
