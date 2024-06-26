@@ -15,7 +15,7 @@
 using namespace std;
 
 string ReplaceString(string source, string find, string replacement);
-void sleepms(int milliseconds);
+// void sleepms(int milliseconds);
 
 class RoboteqDevice
 {
