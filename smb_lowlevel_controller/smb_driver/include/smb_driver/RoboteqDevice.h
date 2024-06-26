@@ -13,17 +13,19 @@ private:
   int fd0;
   int handle;
 
+  const int wait_response_us = 3000;
+
 protected:
   void InitPort();
 
   int Write(string str);
   int ReadAll(string &str);
 
-  int IssueCommandId(int id, string commandType, string command, string args, int waitms, string &response, bool isplusminus = false);
-  int IssueCommandId(int id, string commandType, string command, int waitms, string &response, bool isplusminus = false);
+  int IssueCommandId(int id, string commandType, string command, string args, int waitus, string &response, bool isplusminus = false);
+  int IssueCommandId(int id, string commandType, string command, int waitus, string &response, bool isplusminus = false);
 
-  int IssueCommand(string commandType, string command, string args, int waitms, string &response, bool isplusminus = false);
-  int IssueCommand(string commandType, string command, int waitms, string &response, bool isplusminus = false);
+  int IssueCommand(string commandType, string command, string args, int waitus, string &response, bool isplusminus = false);
+  int IssueCommand(string commandType, string command, int waitus, string &response, bool isplusminus = false);
 
 public:
   bool IsConnected();

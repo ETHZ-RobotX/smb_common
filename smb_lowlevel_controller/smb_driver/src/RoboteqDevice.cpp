@@ -69,7 +69,7 @@ int RoboteqDevice::Connect(string port)
   int z;
 
   for(z=0;z<5;z++){
-    status = IssueCommand("?", "FID", 50, response);
+    status = IssueCommand("?", "FID", 50000, response);
 
     if(status != RQ_SUCCESS)
       {continue;}
@@ -202,7 +202,7 @@ int RoboteqDevice::ReadAll(string &str)
  * Commands including IDs for RoboCAN protocol
  */
 
-int RoboteqDevice::IssueCommandId(int id, string commandType, string command, string args, int waitms, string &response, bool isplusminus)
+int RoboteqDevice::IssueCommandId(int id, string commandType, string command, string args, int waitus, string &response, bool isplusminus)
 {
     int status;
     string read;
@@ -227,7 +227,7 @@ int RoboteqDevice::IssueCommandId(int id, string commandType, string command, st
 #ifdef PRINTING_ON
     cout<<"[RoboteqDriverLib]Writing done\n";
 #endif
-    usleep(waitms * 1000l);
+    usleep(waitus);
 
     status = ReadAll(read);
 
@@ -281,9 +281,9 @@ int RoboteqDevice::IssueCommandId(int id, string commandType, string command, st
 
     return RQ_SUCCESS;
 }
-int RoboteqDevice::IssueCommandId(int id, string commandType, string command, int waitms, string &response, bool isplusminus)
+int RoboteqDevice::IssueCommandId(int id, string commandType, string command, int waitus, string &response, bool isplusminus)
 {
-    return IssueCommandId(id, commandType, command, "", waitms, response, isplusminus);
+    return IssueCommandId(id, commandType, command, "", waitus, response, isplusminus);
 }
 
 int RoboteqDevice::SetConfigId(int id, int configItem, int index, int value)
@@ -306,7 +306,7 @@ int RoboteqDevice::SetConfigId(int id, int configItem, int index, int value)
     if(index < 0)
         return RQ_INDEX_OUT_RANGE;
 
-    int status = IssueCommandId(id, "^", command, args, 10, response, true);
+    int status = IssueCommandId(id, "^", command, args, wait_response_us, response, true);
     if(status != RQ_SUCCESS)
         return status;
     if(response != "+")
@@ -340,7 +340,7 @@ int RoboteqDevice::SetCommandId(int id, int commandItem, int index, int value)
     if(index < 0)
         return RQ_INDEX_OUT_RANGE;
 
-    int status = IssueCommandId(id, "!", command, args, 10, response, true);
+    int status = IssueCommandId(id, "!", command, args, wait_response_us, response, true);
     if(status != RQ_SUCCESS)
         return status;
     if(response != "+")
@@ -372,7 +372,7 @@ int RoboteqDevice::GetConfigId(int id, int configItem, int index, int &result)
     sprintf(command, "$%02X", configItem);
     sprintf(args, "%i", index);
 
-    int status = IssueCommandId(id, "~", command, args, 10, response);
+    int status = IssueCommandId(id, "~", command, args, wait_response_us, response);
     if(status != RQ_SUCCESS)
         return status;
 
@@ -404,7 +404,7 @@ int RoboteqDevice::GetValueId(int id, int operatingItem, int index, int &result)
     sprintf(command, "$%02X", operatingItem);
     sprintf(args, "%i", index);
 
-    int status = IssueCommandId(id, "?", command, args, 10, response);
+    int status = IssueCommandId(id, "?", command, args, wait_response_us, response);
     if(status != RQ_SUCCESS)
         return status;
 
@@ -427,7 +427,7 @@ int RoboteqDevice::GetValueId(int id, int operatingItem, int &result)
  * No ID Commands
  */
 
-int RoboteqDevice::IssueCommand(string commandType, string command, string args, int waitms, string &response, bool isplusminus)
+int RoboteqDevice::IssueCommand(string commandType, string command, string args, int waitus, string &response, bool isplusminus)
 {
   int status;
   string read;
@@ -441,7 +441,7 @@ int RoboteqDevice::IssueCommand(string commandType, string command, string args,
   if(status != RQ_SUCCESS)
     return status;
 
-  usleep(waitms * 1000l);
+  usleep(waitus);
 
   status = ReadAll(read);
   if(status != RQ_SUCCESS)
@@ -473,9 +473,9 @@ int RoboteqDevice::IssueCommand(string commandType, string command, string args,
 #endif
   return RQ_SUCCESS;
 }
-int RoboteqDevice::IssueCommand(string commandType, string command, int waitms, string &response, bool isplusminus)
+int RoboteqDevice::IssueCommand(string commandType, string command, int waitus, string &response, bool isplusminus)
 {
-  return IssueCommand(commandType, command, "", waitms, response, isplusminus);
+  return IssueCommand(commandType, command, "", waitus, response, isplusminus);
 }
 
 int RoboteqDevice::SetConfig(int configItem, int index, int value)
@@ -498,7 +498,7 @@ int RoboteqDevice::SetConfig(int configItem, int index, int value)
   if(index < 0)
     return RQ_INDEX_OUT_RANGE;
 
-  int status = IssueCommand("^", command, args, 10, response, true);
+  int status = IssueCommand("^", command, args, wait_response_us, response, true);
   if(status != RQ_SUCCESS)
     return status;
   if(response != "+")
@@ -532,7 +532,7 @@ int RoboteqDevice::SetCommand(int commandItem, int index, int value)
   if(index < 0)
     return RQ_INDEX_OUT_RANGE;
 
-  int status = IssueCommand("!", command, args, 10, response, true);
+  int status = IssueCommand("!", command, args, wait_response_us, response, true);
   if(status != RQ_SUCCESS)
     return status;
   if(response != "+")
@@ -564,7 +564,7 @@ int RoboteqDevice::GetConfig(int configItem, int index, int &result)
   sprintf(command, "$%02X", configItem);
   sprintf(args, "%i", index);
 
-  int status = IssueCommand("~", command, args, 10, response);
+  int status = IssueCommand("~", command, args, wait_response_us, response);
   if(status != RQ_SUCCESS)
     return status;
 #ifndef ROBOTEQ_DEBUG
@@ -597,7 +597,7 @@ int RoboteqDevice::GetValue(int operatingItem, int index, int &result)
   sprintf(command, "$%02X", operatingItem);
   sprintf(args, "%i", index);
 
-  int status = IssueCommand("?", command, args, 10, response);
+  int status = IssueCommand("?", command, args, wait_response_us, response);
   if(status != RQ_SUCCESS)
     return status;
 
