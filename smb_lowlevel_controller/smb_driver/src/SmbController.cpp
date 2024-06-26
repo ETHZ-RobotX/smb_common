@@ -267,6 +267,10 @@ void SmbController::receiveData(void *context) {
     }
 
     //Read the desired inputs (wheel speeds and rc input)
+    if(!instance->readWheelSpeeds()) {
+      std::cout << "readWheelSpeeds failed" << std::endl;
+    }
+
     if(!instance->readRCInputs()){
       std::cout << "readRCInputs failed" << std::endl;
     };
