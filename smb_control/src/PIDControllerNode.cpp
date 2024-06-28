@@ -177,13 +177,16 @@ void PIDControllerNode::odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
     linear_velocity_pid_.resetIfZero(cmd_vel_requested_.linear.x);
 
     // Update the PID controller
-
     cmd_vel_.angular.z = cmd_vel_requested_.angular.z;
     cmd_vel_.linear.x = cmd_vel_requested_.linear.x;
 
     if(!pure_feed_forward_)
     {
-        cmd_vel_.angular.z += angular_velocity_pid_.update(angular_error, dt_);
+        if (abs(cmd_vel_requested_.angular.z) > 0.05f){
+            cmd_vel_.angular.z += angular_velocity_pid_.update(angular_error, dt_);
+        } else { 
+            cmd_vel_.angular.z = 0.0;
+        }
         cmd_vel_.linear.x += linear_velocity_pid_.update(linear_error, dt_);
     }
 
