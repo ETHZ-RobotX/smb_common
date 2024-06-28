@@ -281,7 +281,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
         *command_ = pid_controller_.computeCommand(error, period);
         *command_ += *setPoint_ > 0 ? ff_general_ : -ff_general_;
         if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
-          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
+          // ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
           *command_ += *setPoint_ > 0 ? ff_pure_rotation_ : -ff_pure_rotation_;
         }
       } else {
