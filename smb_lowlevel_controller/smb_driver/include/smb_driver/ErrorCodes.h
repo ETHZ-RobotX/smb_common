@@ -1,13 +1,13 @@
 #ifndef __ErrorCodes_H_
 #define __ErrorCodes_H_
 
-#define RQ_INVALID_HANDLE        -1
+#define RQ_INVALID_HANDLE       -1
 #define RQ_SUCCESS               0
 #define RQ_ERR_OPEN_PORT         1
 #define RQ_ERR_NOT_CONNECTED     2
 #define RQ_ERR_TRANSMIT_FAILED   3
-#define	RQ_ERR_SERIAL_IO         4
-#define	RQ_ERR_SERIAL_RECEIVE    5
+#define  RQ_ERR_SERIAL_IO        4
+#define  RQ_ERR_SERIAL_RECEIVE   5
 #define RQ_INVALID_RESPONSE      6
 #define RQ_UNRECOGNIZED_DEVICE   7
 #define RQ_UNRECOGNIZED_VERSION  8

@@ -109,35 +109,10 @@ bool SmbController::readWheelSpeeds() {
     return res;
 }
 
-bool SmbController::readBatteryVoltage() {
-    bool res = true;
-
-    int batteryVoltageResult, batteryVoltageStatus = -1;
-    double batteryVoltage;
-    batteryVoltageStatus = serialDevice->GetValue(_V, 2, batteryVoltageResult);
-    if(batteryVoltageStatus == RQ_SUCCESS)
-        batteryVoltage = batteryVoltageResult/10.0;
-    else {
-        res = false;
-        printf("Failed to get battery voltage. Status: %i\n", batteryVoltageStatus);
-    }
-
-    //Write the measured values to the protected memory
-    //todo No timeout is used here on the controller side. Is that good?
-    acquireMutex(dataMutex_, 0);
-
-    if(batteryVoltageStatus == RQ_SUCCESS)
-        batteryVoltage_ = batteryVoltage;
-
-    releaseMutex(dataMutex_);
-
-    return res;
-}
-
 bool SmbController::readRCInputs() {
     bool res = true;
     int channel_1, channel_2 = -1;
-    double batteryVoltage;
+
     if(serialDevice->GetValue(_PIC, 1, channel_1) != RQ_SUCCESS){
       res = false;
     }
@@ -291,27 +266,14 @@ void SmbController::receiveData(void *context) {
       }
     }
 
-    //Read the desired inputs (wheel speeds and battery voltage)
-    if (!instance->readWheelSpeeds())
-      res = false;
+    //Read the desired inputs (wheel speeds and rc input)
+    if(!instance->readWheelSpeeds()) {
+      std::cout << "readWheelSpeeds failed" << std::endl;
+    }
 
     if(!instance->readRCInputs()){
       std::cout << "readRCInputs failed" << std::endl;
     };
-
-    if ((std::chrono::high_resolution_clock::now() - instance->t_lastVoltageUpdate_).count() > instance->batteryVoltageUpdateInterval_ns_) {
-      if (!instance->readBatteryVoltage()){
-        std::cout << "readBatteryVoltage failed" << std::endl;
-        res = false;
-      }
-      else {
-        double batteryVoltage;
-        instance->getBatteryVoltage(batteryVoltage, 500);
-        if (batteryVoltage < instance->lowBatteryVoltageWarningLevel_)
-          printf("[SmbController] WARNING: Low battery voltage. batteryVoltage=%f V", batteryVoltage);
-      }
-      instance->t_lastVoltageUpdate_ = std::chrono::high_resolution_clock::now();
-    }
 
     auto endLoop_ = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::micro> elapsedTime_ = endLoop_ - startLoop_; // fractional duration: no duration_cast needed
@@ -351,15 +313,6 @@ bool SmbController::getWheelSpeeds(double& leftSpeed, double& rightSpeed, int ti
     rightSpeed = rightMotorSpeed_;
     releaseMutex(dataMutex_);    
 
-    return true;
-  }
-  return false;
-}
-
-bool SmbController::getBatteryVoltage(double& batteryVoltage, int timeoutUs) {
-  if (acquireMutex(dataMutex_, timeoutUs)) {
-    batteryVoltage = batteryVoltage_;
-    releaseMutex(dataMutex_);
     return true;
   }
   return false;

@@ -57,8 +57,6 @@ void acquireMutexAndWaitForCondition(mutex_t& mutex, condition_variable_t& condi
 
 void notify(condition_variable_t& condition);
 
-void sleepms(int milliseconds);
-
 
 
 

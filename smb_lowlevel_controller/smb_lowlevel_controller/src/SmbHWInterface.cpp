@@ -8,7 +8,6 @@
 #include <joint_limits_interface/joint_limits_urdf.h>
 #include <joint_limits_interface/joint_limits_rosparam.h>
 #include <urdf_parser/urdf_parser.h>
-#include <sensor_msgs/BatteryState.h>
 #include <algorithm>
 
 namespace smb_lowlevel_controller {
@@ -103,22 +102,6 @@ void SmbHWInterface::setDriverMode(SmbMode mode){
           return false;
       }
 
-      batteryStatePublisher_ = nh_.advertise<sensor_msgs::BatteryState>("base_battery_state", 1, true);
-      batteryStatePublishingTimer_ = nh_.createTimer(ros::Duration(1.0), [this](const auto &){
-        sensor_msgs::BatteryState state;
-        {
-        std::lock_guard<std::mutex> lock(batteryVoltageMutex_);
-        state.voltage = batteryVoltage_;
-        }
-        state.header.stamp = ros::Time::now();
-        const double maxVoltage = 40.0;
-        const double minVoltage = 34.0;
-        state.percentage = (state.voltage - minVoltage)/(maxVoltage - minVoltage);
-        state.percentage = std::clamp((double)state.percentage, (double)0.0, (double)1.0);
-        state.power_supply_status = state.POWER_SUPPLY_STATUS_DISCHARGING;
-        state.present = true;
-        batteryStatePublisher_.publish(state);
-      });
       return true;
   }
 
@@ -214,11 +197,6 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
       // currentPIDs_[0].update(time, elapsedTime);
       // currentPIDs_[1].update(time, elapsedTime);
     }
-    double batteryVoltage = 0;
-    if (smb_->getBatteryVoltage(batteryVoltage, 1000)){
-      std::lock_guard<std::mutex> lock(batteryVoltageMutex_);
-      batteryVoltage_ = batteryVoltage;
-    }
   }
 
   void SmbHWInterface::write(const ros::Time &time, const ros::Duration& elapsedTime) {
@@ -303,7 +281,7 @@ bool reglimits = ((urdf_limits_ok && urdf_soft_limits_ok) || (rosparam_limits_ok
         *command_ = pid_controller_.computeCommand(error, period);
         *command_ += *setPoint_ > 0 ? ff_general_ : -ff_general_;
         if ((*setPoint_ < 0 && *otherSetPoint_ > 0) || (*setPoint_ > 0 && *otherSetPoint_ < 0)) {
-          ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
+          // ROS_INFO_THROTTLE(1.0, "[SmbHWInterface] Diff drive condition, using more power");
           *command_ += *setPoint_ > 0 ? ff_pure_rotation_ : -ff_pure_rotation_;
         }
       } else {

@@ -36,11 +36,6 @@
         rt_cond_signal(&condition);
     }
 
-    void sleepms(int milliseconds)
-    {
-    	usleep(milliseconds * 1000);
-    }
-
 #else
 
 bool acquireMutex(mutex_t &mutex, int timeoutUs) {
@@ -76,11 +71,6 @@ void acquireMutexAndWaitForCondition(mutex_t &mutex, condition_variable_t &condi
 
 void notify(condition_variable_t &condition) {
     condition.notify_one();
-}
-
-void sleepms(int milliseconds)
-{
-	usleep(milliseconds * 1000);
 }
 
 #endif
