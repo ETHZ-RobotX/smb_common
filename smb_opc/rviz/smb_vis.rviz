@@ -71,7 +71,7 @@ Visualization Manager:
             - Class: smb_rviz_plugins/SMBPowerMotor
               Enabled: true
               Name: SMBPowerMotor
-              Topic Power Motor: /control/base_battery_state
+              Topic Power Motor: /smb_powerstatus/base
               Value: true
             - Class: smb_rviz_plugins/SMBPowerPayload
               Enabled: true
