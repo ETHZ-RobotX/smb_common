@@ -4,3 +4,4 @@ smb_slam/maps/*
 !smb_slam/maps/.gitkeep
 *.pcd
 .vscode
+smb_msf_graph/tutorial/rss_plots/*.png

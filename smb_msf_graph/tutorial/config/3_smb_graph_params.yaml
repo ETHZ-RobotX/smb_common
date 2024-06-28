@@ -1,13 +1,23 @@
+# Factor Graph
+graph_params:
+  # TODO: Change here
+  optimizeFixedFramePosesWrtWorld: false  # If true, the poses of the fixed frames are optimized w.r.t. world
+  # TODO: End of change
+
 # Sensor Params
 sensor_params:
   ## Config
-  useLioOdometry: false
+  useLioOdometry: true
   useWheelOdometry: false
   useVioOdometry: false
   ## Rates
   lioOdometryRate: 10
   wheelOdometryRate: 50
   vioOdometryRate: 50
+
+# Alignment Parameters
+alignment_params:
+  initialSe3AlignmentNoiseDensity: [ 1.0e-01, 1.0e-01, 1.0e-01, 1.0e-02, 1.0e-02, 1.0e-02 ] # StdDev, ORDER RPY(rad) - XYZ(meters)
 
 # Noise Parameters
 noise_params:

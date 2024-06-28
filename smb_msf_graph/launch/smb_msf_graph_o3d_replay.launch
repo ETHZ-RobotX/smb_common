@@ -6,8 +6,9 @@
 
     <!-- Parameters -->
     <arg name="imu_topic_name"            default="/imu" />
-    <arg name="lidar_odometry_topic_name" default="/mapping_node/scan2map_odometry"/>
+    <arg name="lidar_odometry_topic_name" default="/mapping/scan2map_odometry"/>
     <arg name="launch_o3d_slam" default="true"/>
+    <arg name="cloud_topic" default="/rslidar/points"/>
 
     <!-- Config Files -->
     <arg name="core_graph_param_file" default="$(find smb_estimator_graph)/config/core/core_graph_params.yaml"/>
@@ -30,6 +31,7 @@
     <!-- Launch Open3D SLAM -->
     <include file="$(find smb_slam)/launch/online_slam.launch" if="$(arg launch_o3d_slam)">
         <arg name="use_sim_time" value="$(arg use_sim_time)" />
+        <arg name="cloud_topic" value="$(arg cloud_topic)" />
     </include>
 
 </launch>
