@@ -25,6 +25,6 @@
     </include>
 
     <!-- Static TF Publisher between world_graph_msf and odom -->
-    <!--    <node pkg="tf" type="static_transform_publisher" name="world_graph_msf_to_odom" args="0 0 0 0 0 0 world_graph_msf odom 100" />-->
+    <node pkg="tf" type="static_transform_publisher" name="world_graph_msf_to_odom" args="0 0 0 0 0 0 world_graph_msf odom 100" />
 
 </launch>
