@@ -2,7 +2,7 @@
 sensor_params:
   ## Config
   useLioOdometry: true
-  useWheelOdometry: false
+  useWheelOdometry: true
   useVioOdometry: false
   ## Rates
   lioOdometryRate: 10
@@ -21,9 +21,9 @@ noise_params:
   gyrBiasRandomWalkNoiseDensity: 2.66e-06 # Continuous-time Noise Amplitude Spectral Density of Gyroscope bias random walk [rad/s^2/√Hz], default: default: sqrt(9.33e-04)
   # TODO: End of change
   ## LiDAR
-  lioPoseUnaryNoiseDensity: [ 0.05, 0.05, 0.05, 0.01, 0.01, 0.01 ] # StdDev, ORDER RPY(rad) - XYZ(meters) First tests:  [ 1000.0, 1000.0, 1000.0, 2.0, 2.0, 2.0 ]
+  lioPoseUnaryNoiseDensity: [ 0.05, 0.05, 0.05, 0.01, 0.01, 0.01 ] # StdDev, ORDER RPY(rad) - XYZ(meters)
   ## Wheel
-  wheelPoseBetweenNoiseDensity: [ 0.2, 0.2, 0.2, 0.005, 0.005, 0.005 ] # StdDev, [ 10.0, 10.0, 10.0, 2.0, 2.0, 2.0 ]
+  wheelPoseBetweenNoiseDensity: [ 0.1, 0.1, 0.1, 0.06, 0.06, 0.06 ] # StdDev, ORDER RPY(rad) - XYZ(meters)
   ## VIO
-  vioPoseBetweenNoiseDensity: [ 100.0, 100.0, 100.0, 0.1, 0.1, 0.1 ] # StdDev [ 10.0, 10.0, 10.0, 2.0, 2.0, 2.0 ]
-  vioPoseUnaryNoiseDensity: [ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ] # StdDev, [ 10.0, 10.0, 10.0, 2.0, 2.0, 2.0 ]
+  vioPoseBetweenNoiseDensity: [ 100.0, 100.0, 100.0, 0.1, 0.1, 0.1 ] # StdDev, ORDER RPY(rad) - XYZ(meters)
+  vioPoseUnaryNoiseDensity: [ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ] # StdDev, ORDER RPY(rad) - XYZ(meters)

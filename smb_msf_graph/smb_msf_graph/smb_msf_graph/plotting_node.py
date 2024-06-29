@@ -88,59 +88,70 @@ class MsfPlotter:
 
         # Plot diagrams when destructor is called
         print(f"Saving plots to {log_dir}...")
+
         # Position plots -------------------------------------------
-        ## x-y-plot
-        plot_name = "state-position-x-y"
-        print(plot_name)
-        x_axis_name = "x[m]"
-        y_axis_name = "y[m]"
-        plot_2d(x_coords=self.x_pos, y_coords=self.y_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
-        ## z-plot
-        plot_name = "state-position-z"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "z[m]"
-        plot_2d(x_coords=self.state_time, y_coords=self.z_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
+        if experiment_name == "1.1" or experiment_name == "1.2" or experiment_name == "1.3":
+            ## x-y-plot
+            plot_name = "state-position-x-y"
+            print(plot_name)
+            x_axis_name = "x[m]"
+            y_axis_name = "y[m]"
+            plot_2d(x_coords=self.x_pos, y_coords=self.y_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+
+        if experiment_name == "2.1" or experiment_name == "2.2" or experiment_name == "3.1" or experiment_name == "3.2":
+            ## z-plot
+            plot_name = "state-position-z"
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "z[m]"
+            plot_2d(x_coords=self.state_time, y_coords=self.z_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+
         # Velcoity plots -------------------------------------------
-        ## x-velocity
-        plot_name = "state-velocity-x"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "v[m/s]"
-        plot_2d(x_coords=self.state_time, y_coords=self.x_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
-        ## y-velocity
-        plot_name = "state-velocity-y"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "v[m/s]"
-        plot_2d(x_coords=self.state_time, y_coords=self.y_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
+        if experiment_name == "1.1" or experiment_name == "1.2" or experiment_name == "1.3" or experiment_name == "3.1" or experiment_name == "3.2":
+            ## x-velocity
+            plot_name = "state-velocity-x"
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "v[m/s]"
+            plot_2d(x_coords=self.state_time, y_coords=self.x_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+            ## y-velocity
+            plot_name = "state-velocity-y"
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "v[m/s]"
+            plot_2d(x_coords=self.state_time, y_coords=self.y_vel, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+
         # Bias plots -----------------------------------------------
-        if experiment_name == "1.3" or experiment_name == "2.1" or experiment_name == "2.2" or experiment_name == "3.1" or experiment_name == "3.2":
-        ## x-Bias
+        if experiment_name == "2.1" or experiment_name == "2.2":
+            ## x-Bias
             plot_name = "acc-bias-x"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "b[m/s^2]"
-        plot_2d(x_coords=self.imu_bias_time, y_coords=self.x_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
-        ## y-Bias
-        plot_name = "acc-bias-y"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "b[m/s^2]"
-        plot_2d(x_coords=self.imu_bias_time, y_coords=self.y_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
-        ## z-Bias
-        plot_name = "acc-bias-z"
-        print(plot_name)
-        x_axis_name = "t[s]"
-        y_axis_name = "b[m/s^2]"
-        plot_2d(x_coords=self.imu_bias_time, y_coords=self.z_acc_bias, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
-                plot_name=plot_name, log_dir=log_dir)
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "b[m/s^2]"
+            plot_2d(x_coords=self.imu_bias_time, y_coords=self.x_acc_bias, x_axis_name=x_axis_name,
+                    y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+            ## y-Bias
+            plot_name = "acc-bias-y"
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "b[m/s^2]"
+            plot_2d(x_coords=self.imu_bias_time, y_coords=self.y_acc_bias, x_axis_name=x_axis_name,
+                    y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+            ## z-Bias
+            plot_name = "acc-bias-z"
+            print(plot_name)
+            x_axis_name = "t[s]"
+            y_axis_name = "b[m/s^2]"
+            plot_2d(x_coords=self.imu_bias_time, y_coords=self.z_acc_bias, x_axis_name=x_axis_name,
+                    y_axis_name=y_axis_name,
+                    plot_name=plot_name, log_dir=log_dir)
+
         # Wheel odometry plots -------------------------------------
         if experiment_name == "1.2":
             ## x-y-plot
@@ -148,7 +159,8 @@ class MsfPlotter:
             print(plot_name)
             x_axis_name = "x[m]"
             y_axis_name = "y[m]"
-            plot_2d(x_coords=self.x_wheel_pos, y_coords=self.y_wheel_pos, x_axis_name=x_axis_name, y_axis_name=y_axis_name,
+            plot_2d(x_coords=self.x_wheel_pos, y_coords=self.y_wheel_pos, x_axis_name=x_axis_name,
+                    y_axis_name=y_axis_name,
                     plot_name=plot_name, log_dir=log_dir)
 
     def state_odometry_callback(self, state_estimate):
