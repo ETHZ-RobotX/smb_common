@@ -22,6 +22,5 @@
     <arg name="odometry_topic"         value="/graph_msf/est_odometry_odom_imu"/>
     <arg name="assumed_external_odometry_tracked_frame" default="imu"/>
   </include>
-
   
 </launch>

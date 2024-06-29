@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <!-- Arguments -->
+  <arg name="use_sim_time"          default="true" />
+  <arg name="cloud_topic"           default="/rslidar/points"  doc="input topic for the lidar pointcloud"/>
+  <arg name="parameter_filename"    default="param_replay.lua" doc="param file name, pcd file path is set in the parameter file"/> 
+  <arg name="parameter_folder_path" default="$(find smb_slam)/config/"/>
+  <arg name="launch_rviz"           default="true" doc="whether to launch rviz"/>
+  <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map (Won't get updated in this case)"/>
+
+  <!-- Be careful!
+  If you dont have the topic specified here in your bag, the node will complain!
+  An example is given for VIO from tracking camera.
+  for GMSF use 
+
+  assumed_external_odometry_tracked_frame = imu
+  async_pose_topic = /graph_msf/est_odometry_odom_imu
+
+  -->
+  <arg name="async_pose_topic" default="/tracking_camera/odom/sample"/>
+  <arg name="assumed_external_odometry_tracked_frame" default="base_link"/>
+
+  <!-- If you to sleep between steps. -->
+  <arg name="relative_sleep_duration" default="0.0"/>
+  <arg name="replay_start_time_as_second" default="0.0"/>
+  <arg name="replay_end_time_as_second" default="2000.0"/>
+
+   <!-- Your bag path. -->
+  <arg name="rosbag_filepath" default="$(find smb_slam)/data/test.bag"/>
+
+  <!-- Launch Replayer (open3d_slam) -->
+  <include file="$(find open3d_slam_ros)/launch/replay.launch">
+    <arg name="cloud_topic"           value="$(arg cloud_topic)" />
+    <arg name="parameter_filename"    value="$(arg parameter_filename)"/>
+    <arg name="launch_rviz"           value="$(arg launch_rviz)"/>
+    <arg name="map_saving_folder"     value="$(arg map_saving_folder)"/>
+    <arg name="use_sim_time"          value="$(arg use_sim_time)" />
+    <arg name="assumed_external_odometry_tracked_frame" default="$(arg assumed_external_odometry_tracked_frame)"/>
+    <arg name="rosbag_filepath"                value="$(arg rosbag_filepath)"/>
+    <arg name="replay_end_time_as_second"      value="$(arg replay_end_time_as_second)" />
+    <arg name="relative_sleep_duration"        value="$(arg relative_sleep_duration)" />
+    <arg name="replay_start_time_as_second"    value="$(arg replay_start_time_as_second)" />
+    <arg name="async_pose_topic"               value="$(arg async_pose_topic)"/>
+    <arg name="parameter_folder_path"          value="$(arg parameter_folder_path)"/>
+  </include>
+  
+</launch>
