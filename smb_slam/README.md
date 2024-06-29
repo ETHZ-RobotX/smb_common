@@ -41,12 +41,12 @@ For all the above cases, if you run in simulation, you can launch rviz by settin
 3. Building a Map Offline (Replay Mode):
 
      Run the following command to start running a replayer node that uses an external odometry specified in the launch file and the point cloud. Different than the online SLAM pipeline, this replayer runs sequentially. This means, the node will not skip measurements and instead it will wait for computation of the previous point cloud to finish before moving on. As a result, in compute limited systems might run slower than real-time and vice-versa, i.e. faster than real-time in powerful devices. This node saves the generated map, a rosbag that contains the registered point clouds as well as the calculated poses and finally, the path of the robot as a .pcd file such that the user can visualize the path next to the map. The saving folder is specified within the `.launch` file.
-     
+     ```
+     roslaunch smb_slam replay_SLAM.launch
+     ```
+
 > **Note**: The user is responsible to make sure that the specified topics are in the bag. The node will guide if there is something missing.
 
-      ```
-      roslaunch smb_slam replay_SLAM.launch
-      ```
 
 ### Map Saving
 
