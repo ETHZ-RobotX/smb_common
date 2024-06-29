@@ -1,5 +1,5 @@
 # SMB_SLAM
-This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping using [open3d_slam](https://github.com/ETHZ-RobotX/open3d_slam_advanced_rss_2024).
+This package contains a bunch of commodity scripts for running (simultaneous) localization & mapping using [open3d_slam](https://github.com/ETHZ-RobotX/open3d_slam_advanced_rss_2024_public).
 
 Follow instructions the instructions below to build ```smb_slam```.
 
@@ -21,7 +21,7 @@ Here are different modes of operation:
 
 1. Running in Online SLAM Mode:
 
-      Make sure that `smb smb.launch` is running correctly. Now simply run the following command to start running online SLAM. You can save the map at any point by using rosservice or the map will automatically get saved upon closing the node. The `loop closure` is switched off by default for this operation and can be turned on using ```loop_closure:=true``` argument (Though we don't recommend it due to computational limits).
+      Make sure that `smb smb.launch` is running correctly. Now simply run the following command to start running online SLAM. You can save the map at any point by using rosservice or the map will automatically get saved upon closing the node. Advanced features such as `loop closure`, `space carving` and `submap-to-submap` registration are disabled by default as SMBs are computationally already loaded. Refer to the parameter file `/smb_slam/config/open3d_slam/param_robosense_rs16.lua` and the below table for parameter details.
       
       ```
       roslaunch smb_slam online_slam.launch
@@ -45,16 +45,16 @@ For all the above cases, if you run in simulation, you can launch rviz by settin
 > **Note**: The user is responsible to make sure that the specified topics are in the bag. The node will guide if there is something missing.
 
       ```
-      roslaunch smb_slam replay_SLAM.launch"
+      roslaunch smb_slam replay_SLAM.launch
       ```
 
 ### Map Saving
 
 The map can be saved at any point by using rosservice from a new terminal. Run the following command from a new sourced terminal:
 ```
-rosservice call /mapping_node/save_map
+rosservice call /mapping/save_map
 ```
-Alternatively there is an option for autosaving upon exit which can be switched on from the param files (`params.saving.save_at_mission_end = true`).
+Alternatively there is an option for autosaving upon exit which can be switched on from the param files (`params.saving.save_map = true`).
 
 
 ## Important Parameters
@@ -70,6 +70,7 @@ Other than the parameters exposed to the ROS parameter server (the parameters us
 | `params.submap.submap_size` | `double` | The submap size in meters, if increased each submap contains more data but computation increases.|
 | `params.map_builder.map_voxel_size ` | `double` | The voxel size of the map, subsequently of the submap. Defines the resolution of the map that is used for localization purposes. |
 | `params.mapper_localizer.scan_to_map_registration.icp.reference_cloud_seting_period` | `double` | The refence setting period in seconds. If you decrease (> 0.0s) the localization becomes more robust but computation increases. If rapid motions are done, the decrease in the period can help.|
+| `params.mapper_localizer.scan_to_map_registration.scan_processing.voxel_size` | `double` | The voxel size used for the registration. This parameter should not be set smaller than the map voxel size, as it would be meaningless. If set smaller the localization resolution increases but also sensitivity to noise and computational limitations. |
 
 
 > **Note**: There are multiple advanced parameters in Open3D, to not complicated simple operation these are not detailed here. Follow the naming of the variables to infer usage.
