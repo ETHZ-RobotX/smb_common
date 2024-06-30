@@ -27,7 +27,7 @@
   <arg name="replay_end_time_as_second" default="2000.0"/>
 
    <!-- Your bag path. -->
-  <arg name="rosbag_filepath" default="$(find smb_slam)/data/test.bag"/>
+  <arg name="rosbag_filepath" default="$(find open3d_slam_ros)/data/tutorial.bag"/>
 
   <!-- Launch Replayer (open3d_slam) -->
   <include file="$(find open3d_slam_ros)/launch/replay.launch">
