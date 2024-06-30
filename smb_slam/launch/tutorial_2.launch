@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+ <!-- 
+  SLAM tutorial 2: This tutorial shows the benefits of providing an external odometry to a SLAM system is shown. Given a rosbag called `tutorial.bag`
+  within `/open3d_slam_rsl/ros/open3d_slam_ros/data/` folder.
+
+  The odometry source is selected as `/tracking_camera/odom/sample` topic which is the Visual-Inertial odometry from the tracking camera.
+  To ensure correct usage of the odometry topic, the frame of the odometry should be provided.
+  For simplicity, this is already corrected entered to the `tutorial_2_LiDAR_SLAM.launch` file.
+
+  For details of this configuration check the `tutorial_2_LiDAR_SLAM.launch` launch file and `tutorial_2_LiDAR_SLAM.lua` configuration file.
+ -->
+
+  <arg name="launch_rviz" default="true"/>
+  <arg name="launch_model" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+
+  <!-- Launch Stack -->
+  <include file="$(find open3d_slam_ros)/launch/tutorials/tutorial_2_LiDAR_SLAM.launch">
+      <arg name="use_sim_time" value="$(arg use_sim_time)" />
+      <arg name="launch_rviz" value="$(arg launch_rviz)" />
+      <arg name="launch_model" value="$(arg launch_model)" />
+
+  </include>
+
+</launch>

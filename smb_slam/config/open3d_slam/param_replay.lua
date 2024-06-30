@@ -4,15 +4,16 @@ include "default/default_parameters.lua"
 params = deepcopy(DEFAULT_PARAMETERS)
 
 --ScanToScan ODOMETRY
-params.odometry.scan_processing.voxel_size = 0.1
+params.odometry.scan_processing.voxel_size = 0.2
 params.odometry.scan_processing.downsampling_ratio = 1.0
+params.odometry.scan_processing.scan_cropping.cropping_radius_max = 40.0
 
 --Advanced Options.
 params.odometry.use_odometry_topic_instead_of_scan_to_scan = true --Uses External Odometry topic instead of Scan2Scan registration.
 params.odometry.use_IMU_for_attitude_initialization = false --Uses IMU msgs to initialize gravity aligned attitude.
 
 --MAPPER_LOCALIZER
-params.mapper_localizer.is_use_map_initialization = true
+params.mapper_localizer.is_use_map_initialization = false
 params.mapper_localizer.republish_the_preloaded_map = false
 params.mapper_localizer.is_merge_scans_into_map = false
 params.mapper_localizer.is_build_dense_map = false
@@ -31,9 +32,9 @@ params.mapper_localizer.scan_to_map_registration.icp.max_distance_knn = 1.0 --Cu
 params.mapper_localizer.scan_to_map_registration.icp.reference_cloud_seting_period = 2.0 --Seconds
 
 --MAP_INITIALIZER
-params.map_initializer.pcd_file_package = "smb_slam"
-params.map_initializer.pcd_file_path = "/data/maps/map.pcd" --you need to give your own map here. .pcd or .ply well supported.
-params.map_initializer.is_initialize_interactively = true
+params.map_initializer.pcd_file_package = "open3d_slam_ros"
+params.map_initializer.pcd_file_path = "" --you need to give your own map here. .pcd or .ply well supported.
+params.map_initializer.is_initialize_interactively = false
 params.map_initializer.init_pose.x = 0.0
 params.map_initializer.init_pose.y = 2.0
 params.map_initializer.init_pose.z = 0.0

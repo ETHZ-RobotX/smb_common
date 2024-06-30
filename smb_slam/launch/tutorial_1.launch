@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+ <!-- 
+  SLAM tutorial 1: This tutorial deploys LiDAR Only Odometry and Mapping given a rosbag called `tutorial.bag`
+  within `/open3d_slam_rsl/ros/open3d_slam_ros/data/` folder.
+  As this is an LIDAR only example, no odometry is required.
+ 
+  For details of this configuration check the `tutorial_1_LO.launch` launch file and `tutorial_1_LO.lua` configuration file.
+ -->
+
+  <arg name="launch_rviz" default="true"/>
+  <arg name="launch_model" default="true"/>
+  <arg name="use_sim_time" default="true"/>
+
+  <!-- Launch Stack -->
+  <include file="$(find open3d_slam_ros)/launch/tutorials/tutorial_1_LO.launch">
+      <arg name="use_sim_time" value="$(arg use_sim_time)" />
+      <arg name="launch_rviz" value="$(arg launch_rviz)" />
+      <arg name="launch_model" value="$(arg launch_model)" />
+
+  </include>
+
+</launch>
