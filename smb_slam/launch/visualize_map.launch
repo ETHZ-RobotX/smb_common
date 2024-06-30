@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
 
-  <arg name="pcd_file_path" default="$(find smb_slam)/data/maps/map.pcd"/>
+  <arg name="pcd_file_path" default="$(find open3d_slam_ros)/data/maps/map.pcd"/>
   <arg name="rviz_config" default="$(find open3d_slam_ros)/rviz/visualizer_node.rviz"/>
   <arg name="launch_rviz" default="true"/>
 
