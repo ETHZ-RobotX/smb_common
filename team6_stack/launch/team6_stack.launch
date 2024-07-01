@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is for adding all the important launch files for our software stacks. -->
+<launch>
+<arg name="sim" default="false"/>
+<arg name="launch_gazebo_gui" default="true"/>
+<arg name="keyboard_teleop" default="false"/>
+
+<arg name="msf_graph_parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
+
+<arg name="launch_far_planner" default="true"/>
+
+<!-- if simulating, the use smb_gazebo instead of smb -->
+<group if="$(arg sim)">
+    <include file="$(find smb_gazebo)/launch/sim.launch">
+        <arg name="launch_gazebo_gui" value="true" />
+        <arg name="keyboard_teleop" value="$(arg keyboard_teleop)" />
+    </include>
+</group>
+
+<group unless="$(arg sim)">
+    <include file="$(find smb)/launch/smb.launch"/>
+</group>
+
+<!-- Launching the MSF Graphs -->
+<include file="$(find smb_msf_graph)/launch/smb_msf_graph.launch">
+    <arg name="use_sim_time" value="$(arg sim)" />
+</include>
+
+<include file="$(find smb_navigation)/launch/navigate2d_cmu.launch">
+    <arg name="use_msf" value="true" />
+    <arg name="global_frame" value="world_graph_msf" />
+    <arg name="state_estimation_topic" value="/transformed_odom" />
+    <arg name="launch_far_planner" value="$(arg launch_far_planner)" />
+</include>
+
+</launch>
