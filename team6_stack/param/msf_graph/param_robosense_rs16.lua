@@ -53,10 +53,10 @@ params.submap.max_num_points = 250000
 params.map_builder.map_voxel_size = 0.25
 params.map_builder.scan_cropping.cropping_radius_max = 40.0
 params.map_builder.scan_cropping.cropping_radius_min = 2.0
-params.map_builder.space_carving.carve_space_every_n_scans = 10
-params.map_builder.space_carving.max_raytracing_length = 20
-params.map_builder.space_carving.truncation_distance = 0.3
-params.map_builder.space_carving.voxel_size = 0.2
+params.map_builder.space_carving.carve_space_every_n_scans = 10 --decreasing will increase commputation load
+params.map_builder.space_carving.max_raytracing_length = 20 --self explanatory
+params.map_builder.space_carving.truncation_distance = 0.3 --roughly the min ray tracing distance for carving
+params.map_builder.space_carving.voxel_size = 0.2 --Bigger value results in more aggresive pruning
 
 --DENSE_MAP_BUILDER
 params.dense_map_builder.map_voxel_size = 0.05
