@@ -25,9 +25,14 @@
   <arg name="relative_sleep_duration" default="0.0"/>
   <arg name="replay_start_time_as_second" default="0.0"/>
   <arg name="replay_end_time_as_second" default="2000.0"/>
+  <arg name="rosbag_folder" default="/workspaces/rss_workspace/rosbags"/>
+  <arg name="rosbag_file" default="2024-07-01/2024-07-01-19-47-39" doc="Name of rosbag file without .bag"/>
 
    <!-- Your bag path. -->
-  <arg name="rosbag_filepath" default="$(find open3d_slam_ros)/data/tutorial.bag"/>
+  <arg name="rosbag_filepath" default="$(arg rosbag_folder)/$(arg rosbag_file)_smb.bag"/>
+
+  <!-- Adding the ros parameters -->
+  <rosparam command="load" file="$(arg rosbag_folder)/$(arg rosbag_file).yaml" />
 
   <!-- Launch Replayer (open3d_slam) -->
   <include file="$(find open3d_slam_ros)/launch/replay.launch">

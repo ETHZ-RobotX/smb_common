@@ -5,9 +5,7 @@
 <arg name="launch_gazebo_gui" default="true"/>
 <arg name="keyboard_teleop" default="false"/>
 
-<arg name="msf_graph_parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
-
-<arg name="launch_far_planner" default="true"/>
+<arg name="launch_far_planner" default="false"/>
 
 <!-- if simulating, the use smb_gazebo instead of smb -->
 <group if="$(arg sim)">
@@ -31,6 +29,10 @@
     <arg name="global_frame" value="world_graph_msf" />
     <arg name="state_estimation_topic" value="/transformed_odom" />
     <arg name="launch_far_planner" value="$(arg launch_far_planner)" />
+</include>
+
+<include file="$(find smb_exploration)/launch/cmu/smb_rss_tare.launch">
+    <arg name="rviz" value="false"/>
 </include>
 
 </launch>
