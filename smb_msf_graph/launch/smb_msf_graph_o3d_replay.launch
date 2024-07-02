@@ -34,4 +34,14 @@
         <arg name="cloud_topic" value="$(arg cloud_topic)" />
     </include>
 
+    <!-- Elevation mapping node -->
+    <arg name="default_elevation_mapping_parameter_file" default="$(dirname)/../config/elevation_mapping/default.yaml"/>
+    <arg name="elevation_mapping_parameter_file" default="$(dirname)/../config/elevation_mapping/vlp16.yaml"/>
+
+    <!-- Elevation Mapping -->
+    <node pkg="elevation_mapping" type="elevation_mapping" name="elevation_mapping" output="log">
+        <rosparam command="load" file="$(arg default_elevation_mapping_parameter_file)"/>
+        <rosparam command="load" file="$(arg elevation_mapping_parameter_file)"/>
+    </node>
+
 </launch>
