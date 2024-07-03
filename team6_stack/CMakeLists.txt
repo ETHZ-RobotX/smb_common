@@ -163,9 +163,10 @@ include_directories(
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
+# Mark executable scripts (Python etc.) for installation
+# in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
+  scripts/object_inspector.py
   scripts/object_detection_saver.py
   scripts/tf_listener.py
   scripts/tf_converter.py
