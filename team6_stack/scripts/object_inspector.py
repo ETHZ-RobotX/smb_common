@@ -50,14 +50,13 @@ class ObjectInspectorNode(object):
         rospy.init_node('my_node')
         rospy.on_shutdown(self.shutdown)
 
-        self.inspected_artefacts = []       # list of artefacts that are already detected
         self.artefacts = []                 # list of artefacts detected
         self.is_inspecting = False          #
 
-        self.exploration_finish_sub = rospy.Subscriber('exploration_finish', Bool, self.exploration_finish_callback)
-        self.detected_artefacts_sub = rospy.Subscriber('/object_detector/detection_info_global', ObjectDetectionInfoArray, self.detected_artefacts_callback)
-        self.inspected_artefacts_pub = rospy.Publisher('/object_inspector/unique_artifacts', ObjectDetectionInfoArray, queue_size=1)
-        # self.waypoint_pub = rospy.Publisher('/way_point', PointStamped, queue_size=1)
+        self.home_reached_sub = rospy.Subscriber('reached_home', Bool, self.home_reached_callback)
+        self.detected_artefacts_sub = rospy.Subscriber('object_detector/detection_info_global', ObjectDetectionInfoArray, self.detected_artefacts_callback)
+        self.inspected_artefacts_pub = rospy.Publisher('object_inspector/unique_artifacts', ObjectDetectionInfoArray, queue_size=1)
+        self.waypoint_pub = rospy.Publisher('way_point', PointStamped, queue_size=1)
 
         rospy.loginfo_once('Object Inspector node is running!')
     
@@ -67,7 +66,7 @@ class ObjectInspectorNode(object):
     def shutdown(self) -> None:
         rospy.loginfo("Shutting down...")
 
-    def exploration_finish_callback(self, msg) -> None:
+    def home_reached_callback(self, msg) -> None:
         if not msg.data:
             return
         
@@ -83,7 +82,7 @@ class ObjectInspectorNode(object):
             already_added = False
 
             # Check if the artefact is already in the list, or is already inspected
-            for artefact in self.artefacts + self.inspected_artefacts:
+            for artefact in self.artefacts:
                 if self.distance(detected_artefact.position, artefact.position) < EPS_:
                     already_added = True
                     break
@@ -94,9 +93,7 @@ class ObjectInspectorNode(object):
         
     def publish_inspected_artefacts(self) -> None:
         inspected_artefacts_msg = ObjectDetectionInfoArray()
-        for artefact in self.artefacts:
-            inspected_artefacts_msg.info.append(artefact)
-            self.inspected_artefacts.append(artefact)
+        inspected_artefacts_msg.info = [artefact for artefact in self.artefacts]
         self.inspected_artefacts_pub.publish(inspected_artefacts_msg)
         rospy.loginfo('Inspected artefacts published!')
         
