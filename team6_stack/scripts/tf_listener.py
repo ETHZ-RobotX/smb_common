@@ -4,9 +4,10 @@ import rospy
 import tf2_ros
 import tf2_msgs
 from tf2_msgs.msg import TFMessage
-from geometry_msgs.msg import TransformStamped
+from geometry_msgs.msg import TransformStamped, PointStamped
 import tf2_geometry_msgs
 from object_detection.object_detection_msgs import ObjectDetectionInfoArray
+from my_transform_package.msg import TransformedDetection
 
 import numpy as np
 
@@ -23,6 +24,8 @@ translation_base2cam = None
 rotation_base2cam = None
 translation_cam2opt = None
 rotation_cam2opt = None
+
+transformed_detection_pub = None
 
 def tf_callback(msg):
         
@@ -82,6 +85,13 @@ def detection_callback(msg):
                 transformed_pose = tf_buffer.transform(object_pose, "base_link", rospy.Duration(1.0))
                 transformed_position = transformed_pose.pose.position
                 rospy.loginfo(f"Detected object (class_id: {class_id}) position in base_link frame: x={transformed_position.x}, y={transformed_position.y}, z={transformed_position.z}")
+            
+                # Publish the transformed detection
+                transformed_detection = TransformedDetection()
+                transformed_detection.position = transformed_position
+                transformed_detection.class_id = class_id
+                transformed_detection_pub.publish(transformed_detection)
+            
             except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
                 rospy.logerr(f"TF transform error: {e}")
 
@@ -103,7 +113,7 @@ def duplicate_rejection(detections):
     return unique_detections
 
 def main():
-    global tf_buffer, tf_listener
+    global tf_buffer, tf_listener, transformed_detection_pub
 
     rospy.init_node('tf_listener', anonymous=True)
 
@@ -114,6 +124,8 @@ def main():
     rospy.Subscriber('/tf_static', TFMessage, tf_static_callback)
     rospy.Subscriber('/object_detector/detection_info', ObjectDetectionInfoArray, detection_callback)
     
+    transformed_detection_pub = rospy.Publisher('/transformed_detections', TransformedDetection, queue_size=10)
+    rospy.Publisher('/artefact_point', PointStamped)
     rospy.spin()
 
 if __name__ == '__main__':

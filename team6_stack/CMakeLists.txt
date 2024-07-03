@@ -7,9 +7,19 @@ project(team6_stack)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED 
+find_package(catkin REQUIRED COMPONENTS
     object_detection
-    )
+    rospy
+    tf2_ros
+    geometry_msgs
+    tf2_geometry_msgs
+    std_msgs
+    tf2_msgs
+    message_generation
+)
+
+catkin_package()
+
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -55,6 +65,7 @@ add_message_files(
   ObjectDetectionInfo.msg
   ObjectDetectionInfoArray.msg
   PointCloudArray.msg
+  TransformedDetection.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -72,10 +83,11 @@ add_message_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  std_msgs  # Or other packages containing msgs
+  geometry_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -110,6 +122,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES team6_stack
 #  CATKIN_DEPENDS other_catkin_pkg
+CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
@@ -121,7 +134,7 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
 # include
-# ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
