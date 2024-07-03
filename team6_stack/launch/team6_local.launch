@@ -10,6 +10,5 @@
 
 <!-- Launching the TF nodes -->
 <node name="tf_converter" pkg="team6_stack" type="tf_converter.py" output="screen"/>
-<node name="tf_listener" pkg="team6_stack" type="tf_listener.py" output="screen"/>
 
 </launch>
