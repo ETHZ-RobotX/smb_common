@@ -4,7 +4,7 @@
   <!-- Arguments -->
   <arg name="use_sim_time"          default="false" />
   <arg name="cloud_topic"           default="/rslidar/points" doc="input topic for the lidar pointcloud"/>
-  <arg name="parameter_filename"    default="param_robosense_rs16.lua" doc="param file name"/>
+  <arg name="parameter_filename"    default="param_robosense_rs16_team6.lua" doc="param file name"/>
   <arg name="launch_rviz"           default="false" doc="whether to launch rviz"/>
   <arg name="launch_sensors"        default="false" doc="whether to launch the sensors on the robot"/>
   <arg name="map_saving_folder"     default="$(find smb_slam)/data/maps/" doc="Path for saving the map"/>
