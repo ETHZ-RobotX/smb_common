@@ -8,6 +8,7 @@ project(team6_stack)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED)
+find_package(object_detection_msgs REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -156,7 +157,7 @@ include_directories(
 # Mark executable scripts (Python etc.) for installation
 # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  scripts/object_inspection.py
+  scripts/object_inspector.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
