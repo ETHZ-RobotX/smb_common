@@ -2,7 +2,9 @@
 import rospy
 
 from std_msgs.msg import Header
-from object_detection.object_detection_msgs import ObjectDetection
+from object_detection_msgs import ObjectDetectionInfoArray
+
+# TODO: needs to be tested
 
 def callback(msg):
     infos = []
@@ -14,14 +16,20 @@ def callback(msg):
             'z': info.position.z # in camera frame
         }
         infos.append(info)
+    
     print(infos)
-    # TODO: Save to a csv file
+    
+    # Save the detected artifacts to a csv file
+    with open('data/artifacts.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+        for info in infos:
+            writer.writerow([info['class_id'], info['x'], info['y'], info['z']])
 
 def object_detection_listener():
     rospy.init_node('team6_stack', anonymous=True)
     
-    # Subscribe to the /object_detection/detection_info topic
-    rospy.Subscriber('/object_detection/detection_info', ObjectDetection, callback)
+    # Subscribe to the /object_detector/detection_info topic
+    rospy.Subscriber('/object_detector/detection_info', ObjectDetectionInfoArray, callback)
     
     # Keep the script running
     rospy.spin()
