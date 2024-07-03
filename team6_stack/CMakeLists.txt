@@ -7,8 +7,11 @@ project(team6_stack)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
-find_package(object_detection_msgs REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  rospy
+  object_detection_msgs
+  object_detection
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -45,9 +48,15 @@ find_package(object_detection_msgs REQUIRED)
 
 ## Generate messages in the 'msg' folder
 # add_message_files(
+#   DIRECTORY msg
 #   FILES
-#   Message1.msg
-#   Message2.msg
+#   ObjectDetection.msg
+#   ObjectDetectionArray.msg
+#   ObjectPosition.msg
+#   ObjectPositionArray.msg
+#   ObjectDetectionInfo.msg
+#   ObjectDetectionInfoArray.msg
+#   PointCloudArray.msg
 # )
 
 ## Generate services in the 'srv' folder
@@ -158,6 +167,9 @@ include_directories(
 # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/object_inspector.py
+  scripts/object_detection_saver.py
+  scripts/tf_listener.py
+  scripts/tf_converter.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
