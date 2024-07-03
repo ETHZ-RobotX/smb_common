@@ -5,4 +5,11 @@
 <!-- Launching the Object Inspector Node -->
 <node name="object_inspector" pkg="team6_stack" type="object_inspector.py" output="screen"/>
 
+<!-- Launching the Object Detection Saver Node -->
+<node name="object_detection_saver" pkg="team6_stack" type="object_detection_saver.py" output="screen"/>
+
+<!-- Launching the TF nodes -->
+<node name="tf_converter" pkg="team6_stack" type="tf_converter.py" output="screen"/>
+<node name="tf_listener" pkg="team6_stack" type="tf_listener.py" output="screen"/>
+
 </launch>
