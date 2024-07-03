@@ -2,7 +2,7 @@
 import rospy
 
 from std_msgs.msg import Header
-from object_detection_msgs import ObjectDetectionInfoArray
+from object_detection_msgs.msg import ObjectDetectionInfoArray
 
 # TODO: needs to be tested
 
