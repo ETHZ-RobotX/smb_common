@@ -2,6 +2,8 @@
 <!-- This file is for adding all the important launch files for our software stacks. -->
 <launch>
 
+<rosparam command="load" file="$(find team6_stack)/param/team6_config.yaml"/>
+
 <!-- Launching the Object Inspector Node -->
 <node name="object_inspector" pkg="team6_stack" type="object_inspector.py" output="screen"/>
 

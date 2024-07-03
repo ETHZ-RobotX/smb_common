@@ -50,6 +50,19 @@ class ObjectInspectorNode(object):
         rospy.init_node('my_node')
         rospy.on_shutdown(self.shutdown)
 
+        # Parameters
+        if (rospy.has_param('/objects_distance_')):
+            EPS_ = rospy.get_param('/objects_distance_')
+            rospy.loginfo('Parameter /objects_distance_ found: %f m', EPS_)
+        else:
+            rospy.logwarn('Parameter /objects_distance_ not found, using default value: %f', EPS_)
+
+        if (rospy.has_param('/max_no_objects_')):
+            MAX_NO_OBJECTS_ = rospy.get_param('/max_no_objects_')
+            rospy.loginfo('Parameter /max_no_objects_ found: %d', MAX_NO_OBJECTS_)
+        else:
+            rospy.logwarn('Parameter /max_no_objects_ not found, using default value: %d', MAX_NO_OBJECTS_)
+
         self.artefacts = []                 # list of artefacts detected
         self.is_inspecting = False          #
 

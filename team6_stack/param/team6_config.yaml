@@ -1,0 +1,3 @@
+# Objector detector
+/objects_distance_: 0.3  # m
+/max_no_objects_: 10
