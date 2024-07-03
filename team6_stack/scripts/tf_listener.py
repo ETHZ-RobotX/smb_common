@@ -125,7 +125,7 @@ def main():
     rospy.Subscriber('/object_detector/detection_info', ObjectDetectionInfoArray, detection_callback)
     
     transformed_detection_pub = rospy.Publisher('/transformed_detections', TransformedDetection, queue_size=10)
-    rospy.Publisher('/artefact_point', PointStamped)
+    #rospy.Publisher('/artefact_point', PointStamped)
     rospy.spin()
 
 if __name__ == '__main__':
