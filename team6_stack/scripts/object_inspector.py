@@ -7,6 +7,7 @@ from geometry_msgs.msg import TransformStamped
 from geometry_msgs.msg import PointStamped, PoseStamped
 import tf2_geometry_msgs
 from object_detection_msgs.msg import ObjectDetectionInfoArray
+from std_msgs.msg import Bool
 
 import numpy as np
 
@@ -34,7 +35,6 @@ class Object:
         self.max_dist = max_dist
 
 EPS_ = 0.15              # m, minimum distance between two artefacts
-TIMER_PERIOD_ = 1.0      # s, timer period
 
 OBJECTS_ = {
     'backpack'  : Object('backpack', 11, 0.0, 1.0),
@@ -51,12 +51,12 @@ class ObjectInspectorNode(object):
         rospy.on_shutdown(self.shutdown)
 
         self.inspected_artefacts = []       # list of artefacts that are already detected
-        self.artefacts = []                 # list of artefacts detected in PointStamped format
+        self.artefacts = []                 # list of artefacts detected
         self.is_inspecting = False          #
 
-        self.timer = rospy.Timer(rospy.Duration(0, int(TIMER_PERIOD_ * 1e9)), self.timer_callback)
+        self.exploration_finish_sub = rospy.Subscriber('exploration_finish', Bool, self.exploration_finish_callback)
         self.detected_artefacts_sub = rospy.Subscriber('/object_detector/detection_info_global', ObjectDetectionInfoArray, self.detected_artefacts_callback)
-        self.inspected_artefacts_pub = rospy.Publisher('/object_inspector/detection_info_global', ObjectDetectionInfoArray, queue_size=1)
+        self.inspected_artefacts_pub = rospy.Publisher('/object_inspector/unique_artifacts', ObjectDetectionInfoArray, queue_size=1)
         # self.waypoint_pub = rospy.Publisher('/way_point', PointStamped, queue_size=1)
 
         rospy.loginfo_once('Object Inspector node is running!')
@@ -67,27 +67,30 @@ class ObjectInspectorNode(object):
     def shutdown(self) -> None:
         rospy.loginfo("Shutting down...")
 
+    def exploration_finish_callback(self, msg) -> None:
+        if not msg.data:
+            return
+        
+        # If there are no artefacts detected, do nothing
+        if len(self.artefacts) == 0:
+            rospy.logwarn('No artefacts detected!')
+
+        # Publish detected artefacts
+        self.publish_inspected_artefacts()
+
     def detected_artefacts_callback(self, msg: ObjectDetectionInfoArray) -> None:
         for detected_artefact in msg.info:
             already_added = False
 
             # Check if the artefact is already in the list, or is already inspected
             for artefact in self.artefacts + self.inspected_artefacts:
-                if self.distance(artefact, msg) < EPS_:
+                if self.distance(detected_artefact.position, artefact.position) < EPS_:
                     already_added = True
                     break
             if already_added:
                 continue
 
             self.artefacts.append(detected_artefact)
-
-    def timer_callback(self, event) -> None:
-        # Check if there are any artefacts
-        if not self.artefacts:
-            return
-        
-        # Publish detected artefacts
-        self.publish_inspected_artefacts()
         
     def publish_inspected_artefacts(self) -> None:
         inspected_artefacts_msg = ObjectDetectionInfoArray()
