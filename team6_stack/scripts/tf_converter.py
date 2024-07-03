@@ -29,7 +29,7 @@ rotation_cam2opt = None
 
 
 point_stamped = None
-artefact_point_pub = rospy.Publisher('/artefact_point', PointStamped, queue_size=10)
+detection_info_global_pub = rospy.Publisher('/object_detector/detection_info_global', ObjectDetectionInfoArray, queue_size=10)
 
 def tf_callback(msg):
         
@@ -79,36 +79,24 @@ def tf_static_callback(msg):
 def detection_callback(msg):
     global point_stamped, artefact_point_pub
     for detection in msg.info:
-    
-        object_position = detection.position # in frame of rgb_camera_optic_link
-        class_id = detection.class_id
+        detection_info_global = detection
 
-        # Create a PoseStamped message for the detected object's position
-        object_pose = tf2_geometry_msgs.PoseStamped()
-        object_pose.header.frame_id = "rgb_camera_optical_link"
-        object_pose.pose.position = object_position
-        object_pose.pose.orientation.w = 1.0 # Don't care about the orientation
-
-        try:
-            # Transform the object position to the base_link frame
-            transformed_pose = tf_buffer.transform(object_pose, "base_link", rospy.Duration(1.0))
+        try: 
+            # Transform the camera frame to the world frame
+            object_pose = tf2_geometry_msgs.PoseStamped()
+            object_pose.header.frame_id = "rgb_camera_optical_link"
+            object_pose.pose.position = detection.position # in frame of rgb_camera_optic_link
+            object_pose.pose.orientation.w = 1.0 # Don't care about the orientation
+            transformed_pose = tf_buffer.transform(object_pose, "world_graph_msf", rospy.Duration(1.0))
             transformed_position = transformed_pose.pose.position
-            
-        
-            # Publish the transformed detection
-            # transformed_detection = TransformedDetection()
-            # transformed_detection.position = transformed_position
-            # transformed_detection.class_id = class_id
-            # transformed_detection_pub.publish(transformed_detection)
-            
-            # Publish the position as PointStamped
-            point_stamped = PointStamped()
-            point_stamped.header.frame_id = class_id
-            point_stamped.header.stamp = rospy.Time.now()
-            point_stamped.point = transformed_position
-            artefact_point_pub.publish(point_stamped)
 
-            rospy.loginfo(f"Object detected: class_id={point_stamped.header}, pos={point_stamped.point}")
+            detection_info_global.position = transformed_position
+
+            # Publish
+            detection_info_global_pub.publish(point_stamped)
+
+            # Log
+            rospy.loginfo(f"Object detected: class_id={point_stamped.header.frame_id}, pos={point_stamped.point}")
         
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
             rospy.logerr(f"TF transform error: {e}")
@@ -131,10 +119,9 @@ def duplicate_rejection(detections):
     return unique_detections
 
 def main():
-    global tf_buffer, tf_listener, transformed_detection_pub
+    global tf_buffer, tf_listener
 
     rospy.init_node('tf_listener', anonymous=True)
-
     tf_buffer = tf2_ros.Buffer()
     tf_listener = tf2_ros.TransformListener(tf_buffer)
 
