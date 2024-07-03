@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 import rospy
 
+import os
+import csv
+import time
+
 from std_msgs.msg import Header
 from object_detection_msgs.msg import ObjectDetectionInfoArray
 
-# TODO: needs to be tested
+timestr = ''
 
 def callback(msg):
     infos = []
@@ -19,15 +23,40 @@ def callback(msg):
     
     print(infos)
     
-    # Save the detected artifacts to a csv file
-    with open('data/artifacts.csv', mode='a', newline='') as file:
-        writer = csv.writer(file)
-        for info in infos:
-            writer.writerow([info['class_id'], info['x'], info['y'], info['z']])
-
+    # Check if the CSV file exists
+    dirname = os.path.dirname(__file__)
+    #timestr = time.strftime("%Y%m%d-%H%M%S")
+    file_name = 'artifacts-' + timestr + '.csv' # Add the already set timestamp
+    #file_name = 'artifacts.csv'
+    file_path = os.path.join(dirname, './../data/' + file_name) # Relative path
+    file_exists = os.path.isfile(file_path)
+    
+    # Save the detected artifacts to a CSV file
+    if file_exists:
+        with open(file_path, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            for info in infos:
+                writer.writerow([info['class_id'], info['x'], info['y'], info['z']])
+    
 def object_detection_listener():
     rospy.init_node('team6_stack', anonymous=True)
+
+    global timestr
     
+    # Check if the CSV file exists
+    dirname = os.path.dirname(__file__)
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    #file_name = 'artifacts.csv'
+    file_name = 'artifacts-' + timestr + '.csv' # Add timestamp for the beginning of the run
+    file_path = os.path.join(dirname, './../data/' + file_name) # Relative path
+    file_exists = os.path.isfile(file_path)
+
+    # Write the header only if the file doesn't exist
+    if not file_exists:
+        with open(file_path, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['class_id', 'x', 'y', 'z'])
+
     # Subscribe to the /object_detector/detection_info topic
     rospy.Subscriber('/object_detector/detection_info', ObjectDetectionInfoArray, callback)
     
