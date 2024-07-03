@@ -16,7 +16,7 @@ Panels:
         - /FarPlanner1/GlobalGraph1
         - /TarePlanner1
       Splitter Ratio: 0.5111420750617981
-    Tree Height: 770
+    Tree Height: 498
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -85,8 +85,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 1.5905910730361938
-                Min Value: -1.1293858289718628
+                Max Value: 2.262173652648926
+                Min Value: -0.20957785844802856
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -133,25 +133,13 @@ Visualization Manager:
                   Value: true
                 base_link:
                   Value: true
-                camera:
-                  Value: true
                 imu:
                   Value: true
                 imu_link:
                   Value: true
                 lidar_mount_link:
                   Value: true
-                map_o3d:
-                  Value: true
-                map_o3d_graph_msf_aligned:
-                  Value: true
-                map_o3d_viz:
-                  Value: true
-                odom_graph_msf:
-                  Value: true
-                odom_o3d:
-                  Value: true
-                raw_rs_o3d:
+                odom:
                   Value: true
                 rgb_camera_link:
                   Value: true
@@ -161,15 +149,7 @@ Visualization Manager:
                   Value: true
                 rslidar_base_link:
                   Value: true
-                sensor:
-                  Value: true
-                sensor_at_scan:
-                  Value: true
                 top:
-                  Value: true
-                vehicle:
-                  Value: true
-                world_graph_msf:
                   Value: true
               Marker Alpha: 1
               Marker Scale: 1
@@ -178,46 +158,30 @@ Visualization Manager:
               Show Axes: true
               Show Names: true
               Tree:
-                base_link:
-                  LF_WHEEL:
-                    {}
-                  LH_WHEEL:
-                    {}
-                  RF_WHEEL:
-                    {}
-                  RH_WHEEL:
-                    {}
-                  base_inertia:
-                    {}
-                  imu_link:
-                    imu:
+                odom:
+                  base_link:
+                    LF_WHEEL:
                       {}
-                  lidar_mount_link:
-                    rslidar_base_link:
-                      rslidar:
-                        map_o3d:
-                          map_o3d_viz:
-                            {}
-                          raw_rs_o3d:
-                            {}
-                        odom_o3d:
+                    LH_WHEEL:
+                      {}
+                    RF_WHEEL:
+                      {}
+                    RH_WHEEL:
+                      {}
+                    base_inertia:
+                      {}
+                    imu_link:
+                      imu:
+                        {}
+                    lidar_mount_link:
+                      rslidar_base_link:
+                        rslidar:
                           {}
-                        sensor:
-                          camera:
-                            {}
-                          vehicle:
-                            {}
-                  odom_graph_msf:
-                    world_graph_msf:
-                      map_o3d_graph_msf_aligned:
+                    rgb_camera_link:
+                      rgb_camera_optical_link:
                         {}
-                      sensor_at_scan:
-                        {}
-                  rgb_camera_link:
-                    rgb_camera_optical_link:
+                    top:
                       {}
-                  top:
-                    {}
               Update Interval: 0
               Value: true
             - Alpha: 1
@@ -926,7 +890,7 @@ Visualization Manager:
           Marker Topic: /sensor_coverage_planner/tare_visualizer/local_planning_horizon
           Name: LocalPlanningHorizon
           Namespaces:
-            "": true
+            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -934,7 +898,7 @@ Visualization Manager:
           Marker Topic: /sensor_coverage_planner/tare_visualizer/exploring_subspaces
           Name: ExplorationSubspaces
           Namespaces:
-            "": true
+            {}
           Queue Size: 100
           Value: true
         - Alpha: 1
@@ -1067,21 +1031,21 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7397965788841248
+      Pitch: 0.7347965836524963
       Target Frame: <Fixed Frame>
-      Yaw: 3.385552406311035
+      Yaw: 3.3455517292022705
     Saved: ~
 Window Geometry:
   ControlPanel:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1536
+  Height: 1136
   Hide Left Dock: false
   Hide Right Dock: true
   Image bounding Boxes:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000400000000000002d000000542fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003d000003a2000000fb0100001cfa000000010100000002fb000000180043006f006e00740072006f006c00500061006e0065006c0100000000ffffffff000000d200fffffffb000000100044006900730070006c0061007900730100000000000001ea0000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000003e5000000b70000007300fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f0061006401000004a2000000dd0000007300ffffff00000001000001c3000003b9fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d000003b9000000a400fffffffb0000001200520061007700200049006d00610067006500000003a20000019a0000001600fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073000000032b000002110000001600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000070f0000005efc0100000002fb0000000800540069006d006501000000000000070f000003bc00fffffffb0000000800540069006d00650100000000000004500000000000000000000004390000054200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000002d0000003b6fc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afc0000003b0000028e000000ed0100001afa000000010100000002fb000000180043006f006e00740072006f006c00500061006e0065006c0100000000ffffffff000000bf00fffffffb000000100044006900730070006c0061007900730100000000000001ea0000015600fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000001a0053004d00420050006f007700650072004d006f0074006f007201000002cf000000800000006d00fffffffb0000001e0053004d00420050006f007700650072005000610079006c006f0061006401000003550000009c0000006d00ffffff00000001000001c3000003b9fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d000003b9000000a000fffffffb0000001200520061007700200049006d00610067006500000003a20000019a0000001600fffffffb000000280049006d00610067006500200062006f0075006e00640069006e006700200042006f007800650073000000032b000002110000001600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007380000005efc0100000002fb0000000800540069006d00650100000000000007380000030700fffffffb0000000800540069006d0065010000000000000450000000000000000000000462000003b600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Raw Image:
     collapsed: false
   SMBPowerMotor:
@@ -1096,6 +1060,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1807
-  X: 0
+  Width: 1848
+  X: 72
   Y: 27
