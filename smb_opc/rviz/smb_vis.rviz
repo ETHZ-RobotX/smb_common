@@ -87,8 +87,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 2.1627650260925293
-                Min Value: -1.0256578922271729
+                Max Value: 2.158384323120117
+                Min Value: -1.0142515897750854
                 Value: true
               Axis: Z
               Channel Name: intensity
@@ -135,6 +135,8 @@ Visualization Manager:
                   Value: true
                 base_link:
                   Value: true
+                camera:
+                  Value: true
                 imu:
                   Value: true
                 imu_link:
@@ -159,7 +161,15 @@ Visualization Manager:
                   Value: true
                 rslidar_base_link:
                   Value: true
+                sensor:
+                  Value: true
+                sensor_at_scan:
+                  Value: true
                 top:
+                  Value: true
+                vehicle:
+                  Value: true
+                world_graph_msf:
                   Value: true
               Marker Alpha: 1
               Marker Scale: 1
@@ -914,7 +924,6 @@ Visualization Manager:
           Name: LocalPlanningHorizon
           Namespaces:
             {}
-            {}
           Queue Size: 100
           Value: true
         - Class: rviz/Marker
@@ -922,7 +931,6 @@ Visualization Manager:
           Marker Topic: /sensor_coverage_planner/tare_visualizer/exploring_subspaces
           Name: ExplorationSubspaces
           Namespaces:
-            {}
             {}
           Queue Size: 100
           Value: true
@@ -1121,7 +1129,7 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1136
+  Height: 1536
   Hide Left Dock: false
   Hide Right Dock: true
   Image bounding Boxes:
