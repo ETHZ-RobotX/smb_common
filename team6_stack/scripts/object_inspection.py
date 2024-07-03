@@ -11,7 +11,7 @@ import numpy as np
 
 eps = 1.0               # m, minimum distance between two artefacts
 min_dist = 2.0          # m, minimum distance from artefact to robot
-timer_period = 0.01     # s, timer period
+timer_period = 1.0      # s, timer period
 
 """ @TODO:
 - Go to artefact with some distance from it
@@ -19,18 +19,43 @@ timer_period = 0.01     # s, timer period
 - How to handle multiple artefacts?
 - When to remove artefact from the list?
     - Inspect object from multiple valid angles
+
+Process:
+- Artefact is detected and position in world frame is sent through /artefact_point
+- Append list if artefact is new
+- If artefact list is not empty, go towards the first artefact in list with some distance
+    - Distance differs with different object
+    - Inspect the object from different viable angles (and distance?)
+- Remove artefact from list after some moment
 """
+
+class Object:
+    def __init__(self, name, id, min_dist, max_dist):
+        self.name = name
+        self.id = id
+        self.min_dist = min_dist
+        self.max_dist = max_dist
 
 class ObjectInspectionNode(object):
     def __init__(self) -> None:
         rospy.init_node('my_node')
         rospy.on_shutdown(self.shutdown)
 
+        self.objects = [
+            Object('backpack', 11, 0.0, 1.0),
+            Object('umbrella', 24, 0.0, 1.0),
+            Object('bottle', 25, 0.0, 1.0),
+            Object('stop_sign', 39, 0.0, 1.0),
+            Object('clock', 74, 0.0, 1.0),
+        ]
+
+        self.inspected_artefacts = [] # list of artefacts that are already detected
         self.artefacts = [] # list of artefacts detected in PointStamped format
 
         self.timer = rospy.Timer(rospy.Duration(0, int(timer_period*1e9)), self.timer_callback)
         self.artefact_sub = rospy.Subscriber('/artefact_point', PointStamped, self.artefact_point_callback)
         self.waypoint_pub = rospy.Publisher('/way_point', PointStamped, queue_size=1)
+        # self.inspection_pub = rospy.Publisher('/something something')
 
     def run(self) -> None:
         rospy.spin()
@@ -42,7 +67,7 @@ class ObjectInspectionNode(object):
         # Check if the artefact is already in the list
         for artefact in self.artefacts:
             if self.distance(artefact, msg) < eps:
-                rospy.loginfo_throttle(10, "Duplicate artefact detected")
+                rospy.loginfo_throttle(30, "Duplicate artefact detected")
                 return
         self.artefacts.append(msg)
         rospy.loginfo(f"Artefact detected: x={msg.point.x}, y={msg.point.y}, z={msg.point.z}")
@@ -62,11 +87,20 @@ class ObjectInspectionNode(object):
             rospy.logwarn("Failed to get robot position")
             return
         
-        # Check if the robot is close enough to the artefact
+        # Get the pose from the artefact to the robot in the world_msf_graph frame
         artefact = self.artefacts[0]
+        pose = PoseStamped()
+        pose.pose.position = artefact.point
+        pose.header.frame_id = 'world_msf_graph'
+        pose.header.stamp = rospy.Time()
+        pose = tf_buffer.transform(pose, 'base_link')
+        artefact.point = pose.pose.position
+
+
+
+        # Check if the robot is close enough to the artefact
         if self.distance(robot_position, artefact) < min_dist:
-            rospy.loginfo("Robot is close to the artefact")
-            self.artefacts.pop(0)
+            rospy.loginfo("Robot is inspecting the artefact")
         else:
             # Publish the artefact as a waypoint
             self.waypoint_pub.publish(artefact)
