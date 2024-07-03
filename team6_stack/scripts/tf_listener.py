@@ -6,8 +6,10 @@ import tf2_msgs
 from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped, PointStamped
 import tf2_geometry_msgs
-from object_detection.object_detection_msgs import ObjectDetectionInfoArray
-from my_transform_package.msg import TransformedDetection
+
+from object_detection_msgs.msg import ObjectDetectionInfoArray
+
+#from my_transform_package.msg import TransformedDetection
 
 import numpy as np
 
@@ -25,7 +27,9 @@ rotation_base2cam = None
 translation_cam2opt = None
 rotation_cam2opt = None
 
-transformed_detection_pub = None
+
+point_stamped = None
+artefact_point_pub = rospy.Publisher('/artefact_point', PointStamped, queue_size=10)
 
 def tf_callback(msg):
         
@@ -35,18 +39,22 @@ def tf_callback(msg):
 
     for transform in msg.transforms:
         # world -> base_link
-        if transform.header.frame_id == "odom_graph_msf" and transform.child_frame_id == "world_graph_msf"
+        if transform.header.frame_id == "odom_graph_msf" and transform.child_frame_id == "world_graph_msf":
             translation_odomGraph2worldGraph = transform.transform.translation
             rotation_odomGraph2worldGraph = transform.transform.rotation
-        if transfrom.header.frame_id == "base_link" and transform.child_frame_id == "odom_graph_msf":
+            #rospy.loginfo(f"Translation_odomGraph2worldGraph: x={translation_odomGraph2worldGraph.x}, y={translation_odomGraph2worldGraph.y}, z={translation_odomGraph2worldGraph.z}")
+            #rospy.loginfo(f"Rotation_odomGraph2worldGraph: x={rotation_odomGraph2worldGraph.x}, y={rotation_odomGraph2worldGraph.y}, z={rotation_odomGraph2worldGraph.z}, w={rotation_odomGraph2worldGraph.w} ")
+        if transform.header.frame_id == "base_link" and transform.child_frame_id == "odom_graph_msf":
             translation_base2odomGraph = transform.transform.translation
             rotation_base2odomGraph = transform.transform.rotation
+            #rospy.loginfo(f"Translation_base2odomGraph: x={translation_base2odomGraph.x}, y={translation_base2odomGraph.y}, z={translation_base2odomGraph.z}")
+            #rospy.loginfo(f"Rotation_base2odomGraph: x={rotation_base2odomGraph.x}, y={rotation_base2odomGraph.y}, z={rotation_base2odomGraph.z}, w={rotation_base2odomGraph.w}")   
 
         if transform.header.frame_id == "odom" and transform.child_frame_id == "base_link":
             translation_world2base = transform.transform.translation
             rotation_world2base = transform.transform.rotation
-            rospy.loginfo(f"Translation_world2base: x={translation_world2base.x}, y={translation_world2base.y}, z={translation_world2base.z}")
-            rospy.loginfo(f"Rotation_world2base: x={rotation_world2base.x}, y={rotation_world2base.y}, z={rotation_world2base.z}, w={rotation_world2base.w}")
+            #rospy.loginfo(f"Translation_world2base: x={translation_world2base.x}, y={translation_world2base.y}, z={translation_world2base.z}")
+            #rospy.loginfo(f"Rotation_world2base: x={rotation_world2base.x}, y={rotation_world2base.y}, z={rotation_world2base.z}, w={rotation_world2base.w}")
 
 
 def tf_static_callback(msg):
@@ -58,42 +66,52 @@ def tf_static_callback(msg):
         if transform.header.frame_id == "base_link" and transform.child_frame_id == "rgb_camera_link":
             translation_base2cam = transform.transform.translation
             rotation_base2cam = transform.transform.rotation
-            rospy.loginfo(f"Translation_base2cam: x={translation_base2cam.x}, y={translation_base2cam.y}, z={translation_base2cam.z}")
-            rospy.loginfo(f"Rotation_base2cam: x={rotation_base2cam.x}, y={rotation_base2cam.y}, z={rotation_base2cam.z}, w={rotation_base2cam.w}")
+            #rospy.loginfo(f"Translation_base2cam: x={translation_base2cam.x}, y={translation_base2cam.y}, z={translation_base2cam.z}")
+            #rospy.loginfo(f"Rotation_base2cam: x={rotation_base2cam.x}, y={rotation_base2cam.y}, z={rotation_base2cam.z}, w={rotation_base2cam.w}")
         # rgb_camera_link -> rgb_camera_optical_link
         if transform.header.frame_id == "rgb_camera_link" and transform.child_frame_id == "rgb_camera_optical_link":
             translation_cam2opt = transform.transform.translation
             rotation_cam2opt = transform.transform.rotation
-            rospy.loginfo(f"Translation_cam2opt: x={translation_cam2opt.x}, y={translation_cam2opt.y}, z={translation_cam2opt.z}")
-            rospy.loginfo(f"Rotation_cam2opt: x={rotation_cam2opt.x}, y={rotation_cam2opt.y}, z={rotation_cam2opt.z}, w={rotation_cam2opt.w}")
+            #rospy.loginfo(f"Translation_cam2opt: x={translation_cam2opt.x}, y={translation_cam2opt.y}, z={translation_cam2opt.z}")
+            #rospy.loginfo(f"Rotation_cam2opt: x={rotation_cam2opt.x}, y={rotation_cam2opt.y}, z={rotation_cam2opt.z}, w={rotation_cam2opt.w}")
 
 
 def detection_callback(msg):
+    global point_stamped, artefact_point_pub
     for detection in msg.info:
-        if detection.frame_id == "rgb_camera_optical_link":
-            object_position = detection.position
-            class_id = detection.class_id
+    
+        object_position = detection.position # in frame of rgb_camera_optic_link
+        class_id = detection.class_id
 
-            # Create a PoseStamped message for the detected object's position
-            object_pose = tf2_geometry_msgs.PoseStamped()
-            object_pose.header.frame_id = "rgb_camera_optical_link"
-            object_pose.pose.position = object_position
-            object_pose.pose.orientation.w = 1.0 # Don't care about the orientation
+        # Create a PoseStamped message for the detected object's position
+        object_pose = tf2_geometry_msgs.PoseStamped()
+        object_pose.header.frame_id = "rgb_camera_optical_link"
+        object_pose.pose.position = object_position
+        object_pose.pose.orientation.w = 1.0 # Don't care about the orientation
 
-            try:
-                # Transform the object position to the base_link frame
-                transformed_pose = tf_buffer.transform(object_pose, "base_link", rospy.Duration(1.0))
-                transformed_position = transformed_pose.pose.position
-                rospy.loginfo(f"Detected object (class_id: {class_id}) position in base_link frame: x={transformed_position.x}, y={transformed_position.y}, z={transformed_position.z}")
+        try:
+            # Transform the object position to the base_link frame
+            transformed_pose = tf_buffer.transform(object_pose, "base_link", rospy.Duration(1.0))
+            transformed_position = transformed_pose.pose.position
             
-                # Publish the transformed detection
-                transformed_detection = TransformedDetection()
-                transformed_detection.position = transformed_position
-                transformed_detection.class_id = class_id
-                transformed_detection_pub.publish(transformed_detection)
+        
+            # Publish the transformed detection
+            # transformed_detection = TransformedDetection()
+            # transformed_detection.position = transformed_position
+            # transformed_detection.class_id = class_id
+            # transformed_detection_pub.publish(transformed_detection)
             
-            except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
-                rospy.logerr(f"TF transform error: {e}")
+            # Publish the position as PointStamped
+            point_stamped = PointStamped()
+            point_stamped.header.frame_id = class_id
+            point_stamped.header.stamp = rospy.Time.now()
+            point_stamped.point = transformed_position
+            artefact_point_pub.publish(point_stamped)
+
+            rospy.loginfo(f"Object detected: class_id={point_stamped.header}, pos={point_stamped.point}")
+        
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException) as e:
+            rospy.logerr(f"TF transform error: {e}")
 
 def duplicate_rejection(detections):
     unique_detections = []
@@ -119,13 +137,14 @@ def main():
 
     tf_buffer = tf2_ros.Buffer()
     tf_listener = tf2_ros.TransformListener(tf_buffer)
-    
+
+  
     rospy.Subscriber('/tf', TFMessage, tf_callback)
     rospy.Subscriber('/tf_static', TFMessage, tf_static_callback)
     rospy.Subscriber('/object_detector/detection_info', ObjectDetectionInfoArray, detection_callback)
     
-    transformed_detection_pub = rospy.Publisher('/transformed_detections', TransformedDetection, queue_size=10)
-    #rospy.Publisher('/artefact_point', PointStamped)
+
+
     rospy.spin()
 
 if __name__ == '__main__':
