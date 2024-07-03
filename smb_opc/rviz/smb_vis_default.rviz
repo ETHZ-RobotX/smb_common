@@ -87,8 +87,8 @@ Visualization Manager:
             - Alpha: 1
               Autocompute Intensity Bounds: true
               Autocompute Value Bounds:
-                Max Value: 2.1627650260925293
-                Min Value: -1.0256578922271729
+                Max Value: 2.158384323120117
+                Min Value: -1.0142515897750854
                 Value: true
               Axis: Z
               Channel Name: intensity
