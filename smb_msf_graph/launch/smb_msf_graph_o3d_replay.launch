@@ -29,8 +29,8 @@
 
     <!-- Launch Open3D SLAM -->
     <include file="$(find smb_slam)/launch/online_slam.launch" if="$(arg launch_o3d_slam)">
-        <arg name="use_sim_time" value="$(arg use_sim_time)" />
-        <arg name="cloud_topic" value="$(arg cloud_topic)" />
+        <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+        <arg name="cloud_topic" value="$(arg cloud_topic)"/>
     </include>
 
     <!-- Elevation mapping node -->
@@ -42,5 +42,8 @@
         <rosparam command="load" file="$(arg default_elevation_mapping_parameter_file)"/>
         <rosparam command="load" file="$(arg elevation_mapping_parameter_file)"/>
     </node>
+
+    <!-- Static TF Publisher between world_graph_msf and odom -->
+    <!--    <node pkg="tf" type="static_transform_publisher" name="world_graph_msf_to_odom" args="0 0 0 0 0 0 world_graph_msf odom 100" />-->
 
 </launch>
