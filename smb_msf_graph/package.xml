@@ -12,5 +12,6 @@
 	<exec_depend>compslam_lio</exec_depend>
 	<exec_depend>open3d_slam_ros</exec_depend>
 	<exec_depend>smb_slam</exec_depend>
+	<exec_depend>elevation_mapping</exec_depend>
 
 </package>

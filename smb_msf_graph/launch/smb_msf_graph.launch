@@ -20,6 +20,7 @@
         <arg name="lidar_odometry_topic_name" value="$(arg lidar_odometry_topic_name)"/>
     </include>
 
+    <!-- Check whether Open3D-SLAM should be launched -->
     <group if="$(arg launch_o3d_slam)">
         <!-- Launch online_slam -->
         <include file="$(find open3d_slam_ros)/launch/development.launch" if="$(arg launch_o3d_slam)">
