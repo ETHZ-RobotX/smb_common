@@ -1,0 +1,25 @@
+digraph G {
+"base_link" -> "base_inertia"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"odom" -> "base_link"[label="Broadcaster: /ekf_se\nAverage rate: 30.612 Hz\nMost recent transform: 2862.872 ( 0.038 sec old)\nBuffer length: 1.960 sec\n"];
+"imu_link" -> "imu"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "imu_link"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "lidar_mount_link"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "rgb_camera_link"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"rgb_camera_link" -> "rgb_camera_optical_link"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"lidar_mount_link" -> "rslidar_base_link"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"rslidar_base_link" -> "rslidar"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "top"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 2862.910 sec old)\nBuffer length: 0.000 sec\n"];
+"odom_graph_msf" -> "world_graph_msf"[label="Broadcaster: /smb_estimator_node\nAverage rate: 386.500 Hz\nMost recent transform: 2862.902 ( 0.008 sec old)\nBuffer length: 2.000 sec\n"];
+"base_link" -> "odom_graph_msf"[label="Broadcaster: /smb_estimator_node\nAverage rate: 386.114 Hz\nMost recent transform: 2862.905 ( 0.005 sec old)\nBuffer length: 2.002 sec\n"];
+"base_link" -> "LF_WHEEL"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 50.505 Hz\nMost recent transform: 2862.891 ( 0.019 sec old)\nBuffer length: 1.980 sec\n"];
+"base_link" -> "LH_WHEEL"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 50.505 Hz\nMost recent transform: 2862.891 ( 0.019 sec old)\nBuffer length: 1.980 sec\n"];
+"base_link" -> "RF_WHEEL"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 50.505 Hz\nMost recent transform: 2862.891 ( 0.019 sec old)\nBuffer length: 1.980 sec\n"];
+"base_link" -> "RH_WHEEL"[label="Broadcaster: /control/smb_robot_state_publisher\nAverage rate: 50.505 Hz\nMost recent transform: 2862.891 ( 0.019 sec old)\nBuffer length: 1.980 sec\n"];
+"world_graph_msf" -> "map_o3d_graph_msf_aligned"[label="Broadcaster: /smb_estimator_node\nAverage rate: 13.193 Hz\nMost recent transform: 2862.750 ( 0.160 sec old)\nBuffer length: 1.895 sec\n"];
+"map_o3d" -> "raw_rs_o3d"[label="Broadcaster: /mapping\nAverage rate: 10.582 Hz\nMost recent transform: 2862.855 ( 0.055 sec old)\nBuffer length: 1.890 sec\n"];
+"rslidar" -> "map_o3d"[label="Broadcaster: /mapping\nAverage rate: 10.582 Hz\nMost recent transform: 2862.855 ( 0.055 sec old)\nBuffer length: 1.890 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 2862.910"[ shape=plaintext ] ;
+ }->"odom";
+}

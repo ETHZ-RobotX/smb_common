@@ -25,4 +25,6 @@ rosbag record --output-name=${outpath}/${now}"_smb" \
 /imu \
 /rslidar/points  \
 /tf \
-/tf_static
+/tf_static \
+/clock \
+/object_detector/detection_info
